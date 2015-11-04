@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="../css/list.css">
 </head>
-<body>
+<body onload="populateList();">
     <section>
         <h1>Habit List</h1>
         <ul id="habit-list">
@@ -110,6 +110,16 @@
             var child = element.parentNode.parentNode;
             var parent = child.parentNode;
             parent.removeChild(child);
+        }
+
+        function populateList()
+        {
+            var indexCounter = 0;
+            //for(habit in list)
+            //{
+                //var container = document.getElementById('habit-list');
+                //container.append('<li id=listItem'+ ++indexCounter'></li>');
+            //}
         }
     </script>
 </body>
