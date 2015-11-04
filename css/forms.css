@@ -19,7 +19,7 @@ body {
 p{
 	color:#6c6c6c;
 	font-size: medium;
-}	
+}
 div.forms {
 	position: relative;
 	margin: 0 auto;
@@ -29,15 +29,15 @@ div.forms {
 	border-radius: 25px;
 	bottom: auto;
 }
-input#title{
+input#habit_title{
 	height: 30px;
 	width: 350px;
 	font-size:medium;
 
 }
-input#others{
+input#notes{
 	height: 30px;
-	width: 250px;
+	width: 350px;
 	font-size:medium;
 }
 img.icon{
@@ -59,12 +59,12 @@ img.icon{
 	background-color: white;
 	border-radius: 25px;
   }
-  input#title{
+  input#habit_title{
 	height: 30px;
 	width: 250px;
 	font-size:small;
   }
-  input#others{
+  input#notes{
 	height: 30px;
 	width: 250px;
 	font-size:small;
@@ -107,7 +107,7 @@ img.icon:hover{
 	transform: scale(1.3);
 	cursor: pointer;
 }
-span#others_text{
+span#notes_text{
 	padding-right: 5px;
 }
 
