@@ -112,14 +112,14 @@
             parent.removeChild(child);
         }
 
-        function populateList()
-        {
+        function populateList() {
             var indexCounter = 0;
-            //for(habit in list)
-            //{
-                //var container = document.getElementById('habit-list');
-                //container.append('<li id=listItem'+ ++indexCounter'></li>');
-            //}
+            var container = document.getElementById('habit-list');
+            // print out resultant list
+            var finalList = JSON.parse(localStorage['habitList']);
+            for(habitItem in finalList) {
+                var outerList = createElement('<li id=listItem'+ ++indexCounter'></li>');
+            }
         }
     </script>
 </body>

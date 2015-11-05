@@ -70,41 +70,21 @@
 
 				// If form validates, submit habit
 				if (validateForm()) {
-					localStorage.clear();
 					alert(JSON.stringify(habit));
 					// Check if habit list exists in local storage already,
 					// if it does not exist, create a new list with new habit
-					if(localStorage.length == 0)
-					{
-						var newList = [habit, habit];
-						//newList[0] = habit;
+					if(localStorage.length == 0) {
+						var newList = [];
+						newList[0] = habit;
 						localStorage['habitList'] = JSON.stringify(newList);
 					}
 					// if it list exists, add habit to list
-					else
-					{
+					else {
 						// save habit data object into local storage
 						var existingList = JSON.parse(localStorage['habitList']);
 						existingList.push(habit);
 						localStorage['habitList'] = JSON.stringify(existingList);
 					}
-
-					// print out resultant list
-					var finalList = JSON.parse(localStorage['habitList']);
-					alert("finalList: "+finalList);
-					alert("finalList: "+JSON.stringify(finalList));
-			        for(item in finalList)
-			        {
-			        	alert("item: "+item);
-						alert("item: "+JSON.stringify(item));
-			            var habit_title = item.habit_title;
-			            var weekly_freq = item.weekly_freq;
-			            var daily_freq = item.daily_freq;
-			            var notes = item.notes;
-			            alert("item: " + item +", title: " + habit_title + ", weekly_freq: " + weekly_freq +
-			                ", daily_freq: " + daily_freq + ", notes: "+ notes);
-			        }
-
 					// navigate to list page
 					window.location = 'list.html';
 				} else {
