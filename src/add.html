@@ -54,8 +54,9 @@
 			 * Optional fields: icon, weekly_freq, daily_freq, notes
 			 */
 			var habit = {
-				habit_title : "",
-				icon : "../img/default.jpg",
+				id : "",
+				title : "",
+				icon : "../img/salad.jpg",
 				weekly_freq : [],
 				daily_freq : 1,
 				notes : ""
@@ -63,31 +64,61 @@
 
 			function onSubmit() {
 				// Populate the habit object
-				habit.habit_title = document.getElementById("habit_title").value;
+				habit.title = document.getElementById('habit_title').value;
 				habit.weekly_freq = getWeeklyFrequency();
 				habit.daily_freq = getDailyFrequency();
-				habit.notes = document.getElementById("notes").value;
+				habit.notes = document.getElementById('notes').value;
 
 				// If form validates, submit habit
 				if (validateForm()) {
+
 					// Check if habit list exists in local storage already,
-					// if it does not exist, create a new list with new habit
+					// if list does not exist, create a new list with new habit
 					if(localStorage.length == 0) {
+
+						// 'nextID' is an unique counter for IDing habit objects
+						localStorage['nextID'] = '1';
+
+						// Set the habit item's ID
+						habit.id = '0';
 						var newList = [];
 						newList[0] = habit;
+
+						// Store the new array
 						localStorage['habitList'] = JSON.stringify(newList);
 					}
-					// if it list exists, add habit to list
+					// if list exists, add habit to list
 					else {
-						// save habit data object into local storage
+
+						// save habit data object into local storage 
 						var existingList = JSON.parse(localStorage['habitList']);
-						existingList.push(habit);
-						localStorage['habitList'] = JSON.stringify(existingList);
+
+						// if list exists, check if it is empty
+						// if empty, reset nextID counter, and add new habit
+						if(existingList.length == 0) {
+
+							// Set the habit item's ID
+							localStorage['nextID'] = '1';
+							habit.id = '0';
+							existingList[0] = habit;
+							localStorage['habitList'] = JSON.stringify(existingList);
+						}
+						// if not empty, continue adding habit item as normal
+						else {
+							// Set the habit item's ID
+							habit.id = localStorage['nextID'];
+							localStorage['nextID'] = (parseInt(localStorage['nextID'])+1);
+							existingList.push(habit);
+
+							// Store newly modified array
+							localStorage['habitList'] = JSON.stringify(existingList);
+						}
 					}
+
 					// navigate to list page
 					window.location = 'list.html';
 				} else {
-					alert("form failed validation");
+					alert('form failed validation');
 					// do nothing
 				}
 			}
