@@ -5,20 +5,20 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Welcome to Virtue/Vice!</title>
 		<link rel="stylesheet" href="../css/login.css">
+    <script src='../js/global.js'></script>
 	</head>
-	<body>
+	<body onload="clearLocalStorage(); printUsers(); checkCurrentUser();">
 	  <div class="login">
 	  	<h1>virtue / <i>vice</i></h1>
-
       <form class="loginForm" action="index_submit" method="get" accept-charset="utf-8">
       	<table>
       		<tr>
         		<td class="svgTd">
-        			<label for="usermail">
+        			<label for="useremail">
         				<svg x="0px" y="0px" width="50px" height="50px" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1376 128q119 0 203.5 84.5t84.5 203.5v960q0 119-84.5 203.5t-203.5 84.5h-960q-119 0-203.5-84.5t-84.5-203.5v-960q0-119 84.5-203.5t203.5-84.5h960zm32 1056v-436q-31 35-64 55-34 22-132.5 85t-151.5 99q-98 69-164 69t-164-69q-46-32-141.5-92.5t-142.5-92.5q-12-8-33-27t-31-27v436q0 40 28 68t68 28h832q40 0 68-28t28-68zm0-573q0-41-27.5-70t-68.5-29h-832q-40 0-68 28t-28 68q0 37 30.5 76.5t67.5 64.5q47 32 137.5 89t129.5 83q3 2 17 11.5t21 14 21 13 23.5 13 21.5 9.5 22.5 7.5 20.5 2.5 20.5-2.5 22.5-7.5 21.5-9.5 23.5-13 21-13 21-14 17-11.5l267-174q35-23 66.5-62.5t31.5-73.5z"/></svg>
 						  </label>
 						</td>
-            <td><input id="usermail" class="textInput" type="email" name="usermail" placeholder="Email" required></td>
+            <td><input id="useremail" class="textInput" type="email" name="useremail" placeholder="Email" required></td>
           </tr>
           <tr style="height: 15px"><td></td><td></td></tr>
           <tr>
@@ -30,14 +30,158 @@
           	<td><input id="password" class="textInput" type="password" name="password" placeholder="Password" required></td>
           </tr>
        	</table>
-       	<p id="signInMessage">Sign in successful! <span style="color: #4caf50">&#10004;</span></p>
+       	<p id="Message"><span style="color: #4caf50; font-size: 14px">&#10004;</span></p>
        	<div class="buttons">
-       		<input class="loginButton" type="button" value="Login" onclick="location.href='welcome.html'">
-          <input class="signUpButton" type="button" value="Signup" onclick="onClickSignUp()">
+       		<input class="loginButton" type="button" value="LogIn" onclick="logIn()">
+          <input class="signUpButton" type="button" value="SignUp" onclick="signUp()">
         </div>
       </form>
     </div>
+    <script>
 
-    <script src="../js/login.js"></script>
+      // Attempts to log into user account
+      function logIn() {
+        if(!validateForm()) {
+           return;
+        }
+
+        var inputEmail = document.getElementById('useremail').value;
+        var inputPassword = document.getElementById('password').value;
+
+        // Flag for if user exists
+        var exists = false;
+
+        // If user list does not exist, create one
+        if(localStorage['users'] == undefined) {
+            var newList = [];
+            localStorage['users'] = JSON.stringify(newList);
+        }
+        else {
+
+          // If user list exists, search for matching user (with correct
+          // email and password
+          var users = JSON.parse(localStorage['users']);
+          for(u in users) {
+            if(users[u].email == inputEmail && users[u].password == inputPassword) {
+              // Store user id into client browser
+              localStorage['currentUser'] = users[u].id;
+              exists = true;
+              break;
+            }
+          }
+        }
+
+        // Display message
+        if(exists) {
+           displayMessage('Log In Successful!');
+           window.location = 'list.html';
+        }
+        else {
+          displayMessage('Log In Unsuccessful! Make sure the account exists and you have the correct email and password!');
+        }
+      }
+
+      // Attempts to create a new user account
+      function signUp() {
+        if(!validateForm()) {
+           return;
+        }
+
+        // Flag for if user exists
+        var exists = false;
+        var inputEmail = document.getElementById('useremail').value;
+        var inputPassword = document.getElementById('password').value;
+
+        // If user list does not exist, create one
+        if(localStorage['users'] == undefined) {
+          var newList = [];
+          localStorage['users'] = JSON.stringify(newList);
+        }
+
+        // If user list exists, search for conflicting matching user (with 
+        // same email)
+        else {
+          var users = JSON.parse(localStorage['users']);
+          for(u in users) {
+             // Check if there exists account with email already
+             if(users[u].email == inputEmail)
+             {
+                exists = true;
+                break;
+             }
+          }
+        }
+
+        // If account with email does not exist, create one
+        if(!exists) {
+
+            // Template for user account object
+            var user = {
+              id : "",
+              email : "",
+              password : "",
+              list : "null",
+              nextHabitID : "0",
+              editID : "null"
+            };
+
+            if(localStorage['nextID'] == undefined) {
+              localStorage['nextID'] = '0';
+            }
+
+            // Define the user account
+            user.id = localStorage['nextID'];
+            user.email = inputEmail;
+            user.password = inputPassword;
+
+            // Update next unique ID to be used
+            localStorage['nextID'] = parseInt(localStorage['nextID'])+1;
+
+            // Add new user account to user list
+            var users = JSON.parse(localStorage['users']);
+            users.push(user);
+            localStorage['users'] = JSON.stringify(users);
+
+            // Save user account who's logged in
+            localStorage['currentUser'] = user.id;
+
+            // Display message and go to add habit page
+            displayMessage('Sign Up Successful!');
+            window.location = 'add.html';
+        }
+        // If account with email does exist, display error
+        else {
+          displayMessage('Sign Up Unsuccessful! An account with that email already exists!');
+        }
+      }
+
+      // Validates user input to the forms
+      function validateForm() {
+        var inputEmail = document.getElementById('useremail').value;
+        var inputPassword = document.getElementById('password').value;
+
+        if(inputEmail == "" || inputPassword == "") {
+          displayMessage('Please enter a valid email and password!');
+          return false;
+        }
+        else {
+          return true;
+        }
+      }
+
+      // Displays message to user
+      function displayMessage(s) {
+        var messageText = document.getElementById("Message");
+        messageText.innerHTML = s;
+        messageText.style.display = "block";
+      }
+
+      // Clears input fields
+      function clearFields() {
+        document.getElementById('useremail').value = '';
+        document.getElementById('password').value = '';
+      }
+
+    </script>
 	</body>
 </html>
