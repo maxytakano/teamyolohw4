@@ -5,101 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="../css/list.css">
+    <script src='../js/global.js'></script>
 </head>
-<body>
+<body onload="checkCurrentUser();">
+    <input type="button" onclick="logOut();" value="Log Out"></input>
     <section>
         <h1>Habit List</h1>
-        <ul id="habit-list">
-            <!--<li>
-                <ul class='habit-info'>
-                    <li><div class='habit-name'>Sleep 8 hours</div></li>
-                    <li><img class='habit-icon' src='../img/sleep.jpg' alt='habit icon'></li>
-                </ul>
-                <div class='message'>
-                    <span class='message-total'>
-                        <strong>2</strong> days in a row! Best Record: <strong>5</strong><br>
-                        <svg height='25' width='150'>
-                            <line x1='0' y1='0' x2='60' y2='0' style='stroke:rgba(65, 131, 215, 0.8);stroke-width:25' />
-                            <line x1='60' y1='0' x2='150' y2='0' style='stroke:rgba(171,171,171,0.6);stroke-width:25' />
-                        </svg>
-                    </span><br>
-                    <span class='message-today'>Completed <strong>1/1</strong> for today!</span>
-                </div>
-                <div class='habit-op'>
-                    <button type='button' class='op op-done' onclick='showMsg(this);' title='done'>
-                        <img src='../img/done.svg' alt='Done'>
-                    </button>
-                    <button type='button' class='op op-edit' onclick='location.href='edit.html'' title='edit habit'>
-                        <img src='../img/edit.svg' alt='Edit'>
-                    </button>
-                    <button type='button' class='op op-del' onclick='deleteHabit(this);' title='delete habit'>
-                        <img src='../img/delete.svg' alt='Del'>
-                    </button>
-                </div>
-            </li>
-
-            <li>
-                <ul class='habit-info'>
-                    <li><div class='habit-name'>Eat Healthy</div></li>
-                    <li><img class='habit-icon' src='../img/salad.jpg' alt='habit icon'></li>
-                </ul>
-                <div class='message'>
-                    <span class='message-total'>
-                        <strong>10</strong> days in a row! Best Record: <strong>20</strong><br>
-                        <svg height='25' width='150'>
-                            <line x1='0' y1='0' x2='75' y2='0' style='stroke:rgba(65, 131, 215, 0.8);stroke-width:25' />
-                            <line x1='75' y1='0' x2='150' y2='0' style='stroke:rgba(171,171,171,0.6);stroke-width:25' />
-                        </svg>
-                    </span><br>
-                    <span class='message-today'>Completed <strong>1/3</strong> for today!</span>
-                </div>
-                <div class='habit-op'>
-                    <button type='button' class='op op-done' onclick='showMsg(this);' title='done'>
-                        <img src='../img/done.svg' alt='Done'>
-                    </button>
-                    <button type='button' class='op op-edit' onclick='location.href='edit.html'' title='edit habit'>
-                        <img src='../img/edit.svg' alt='Edit'>
-                    </button>
-                    <button type='button' class='op op-del' onclick='deleteHabit(this);' title='delete habit'>
-                        <img src='../img/delete.svg' alt='Del'>
-                    </button>
-                </div>
-            </li>
-
-            <li>
-                <ul class='habit-info'>
-                    <li><div class='habit-name'>Exercise 30 minutes</div></li>
-                    <li><img class='habit-icon' src='../img/run.jpg' alt='habit icon'></li>
-                </ul>
-                <div class='message'>
-                    <span class='message-total'>
-                        <strong>48</strong> days in a row! Best Record: <strong>60</strong><br>
-                        <svg height='25' width='150'>
-                            <line x1='0' y1='0' x2='120' y2='0' style='stroke:rgba(65, 131, 215, 0.8);stroke-width:25' />
-                            <line x1='120' y1='0' x2='150' y2='0' style='stroke:rgba(171,171,171,0.6);stroke-width:25' />
-                        </svg>
-                    </span><br>
-                    <span class='message-today'>Completed <strong>1/2</strong> for today!</span>
-                </div>
-                <div class='habit-op'>
-                    <button type='button' class='op op-done' onclick='showMsg(this);' title='done'>
-                        <img src='../img/done.svg' alt='Done'>
-                    </button>
-                    <button type='button' class='op op-edit' onclick='location.href='edit.html'' title='edit habit'>
-                        <img src='../img/edit.svg' alt='Edit'>
-                    </button>
-                    <button type='button' class='op op-del' onclick='deleteHabit(this);' title='delete habit'>
-                        <img src='../img/delete.svg' alt='Del'>
-                    </button>
-                </div>
-            </li>-->
-
-        </ul>
-        
+        <ul id="habit-list"></ul>
     </section>
-
     <button type="button" id="addHabit" onclick="location.href='add.html'" title="add habit">+</button>
-
     <script type="text/javascript">
         populateList();
 
@@ -108,19 +22,29 @@
             msgElement.style.visibility="visible";
         }
 
+        // Go to edit page
+        function editHabit(id) {
+            var user = getCurrentUser();
+            user.editID = id;
+            modifyCurrentUser(user);
+            window.location = 'edit.html';
+        }
+
         // Removes habit entry from the list and from local storage
         function deleteHabit(element, id){
-            // Remove from local storage: Find the habit object and delete from array
-            var removeList = JSON.parse(localStorage['habitList']);
-            for(habitItem in removeList) {
-                if(removeList[habitItem].id == id) {
-                    removeList.splice(habitItem, 1);
+            // Remove from user's habit list
+            var user = getCurrentUser();
+            var removeList = JSON.parse(user.list);
+            for(h in removeList) {
+                if(removeList[h].id == id) {
+                    removeList.splice(h, 1);
                     break;
                 }
             }
 
-            // Store newly modified array into local storage
-            localStorage['habitList'] = JSON.stringify(removeList);
+            // Store newly modified list into the user's account
+            user.list = JSON.stringify(removeList);
+            modifyCurrentUser(user);
 
             // Remove habit entry from document
             var child = element.parentNode.parentNode;
@@ -143,18 +67,21 @@
             // Grab containing element for which we are going to add items into
             var container = document.getElementById('habit-list');
 
-            // Obtain habits from local storage
-            var finalList = JSON.parse(localStorage['habitList']);
+            // Obtain habits from current user
+            var user = getCurrentUser();
+            var habitList = JSON.parse(user.list);
 
             // Iterate through habits in local storage, modify temporary habit object,
             // and add list entry into the document using the habit object's data
-            for(habitItem in finalList) {
-                habit.id = finalList[habitItem].id;
-                habit.title = finalList[habitItem].title;
-                habit.icon = finalList[habitItem].icon;
+            for(h in habitList) {
+                habit.id = habitList[h].id;
+                habit.title = habitList[h].title;
+                habit.icon = habitList[h].icon;
+
                 var outerList = document.createElement('li');
-                outerList.setAttribute("id", "listItem" + habit.id);
+                outerList.setAttribute("id", "habitItem_"+habit.id);
                 outerList.innerHTML = formatTemplate(habit);
+
                 container.appendChild(outerList);
             }
         }
@@ -181,7 +108,7 @@
                 "\t<button type='button' class='op op-done' onclick='showMsg(this);' title='done'>\n"+
                 "\t\t<img src='../img/done.svg' alt='Done'>\n"+
                 "\t</button>\n"+
-                "\t<button type='button' class='op op-edit' onclick=\"location.href='edit.html'\" title='edit habit'>\n"+
+                "\t<button type='button' class='op op-edit' onclick='editHabit("+habit.id+");' title='edit habit'>\n"+
                 "\t\t<img src='../img/edit.svg' alt='Edit'>\n"+
                 "\t</button>\n"+
                 "\t<button type='button' class='op op-del' onclick='deleteHabit(this, "+habit.id+");' title='delete habit'>\n"+
