@@ -88,6 +88,16 @@ img.icon{
   
 }
 
+/* for iphone screen */
+@media screen and (max-width: 350px)
+{
+    div.forms
+    {
+        width: 300px;
+        margin-bottom: 10px;
+    }
+}
+
 h2{
 	text-align:center;
 	background-color: #bdbdbd;

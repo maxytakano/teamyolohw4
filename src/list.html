@@ -17,6 +17,49 @@
     <script type="text/javascript">
         populateList();
 
+        // Returns a formateted string template for a list entry
+        function formatTemplate(habit)
+        {
+            var listString = '\n'+
+            '<ul class="habit-info">'+
+            '    <li>'+
+            '        <div class="habit-name">'+habit.title+'</div>'+
+            '        <button id="options-button" type="button" class="op op-gear" onClick="toggleButton(this);" title="habit options">'+
+            '            <img id="gear" class="gear-img" src="../img/gear.png" alt="Edit">'+
+            '        </button>'+
+            '        <div class="white-square"></div>'+
+            '        <span id="options-slideout" class="options">'+
+            '            <button type="button" class="op op-edit" onclick="editHabit('+habit.id+');" title="edit habit">'+
+            '                <img class="small-buttons" src="../img/edit.svg" alt="Edit">'+
+            '            </button>'+
+            '            <button type="button" class="op op-del" onclick="deleteHabit(this, '+habit.id+');" title="delete habit">'+
+            '                <img class="small-buttons" src="../img/delete.svg" alt="Del">'+
+            '            </button>'+
+            '        </span>'+
+            '    </li>'+
+            '    <li><img class="habit-icon" src="'+habit.icon+'" alt="habit icon"></li>'+
+            '</ul>'+
+            '<div class="message">'+
+            '    <span class="message-total">'+
+            '        <strong>2</strong> days in a row! Best Record: <strong>5</strong><br>'+
+            '        <svg height="25" width="150">'+
+            '            <line x1="0" y1="0" x2="60" y2="0" style="stroke:rgba(65, 131, 215, 0.8);stroke-width:25" />'+
+            '            <line x1="60" y1="0" x2="150" y2="0" style="stroke:rgba(171,171,171,0.6);stroke-width:25" />'+
+            '        </svg>'+
+            '    </span><br>'+
+            '    <span class="message-today">Completed <strong>1/1</strong> for today!</span>'+
+            '</div>'+
+            '<div class="habit-op">'+
+            '    <button type="button" class="op op-done" onclick="showMsg(this);" title="done">'+
+            '        <img src="../img/done.svg" alt="Done">'+
+            '    </button>'+
+            '    <button type="button" class="op op-fail" onclick="showMsg(this);" title="done">'+
+            '        <img src="../img/xIcon.png" alt="Done">'+
+            '    </button>'+
+            '</div>';
+            return listString;
+        }
+
         function showMsg(element){
             var msgElement = (element.parentNode.parentNode.getElementsByClassName("message"))[0];
             msgElement.style.visibility="visible";
@@ -47,7 +90,7 @@
             modifyCurrentUser(user);
 
             // Remove habit entry from document
-            var child = element.parentNode.parentNode;
+            var child = getHabitRoot(element);
             var parent = child.parentNode;
             parent.removeChild(child);
         }
@@ -86,36 +129,49 @@
             }
         }
 
-        // Returns a formateted string template for a list entry
-        function formatTemplate(habit)
-        {
-            return "\n"+
-                "<ul class='habit-info'>\n"+
-                "\t<li><div class='habit-name'>"+habit.title+"</div></li>\n"+
-                "\t\t<li><img class='habit-icon' src='"+habit.icon+"' alt='habit icon'></li>\n"+
-                "</ul>\n"+
-                "<div class='message'>\n"+
-                "\t<span class='message-total'>\n"+
-                "\t\t<strong>48</strong> days in a row! Best Record: <strong>60</strong><br>\n"+
-                "\t\t\t<svg height='25' width='150'>\n"+
-                "\t\t\t\t<line x1='0' y1='0' x2='120' y2='0' style='stroke:rgba(65, 131, 215, 0.8);stroke-width:25' />\n"+
-                "\t\t\t\t<line x1='120' y1='0' x2='150' y2='0' style='stroke:rgba(171,171,171,0.6);stroke-width:25' />\n"+
-                "\t\t\t</svg>\n"+
-                "\t</span><br>\n"+
-                "\t<span class='message-today'>Completed <strong>1/2</strong> for today!</span>\n"+
-                "</div>\n"+
-                "<div class='habit-op'>\n"+
-                "\t<button type='button' class='op op-done' onclick='showMsg(this);' title='done'>\n"+
-                "\t\t<img src='../img/done.svg' alt='Done'>\n"+
-                "\t</button>\n"+
-                "\t<button type='button' class='op op-edit' onclick='editHabit("+habit.id+");' title='edit habit'>\n"+
-                "\t\t<img src='../img/edit.svg' alt='Edit'>\n"+
-                "\t</button>\n"+
-                "\t<button type='button' class='op op-del' onclick='deleteHabit(this, "+habit.id+");' title='delete habit'>\n"+
-                "\t\t<img src='../img/delete.svg' alt='Del'>\n"+
-                "\t</button>\n"+
-                "</div>\n";
+        /*** Animation ***/
+
+        /* slides out the options then back in */
+        function toggleButton(element) {
+            var parent = element.parentNode;
+            var optionsButton = findChild(parent, "options-button");
+            var optionsMenu = findChild(parent, "options-slideout");
+            if (optionsMenu.className == "options") {
+                // toggle in options
+                optionsMenu.className = "options-out";
+                optionsButton.className = "op op-gear selected";
+            } else {
+                // toggle out options
+                optionsMenu.className = "options";
+                optionsButton.className = "op op-gear";
+            }
         }
+
+
+        /*** Helper functions ***/
+
+        /* returns the habit list node corresponding to an element in the habit */
+        function getHabitRoot(element) {
+            var curNode = element;
+            while (curNode.parentNode.id != "habit-list") {
+                curNode = curNode.parentNode;
+            }
+            return curNode;
+        }
+
+        /* finds a child by id of a parent node */
+        function findChild(parent, id) {
+            var children = parent.childNodes;
+            var result;
+            var node;
+            for (node in children) {
+                if (children[node].id == id) {
+                    result = children[node];
+                }
+            }
+            return result;
+        }
+
     </script>
 </body>
 </html>
