@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="../css/list.css">
+	<script src='https://cdn.firebase.com/js/client/2.3.1/firebase.js'></script>
     <script src='../js/global.js'></script>
 </head>
 <body onload="checkCurrentUser();">
@@ -15,6 +16,7 @@
     </section>
     <button type="button" id="addHabit" onclick="location.href='add.html'" title="add habit">+</button>
     <script type="text/javascript">
+		
         populateList();
 
         // Returns a formateted string template for a list entry
