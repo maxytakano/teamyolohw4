@@ -96,14 +96,16 @@ body{
 }
 /* occludes view of buttons */
 .white-square {
-    display:inline-block;
+    border: 2px solid #FFF;
+    border-radius: 100%;
+    display: inline-block;
     background-color: #FFF;
-    position:relative;
+    position: relative;
     width: 50px;
-    height: 30px;
+    height: 25px;
     z-index: 2;
-    top: 12px;
-    left: -71px;
+    top: 10px;
+    left: -63px;
 }
 .options {
     position:relative;
