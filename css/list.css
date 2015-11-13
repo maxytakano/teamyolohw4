@@ -30,6 +30,10 @@ body{
     font-size: 24px;
     position: relative;
     z-index: 4;
+	
+	/* Handles names that are too long for box */
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 .habit-icon{margin:0; border-radius:5px;width:100px; height:100px;}
 .week-container {
@@ -219,6 +223,10 @@ body{
             word-wrap: break-word;
             margin-left: 0px;
         }
+		.habit-name
+		{
+			max-width: 210px;
+		}
 }
 
 /* iphone 4 and 5 */
@@ -226,6 +234,10 @@ body{
     and (max-width: 350px) {
         section{width:300px;margin: 0 auto;}
         .message{right:4px;bottom:65px;font-size: xx-small;}
+		.habit-name
+		{
+			max-width: 160px;
+		}
 }
 
 /* desktop, tablet */
@@ -237,4 +249,8 @@ body{
         bottom: 65px;
         width: 343px;
     }
+	.habit-name
+	{
+		max-width: 350px;
+	}
 }
