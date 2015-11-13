@@ -56,7 +56,7 @@ function getHabit(id) {
   }
 }
 
-// Given an updated habit, update it within the 
+// Given an updated habit, update it within the
 // current user's habit list
 function modifyHabit(habit) {
   var user = getCurrentUser();

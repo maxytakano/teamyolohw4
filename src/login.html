@@ -8,7 +8,7 @@
 		<script src='https://cdn.firebase.com/js/client/2.3.1/firebase.js'></script>
 		<script src='../js/global.js'></script>
 	</head>
-	<body onload="clearLocalStorage(); printUsers(); checkCurrentUser();">
+  <body onload="clearLocalStorage(); printUsers(); checkCurrentUser();">
 	  <div class="login">
 	  	<h1>virtue / <i>vice</i></h1>
       <form class="loginForm" action="index_submit" method="get" accept-charset="utf-8">
@@ -33,8 +33,8 @@
        	</table>
        	<p id="Message"><span style="color: #4caf50; font-size: 14px">&#10004;</span></p>
        	<div class="buttons">
-       		<input class="loginButton" type="button" value="LogIn" onclick="logIn()">
-          <input class="signUpButton" type="button" value="SignUp" onclick="signUp()">
+       		<input class="loginButton" type="button" value="Log In" onclick="logIn()">
+          <input class="signUpButton" type="button" value="Sign Up" onclick="signUp()">
         </div>
       </form>
     </div>
@@ -58,7 +58,6 @@
             localStorage['users'] = JSON.stringify(newList);
         }
         else {
-
           // If user list exists, search for matching user (with correct
           // email and password
           var users = JSON.parse(localStorage['users']);

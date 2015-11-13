@@ -35,9 +35,9 @@
 
 				<p><label>Daily Frequency</label></p>
 				<div id="daily-button">
-					<label> <input id="Day1ID" type="radio" name="day" value="Day1" checked><span>1</span></label>
-					<label> <input id="Day2ID" type="radio" name="day" value="Day2"><span>2</span></label>
-					<label> <input id="Day3ID" type="radio" name="day" value="Day3"><span>3</span></label>
+					<label> <input id="Day1ID" type="radio" name="day" value="1" checked><span>1</span></label>
+					<label> <input id="Day2ID" type="radio" name="day" value="2"><span>2</span></label>
+					<label> <input id="Day3ID" type="radio" name="day" value="3"><span>3</span></label>
 					<span id="times">times</span>
 				</div>
 				<p><label><span id="notes_text">Notes (optional): </span></label></p>
@@ -59,7 +59,12 @@
 				icon : "",
 				weekly_freq : [],
 				daily_freq : 1,
-				notes : ""
+				notes : "",
+				completed_days: 0,
+                total_days : 1,
+                current_streak: 0,
+                longest_streak: 0,
+                completed_today: 0
 			};
 
 			selectImage(document.getElementById("../img/sleep.jpgID"));
@@ -73,7 +78,6 @@
 					newHabit.weekly_freq = getWeeklyFrequency();
 					newHabit.daily_freq = getDailyFrequency();
 					newHabit.notes = document.getElementById('notes').value;
-					
 					var user = getCurrentUser();
 					var newList = [];
 
@@ -93,7 +97,6 @@
 						// if list exists, check if it is empty
 						// if empty, reset nextID counter, and add new habit
 						if(newList.length == 0) {
-							
 							// Set the habit item's ID
 							user.nextHabitID = '1';
 							newHabit.id = '0';
@@ -149,13 +152,18 @@
 				for (var i = 0; i < labels.length; i++) {
 					week = labels[i].children.date;
 					if (week.checked) {
-						selected_weeks.push(week.value);
+						console.log(i);
+						selected_weeks.push(true);
+					} else {
+						selected_weeks.push(false);
 					}
 				}
 				if(selected_weeks.length == 0) {
+					// TODO: throw validation instead
 					for (var i = 0; i < labels.length; i++) {
 						week = labels[i].children.date;
-						selected_weeks.push(week.value);
+						// selected_weeks.push(week.value);
+						selected_weeks.push(true);
 					}
 				}
 				return selected_weeks;
@@ -170,7 +178,6 @@
 				for (var i = 0; i < labels.length; i++) {
 					selected_freq = labels[i].children.day;
 					if (selected_freq.checked) {
-						// console.log(sele)
 						return selected_freq.value;
 					}
 				}
