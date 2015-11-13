@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<script src="http://www.parsecdn.com/js/parse-latest.js"></script>
+    	<script src='../js/global.js'></script>
+    	<script>
+        	initParse();
+    	</script>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Add Habit</title>
 		<link rel="stylesheet" href="../css/forms.css">
-		<script src='https://cdn.firebase.com/js/client/2.3.1/firebase.js'></script>
-		<script src='../js/global.js'></script>
 	</head>
 	<body onload="checkCurrentUser();">
     	<input type="button" onclick="logOut();" value="Log Out"></input>
@@ -54,7 +57,6 @@
 			 * Optional fields: icon, weekly_freq, daily_freq, notes
 			 */
 			var newHabit = {
-				id : "",
 				title : "",
 				icon : "",
 				weekly_freq : [],
@@ -68,56 +70,32 @@
 				// If form validates, submit habit
 				if (validateForm()) {
 
-					// Populate the habit object
-					newHabit.title = document.getElementById('habit_title').value;
-					newHabit.weekly_freq = getWeeklyFrequency();
-					newHabit.daily_freq = getDailyFrequency();
-					newHabit.notes = document.getElementById('notes').value;
-					
-					var user = getCurrentUser();
-					var newList = [];
+					var user = Parse.User.current();
+					var List = Parse.Object.extend("List");
+					var query = new Parse.Query(List);
 
-					// Check if habit list exists already,
-					// if list does not exist, create a new list with new habit
-					if(user.list == 'null') {
+					query.get(user.get('list'), {
+					  	success: function(list) {
+					  		// The object was retrieved successfully.
+							newHabit.title = document.getElementById('habit_title').value;
+							newHabit.weekly_freq = getWeeklyFrequency();
+							newHabit.daily_freq = getDailyFrequency();
+							newHabit.notes = document.getElementById('notes').value;
 
-						//  Set the habit item's ID
-						user.nextHabitID = '1';
-						newHabit.id = '0';
-						newList[0] = newHabit;
-					}
-					// if list exists, add habit to list
-					else {
-						newList = JSON.parse(user.list);
-
-						// if list exists, check if it is empty
-						// if empty, reset nextID counter, and add new habit
-						if(newList.length == 0) {
-							
-							// Set the habit item's ID
-							user.nextHabitID = '1';
-							newHabit.id = '0';
-							newList[0] = newHabit;
-						}
-						// if not empty, continue adding habit item as normal
-						else {
-
-							// Set the habit item's ID
-							newHabit.id = user.nextHabitID;
-							user.nextHabitID = parseInt(user.nextHabitID)+1;
-							newList.push(newHabit);
-						}
-					}
-
-					// Store newly modified list into user's account
-					user.list = JSON.stringify(newList);
-					modifyCurrentUser(user);
-
-					// navigate to list page
-					window.location = 'list.html';
-				} else {
+					  		list.add('habits', newHabit);
+					  		list.save().then(function() {
+					  			window.location = 'list.html';
+					  		});
+					  	},
+					  	error: function(object, error) {
+					  		alert("Error: " + error.code + " " + error.message);
+					    	// The object was not retrieved successfully.
+					    	// error is a Parse.Error with an error code and message.
+					  	}
+					});
+				}
+				else {
 					alert('form failed validation');
-					// do nothing
 				}
 			}
 

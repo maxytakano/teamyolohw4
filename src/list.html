@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="http://www.parsecdn.com/js/parse-latest.js"></script>
+    <script src='../js/global.js'></script>
+    <script>
+        initParse();
+    </script>
     <title>Virtue / Vice</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="../css/list.css">
-	<script src='https://cdn.firebase.com/js/client/2.3.1/firebase.js'></script>
-    <script src='../js/global.js'></script>
 </head>
 <body onload="checkCurrentUser();">
     <input type="button" onclick="logOut();" value="Log Out"></input>
@@ -16,8 +19,9 @@
     </section>
     <button type="button" id="addHabit" onclick="location.href='add.html'" title="add habit">+</button>
     <script type="text/javascript">
-		
+
         populateList();
+        //setTimeout(populateList, 200);
 
         // Returns a formateted string template for a list entry
         function formatTemplate(habit)
@@ -31,10 +35,10 @@
             '        </button>'+
             '        <div class="white-square"></div>'+
             '        <span id="options-slideout" class="options">'+
-            '            <button type="button" class="op op-edit" onclick="editHabit('+habit.id+');" title="edit habit">'+
+            '            <button type="button" class="op op-edit" onclick="editHabit(\''+habit.title+'\');" title="edit habit">'+
             '                <img class="small-buttons" src="../img/edit.svg" alt="Edit">'+
             '            </button>'+
-            '            <button type="button" class="op op-del" onclick="deleteHabit(this, '+habit.id+');" title="delete habit">'+
+            '            <button type="button" class="op op-del" onclick="deleteHabit(this, \''+habit.title+'\');" title="delete habit">'+
             '                <img class="small-buttons" src="../img/delete.svg" alt="Del">'+
             '            </button>'+
             '        </span>'+
@@ -68,40 +72,62 @@
         }
 
         // Go to edit page
-        function editHabit(id) {
-            var user = getCurrentUser();
-            user.editID = id;
-            modifyCurrentUser(user);
-            window.location = 'edit.html';
-        }
+        function editHabit(title) {
+            var user = Parse.User.current();
+            var List = Parse.Object.extend("List");
+            var query = new Parse.Query(List);
 
-        // Removes habit entry from the list and from local storage
-        function deleteHabit(element, id){
-            // Remove from user's habit list
-            var user = getCurrentUser();
-            var removeList = JSON.parse(user.list);
-            for(h in removeList) {
-                if(removeList[h].id == id) {
-                    removeList.splice(h, 1);
-                    break;
+            query.get(user.get('list'), {
+                success: function(list) {
+                    list.set('editTitle', title);
+                    list.save().then(function() {
+                         window.location = 'edit.html';
+                    });
+                },
+                error: function(object, error) {
+                    alert("Error: " + error.code + " " + error.message);
+                    // The object was not retrieved successfully.
+                    // error is a Parse.Error with an error code and message.
                 }
-            }
-
-            // Store newly modified list into the user's account
-            user.list = JSON.stringify(removeList);
-            modifyCurrentUser(user);
-
-            // Remove habit entry from document
-            var child = getHabitRoot(element);
-            var parent = child.parentNode;
-            parent.removeChild(child);
+            });
         }
 
-        // Dynamically adds habits into the document habit list
+        function deleteHabit(element, title){
+            // Remove from user's habit list
+            var user = Parse.User.current();
+            var List = Parse.Object.extend("List");
+            var query = new Parse.Query(List);
+
+            query.get(user.get('list'), {
+                success: function(list) {
+                    // The object was retrieved successfully.
+                    var habits = list.get('habits');
+                    for(h in habits) {
+
+                        if(habits[h].title == title) {
+                            habits.splice(h, 1);
+                            break;
+                        }
+                    }
+                    list.set('habits', habits);
+                    list.save().then(function() {
+                        // Remove habit entry from document
+                        var child = getHabitRoot(element);
+                        var parent = child.parentNode;
+                        parent.removeChild(child);
+                    });
+                },
+                error: function(object, error) {
+                    alert("Error: " + error.code + " " + error.message);
+                    // The object was not retrieved successfully.
+                    // error is a Parse.Error with an error code and message.
+                }
+            });
+        }
+
         function populateList() {
             // Create template habit object
             var habit = {
-                id: "",
                 title : "",
                 icon : "../img/no.jpg",
                 weekly_freq : [],
@@ -112,23 +138,32 @@
             // Grab containing element for which we are going to add items into
             var container = document.getElementById('habit-list');
 
-            // Obtain habits from current user
-            var user = getCurrentUser();
-            var habitList = JSON.parse(user.list);
+            var user = Parse.User.current();
+            var List = Parse.Object.extend("List");
+            var query = new Parse.Query(List);
 
-            // Iterate through habits in local storage, modify temporary habit object,
-            // and add list entry into the document using the habit object's data
-            for(h in habitList) {
-                habit.id = habitList[h].id;
-                habit.title = habitList[h].title;
-                habit.icon = habitList[h].icon;
+            query.get(user.get('list'), {
+                success: function(list) {
+                    // The object was retrieved successfully.
+                    // Populate the habit object
+                    var habits = list.get('habits');
+                    for(h in habits) {
+                        habit.title = habits[h].title;
+                        habit.icon = habits[h].icon;
 
-                var outerList = document.createElement('li');
-                outerList.setAttribute("id", "habitItem_"+habit.id);
-                outerList.innerHTML = formatTemplate(habit);
+                        var outerList = document.createElement('li');
+                        outerList.setAttribute("id", "habitItem_"+habit.title);
+                        outerList.innerHTML = formatTemplate(habit);
 
-                container.appendChild(outerList);
-            }
+                        container.appendChild(outerList);
+                    }
+                },
+                error: function(object, error) {
+                    alert("Error: " + error.code + " " + error.message);
+                    // The object was not retrieved successfully.
+                    // error is a Parse.Error with an error code and message.
+                }
+            });
         }
 
         /*** Animation ***/
@@ -173,7 +208,6 @@
             }
             return result;
         }
-
     </script>
 </body>
 </html>

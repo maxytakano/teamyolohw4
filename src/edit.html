@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<script src="http://www.parsecdn.com/js/parse-latest.js"></script>
+    	<script src='../js/global.js'></script>
+    	<script>
+        	initParse();
+    	</script>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Edit Habit</title>
 		<link rel="stylesheet" href="../css/forms.css">
-		<script src='https://cdn.firebase.com/js/client/2.3.1/firebase.js'></script>
-		<script src='../js/global.js'></script>
 	</head>
 	<body onload="checkCurrentUser();">
     	<input type="button" onclick="logOut();" value="Log Out"></input>
@@ -54,7 +57,6 @@
 			 * Optional fields: icon, weekly_freq, daily_freq, notes
 			 */
 			var newHabit = {
-				id : "",
 				title : "",
 				icon : "",
 				weekly_freq : [],
@@ -63,47 +65,95 @@
 			};
 
 			fillForm();
+			//setTimeout(fillForm, 200);
 
-			// Fill out form with current data
 			function fillForm() {
-				var user = getCurrentUser();
-				var habit = getHabit(user.editID);
-				if(user.editID == 'null' || habit == undefined) {
-					alert("Sorry. This habit seems to have been deleted.");
-					window.location = 'list.html';
-				}
-				document.getElementById('habit_title').value = habit.title;
-				selectImage(document.getElementById("../img/sleep.jpgID"));
-				for(var i = 0; i < habit.weekly_freq.length; i++) {
-					document.getElementById(habit.weekly_freq[i]+"ID").checked = true;
-				}
-				document.getElementById(habit.daily_freq+"ID").checked = true;
-				document.getElementById('notes').value = habit.notes;
+				var user = Parse.User.current();
+	            var List = Parse.Object.extend("List");
+	            var query = new Parse.Query(List);
 
+	            query.get(user.get('list'), {
+	                success: function(list) {
+	                    // The object was retrieved successfully.
+	                    // Populate the habit object
+	                    var habits = list.get('habits');
+	                    var h_title = list.get('editTitle');
+	                    var habit;
+	                    for(h in habits) {
+
+	                        if(habits[h].title == h_title) {
+	                            habit = habits[h];
+	                            break;
+	                        }
+	                    }
+	                    if(!habit) {
+							alert("Sorry. This habit seems to have been deleted.");
+							window.location = 'list.html';
+	                    }
+
+	                    else {
+							document.getElementById('habit_title').value = habit.title;
+							selectImage(document.getElementById("../img/sleep.jpgID"));
+							for(var i = 0; i < habit.weekly_freq.length; i++) {
+								document.getElementById(habit.weekly_freq[i]+"ID").checked = true;
+							}
+							document.getElementById(habit.daily_freq+"ID").checked = true;
+							document.getElementById('notes').value = habit.notes;
+	                    }
+	                },
+	                error: function(object, error) {
+	                    alert("Error: " + error.code + " " + error.message);
+	                    // The object was not retrieved successfully.
+	                    // error is a Parse.Error with an error code and message.
+	                }
+	            });
 			}
 
-			// Submit the editted habit
 			function onSubmit() {
-				// If form validates, submit newly modified habit and go to
-				// list page
+
+				// If form validates, submit habit
 				if (validateForm()) {
 
-					// Populate the habit object
-					var user = getCurrentUser();
-					newHabit.id = user.editID;
-					newHabit.title = document.getElementById('habit_title').value;
-					newHabit.weekly_freq = getWeeklyFrequency();
-					newHabit.daily_freq = getDailyFrequency();
-					newHabit.notes = document.getElementById('notes').value;
+					var user = Parse.User.current();
+					var List = Parse.Object.extend("List");
+					var query = new Parse.Query(List);
 
-					modifyHabit(newHabit);
-					window.location = 'list.html';
-				} else {
+					query.get(user.get('list'), {
+						success: function(list) {
+		                    // The object was retrieved successfully.
+		                    var habits = list.get('habits');
+		                    for(h in habits) {
+
+		                        if(habits[h].title == list.get('editTitle')) {
+		                            habits.splice(h, 1);
+		                            break;
+		                        }
+		                    }
+
+				            newHabit.id = user.editID;
+							newHabit.title = document.getElementById('habit_title').value;
+							newHabit.weekly_freq = getWeeklyFrequency();
+							newHabit.daily_freq = getDailyFrequency();
+							newHabit.notes = document.getElementById('notes').value;
+							habits.push(newHabit);
+
+				            list.set('habits', habits);
+				            list.set('editTitle', '');
+		                    list.save().then(function() {
+		                        window.location = 'list.html';
+		                    });
+		                },
+					  	error: function(object, error) {
+					  		alert("Error: " + error.code + " " + error.message);
+					    	// The object was not retrieved successfully.
+					    	// error is a Parse.Error with an error code and message.
+					  	}
+					});
+				}
+				else {
 					alert('form failed validation');
-					// do nothing
 				}
 			}
-
 
 			/**
 			 * Validates the current habit object to see if the form can be submitted
@@ -174,6 +224,46 @@
 				// Save the current image into the habit object.
 				newHabit.icon = el.src;
 			}
+
+/*			// Fill out form with current data
+			function fillForm() {
+				var user = getCurrentUser();
+				var habit = getHabit(user.editID);
+				if(user.editID == 'null' || habit == undefined) {
+					alert("Sorry. This habit seems to have been deleted.");
+					window.location = 'list.html';
+				}
+				document.getElementById('habit_title').value = habit.title;
+				selectImage(document.getElementById("../img/sleep.jpgID"));
+				for(var i = 0; i < habit.weekly_freq.length; i++) {
+					document.getElementById(habit.weekly_freq[i]+"ID").checked = true;
+				}
+				document.getElementById(habit.daily_freq+"ID").checked = true;
+				document.getElementById('notes').value = habit.notes;
+			}
+
+			// Submit the editted habit
+			function onSubmit() {
+				// If form validates, submit newly modified habit and go to
+				// list page
+				if (validateForm()) {
+
+					// Populate the habit object
+					var user = getCurrentUser();
+					newHabit.id = user.editID;
+					newHabit.title = document.getElementById('habit_title').value;
+					newHabit.weekly_freq = getWeeklyFrequency();
+					newHabit.daily_freq = getDailyFrequency();
+					newHabit.notes = document.getElementById('notes').value;
+
+					modifyHabit(newHabit);
+					window.location = 'list.html';
+				} else {
+					alert('form failed validation');
+					// do nothing
+				}
+			}*/
+
 		</script>
 	</body>
 </html>

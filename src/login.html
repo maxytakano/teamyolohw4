@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html>
 	<head>
+    <script src="http://www.parsecdn.com/js/parse-latest.js"></script>
+    <script src='../js/global.js'></script>
+    <script>
+        initParse();
+    </script>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Welcome to Virtue/Vice!</title>
 		<link rel="stylesheet" href="../css/login.css">
-		<script src='https://cdn.firebase.com/js/client/2.3.1/firebase.js'></script>
-		<script src='../js/global.js'></script>
 	</head>
-	<body onload="clearLocalStorage(); printUsers(); checkCurrentUser();">
+	<body onload="checkCurrentUser();">
 	  <div class="login">
 	  	<h1>virtue / <i>vice</i></h1>
       <form class="loginForm" action="index_submit" method="get" accept-charset="utf-8">
@@ -49,37 +52,18 @@
         var inputEmail = document.getElementById('useremail').value;
         var inputPassword = document.getElementById('password').value;
 
-        // Flag for if user exists
-        var exists = false;
-
-        // If user list does not exist, create one
-        if(localStorage['users'] == undefined) {
-            var newList = [];
-            localStorage['users'] = JSON.stringify(newList);
-        }
-        else {
-
-          // If user list exists, search for matching user (with correct
-          // email and password
-          var users = JSON.parse(localStorage['users']);
-          for(u in users) {
-            if(users[u].email == inputEmail && users[u].password == inputPassword) {
-              // Store user id into client browser
-              localStorage['currentUser'] = users[u].id;
-              exists = true;
-              break;
-            }
+        Parse.User.logIn(inputEmail,  inputPassword, {
+          success: function(user) {
+            // Do stuff after successful login.
+            displayMessage('Log In Successful!');
+            window.location = 'list.html';
+          },
+          error: function(user, error) {
+            // The login failed. Check error to see why.
+            alert("Error: " + error.code + " " + error.message);
+            displayMessage('Log In Unsuccessful! Make sure the account exists and you have the correct email and password!');
           }
-        }
-
-        // Display message
-        if(exists) {
-           displayMessage('Log In Successful!');
-           window.location = 'list.html';
-        }
-        else {
-          displayMessage('Log In Unsuccessful! Make sure the account exists and you have the correct email and password!');
-        }
+        });
       }
 
       // Attempts to create a new user account
@@ -88,72 +72,38 @@
            return;
         }
 
-        // Flag for if user exists
-        var exists = false;
         var inputEmail = document.getElementById('useremail').value;
         var inputPassword = document.getElementById('password').value;
 
-        // If user list does not exist, create one
-        if(localStorage['users'] == undefined) {
-          var newList = [];
-          localStorage['users'] = JSON.stringify(newList);
-        }
+        var user = new Parse.User();
 
-        // If user list exists, search for conflicting matching user (with 
-        // same email)
-        else {
-          var users = JSON.parse(localStorage['users']);
-          for(u in users) {
-             // Check if there exists account with email already
-             if(users[u].email == inputEmail)
-             {
-                exists = true;
-                break;
-             }
-          }
-        }
+        var List = Parse.Object.extend("List");
+        var list = new List();
+        list.set('habits', []);
+        list.set('editTitle', '');
 
-        // If account with email does not exist, create one
-        if(!exists) {
+        list.save().then(function(list){
 
-            // Template for user account object
-            var user = {
-              id : "",
-              email : "",
-              password : "",
-              list : "null",
-              nextHabitID : "0",
-              editID : "null"
-            };
+          user.set("username", inputEmail);
+          user.set("email", inputEmail);
+          user.set("password", inputPassword);
+          user.set('list', list.id);
 
-            if(localStorage['nextID'] == undefined) {
-              localStorage['nextID'] = '0';
+          user.signUp(null, {
+            success: function(user) {
+
+              displayMessage('Sign Up Successful!');
+              window.location = 'add.html';
+            },
+            error: function(user, error) {
+
+              displayMessage('Sign Up Unsuccessful! Please use unique, valid email and password!');
+              alert("Error: " + error.code + " " + error.message);
             }
+          });
+        });
 
-            // Define the user account
-            user.id = localStorage['nextID'];
-            user.email = inputEmail;
-            user.password = inputPassword;
 
-            // Update next unique ID to be used
-            localStorage['nextID'] = parseInt(localStorage['nextID'])+1;
-
-            // Add new user account to user list
-            var users = JSON.parse(localStorage['users']);
-            users.push(user);
-            localStorage['users'] = JSON.stringify(users);
-
-            // Save user account who's logged in
-            localStorage['currentUser'] = user.id;
-
-            // Display message and go to add habit page
-            displayMessage('Sign Up Successful!');
-            window.location = 'add.html';
-        }
-        // If account with email does exist, display error
-        else {
-          displayMessage('Sign Up Unsuccessful! An account with that email already exists!');
-        }
       }
 
       // Validates user input to the forms
@@ -182,7 +132,6 @@
         document.getElementById('useremail').value = '';
         document.getElementById('password').value = '';
       }
-
     </script>
 	</body>
 </html>
