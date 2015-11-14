@@ -16,12 +16,24 @@
     <input type="button" onclick="advanceDay();" value="Advance Day"></input>
 
     <section>
-        <h1>Habit List</h1>
+        <h1 id="header-text">Habit List</h1>
         <ul id="habit-list"></ul>
     </section>
+	<div id="addHabit-empty">
+		<div id="addHabit-message">
+			<p>You have no habits.<br/>Click here to add one.</p>
+		</div>
+		<img id="addHabit-arrow" src="../img/downArrow.png" alt="Arrow">
+	</div>
     <button type="button" id="addHabit" onclick="location.href='add.html'" title="add habit">+</button>
     <script type="text/javascript">
+		var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+		
         populateList();
+		var currentDate = new Date();
+		document.getElementById("header-text").innerHTML += " - " + days[currentDate.getDay()] + " " + (currentDate.getMonth()+1) + "/" + currentDate.getDate();
+		//alert("Today is " + days[currentDate.getDay()] + ".");
+		
         //setTimeout(populateList, 200);
 
         // Returns a formateted string template for a list entry
@@ -126,6 +138,7 @@
                         var child = getHabitRoot(element);
                         var parent = child.parentNode;
                         parent.removeChild(child);
+						checkForHabits();
                     });
                 },
                 error: function(object, error) {
@@ -180,6 +193,7 @@
                         // Refresh the habit.
                         refreshHabit(curHabit);
                     }
+					checkForHabits();
                 },
                 error: function(object, error) {
                     alert("Error: " + error.code + " " + error.message);
@@ -188,6 +202,21 @@
                 }
             });
         }
+		
+		/** Check to see if any habits are on page and place a user message if not **/
+		function checkForHabits()
+		{
+			var list = document.getElementById("habit-list");
+			var msg = document.getElementById("addHabit-empty");
+			if(list.childNodes.length <= 0)
+			{
+				msg.style.visibility = "visible";
+			}
+			else
+			{
+				msg.style.visibility = "hidden";
+			}
+		}
 
         /** Success/Fail **/
         function thumbsUp(habit_id) {

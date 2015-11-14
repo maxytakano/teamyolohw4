@@ -212,6 +212,11 @@ body{
 #addHabit:active{border: 2px solid gray; background: rgb(33, 72, 100); box-shadow: 0 0 10px gray;}
 #addHabit:focus{outline-style:none;}
 
+/* mesage above add habit when there are no habits displayed */
+#addHabit-empty{position: fixed; text-align: center; width: 60px; bottom: 110px; right: 40px; visibility: hidden;}
+#addHabit-message{padding:5%; /*background: rgba(255,255,255,1);*/ border:2px solid rgb(0,0,0); border-radius:5px; box-sizing: border-box; position: relative; width: 260px; right: 200px; font-size: x-large;}
+#addHabit-arrow{width: 60px;}
+
 
 /* phone */
 @media only screen
