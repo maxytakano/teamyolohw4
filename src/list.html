@@ -13,6 +13,8 @@
 </head>
 <body onload="checkCurrentUser();">
     <input type="button" onclick="logOut();" value="Log Out"></input>
+    <input type="button" onclick="advanceDay();" value="Advance Day"></input>
+
     <section>
         <h1>Habit List</h1>
         <ul id="habit-list"></ul>
@@ -26,60 +28,74 @@
         // Returns a formateted string template for a list entry
         function formatTemplate(habit)
         {
-            var listString = '\n'+
-            '<ul class="habit-info">'+
-            '    <li>'+
-            '        <div class="habit-name">'+habit.title+'</div>'+
-            '        <button id="options-button" type="button" class="op op-gear" onClick="toggleButton(this);" title="habit options">'+
-            '            <img id="gear" class="gear-img" src="../img/gear.png" alt="Edit">'+
-            '        </button>'+
-            '        <div class="white-square"></div>'+
-            '        <span id="options-slideout" class="options">'+
-            '            <button type="button" class="op op-edit" onclick="editHabit(\''+habit.title+'\');" title="edit habit">'+
-            '                <img class="small-buttons" src="../img/edit.svg" alt="Edit">'+
-            '            </button>'+
-            '            <button type="button" class="op op-del" onclick="deleteHabit(this, \''+habit.title+'\');" title="delete habit">'+
-            '                <img class="small-buttons" src="../img/delete.svg" alt="Del">'+
-            '            </button>'+
-            '        </span>'+
-            '    </li>'+
-            '    <li><img class="habit-icon" src="'+habit.icon+'" alt="habit icon"></li>'+
-            '</ul>'+
-            '<div class="message">'+
-            '    <span class="message-total">'+
-            '        <strong>2</strong> days in a row! Best Record: <strong>5</strong><br>'+
-            '        <svg height="25" width="150">'+
-            '            <line x1="0" y1="0" x2="60" y2="0" style="stroke:rgba(65, 131, 215, 0.8);stroke-width:25" />'+
-            '            <line x1="60" y1="0" x2="150" y2="0" style="stroke:rgba(171,171,171,0.6);stroke-width:25" />'+
-            '        </svg>'+
-            '    </span><br>'+
-            '    <span class="message-today">Completed <strong>1/1</strong> for today!</span>'+
-            '</div>'+
-            '<div class="habit-op">'+
-            '    <button type="button" class="op op-done" onclick="showMsg(this);" title="done">'+
-            '        <img src="../img/done.svg" alt="Done">'+
-            '    </button>'+
-            '    <button type="button" class="op op-fail" onclick="showMsg(this);" title="done">'+
-            '        <img src="../img/xIcon.png" alt="Done">'+
-            '    </button>'+
-            '</div>';
+
+
+            var listString = '\n \
+            <ul class="habit-info">\n \
+                <li>\n \
+                    <div class="habit-name">'+habit.habit_id+'</div>\n \
+                    <button id="options-button" type="button" class="op op-gear" onClick="toggleButton(this);" title="habit options">\n \
+                        <img id="gear" class="gear-img" src="../img/gear.png" alt="Edit">\n \
+                    </button>\n \
+                    <div class="white-square"></div>\n \
+                    <span id="options-slideout" class="options">\n \
+                        <button type="button" class="op op-edit" onclick="editHabit("'+habit.habit_id+'");" title="edit habit">\n \
+                            <img class="small-buttons" src="../img/edit.svg" alt="Edit">\n \
+                        </button>\n \
+                        <button type="button" class="op op-del" onclick="deleteHabit(this, "'+habit.habit_id+'");" title="delete habit">\n \
+                            <img class="small-buttons" src="../img/delete.svg" alt="Del">\n \
+                        </button>\n \
+                    </span>\n \
+                </li>\n \
+                <li>\n \
+                    <img class="habit-icon" src="'+habit.icon+'" alt="habit icon"><br>\n \
+                    <div class="week-container">\n \
+                        <div class="week-day-off">S<small>u</small></div>\n \
+                        <div class="week-day-off">M</div>\n \
+                        <div class="week-day-off">T<small>u</small></div>\n \
+                        <div class="week-day-off">W</div>\n \
+                        <br><span style="margin-left: 14px;"></span>\n \
+                        <div class="week-day-off">T<small>h</small></div>\n \
+                        <div class="week-day-off">F</div>\n \
+                        <div class="week-day-off">S<small>a</small></div>\n \
+                    </div>\n \
+                </li>\n \
+            </ul>\n \
+            <div class="message">\n \
+                <div class="message-total">\n \
+                    <div class="graph-message">\n \
+                    </div><br>\n \
+                    <svg class="habit-graph" height="25" width="150">\n \
+                        <line x1="0" y1="0" x2="150" y2="0" style="stroke:rgba(171,171,171,0.6);stroke-width:25" />\n \
+                        <line class="blue-line" x1="0" y1="0" x2="60" y2="0" style="stroke:rgba(65, 131, 215, 0.8);stroke-width:25" />\n \
+                    </svg>\n \
+                    <div class="complete-message">\n \
+                        Completed <strong>0/1</strong> for today.\n \
+                    </div>\n \
+                </div><br>\n \
+            </div>\n \
+            <div class="habit-op" id="button-container">\n \
+                <div class="disabled-button"></div>\n \
+                <div class="disabled-button2"></div>\n \
+                <button type="button" class="op op-done" onclick="success("'+habit.habit_id+'");" title="done">\n \
+                    <img src="../img/done.svg" alt="Done">\n \
+                </button>\n \
+                <button type="button" class="op op-fail" onclick="fail("'+habit.habit_id+'");" title="done">\n \
+                    <img src="../img/xIcon.png" alt="Done">\n \
+                </button>\n \
+            </div>';
             return listString;
         }
 
-        function showMsg(element){
-            var msgElement = (element.parentNode.parentNode.getElementsByClassName("message"))[0];
-            msgElement.style.visibility="visible";
-        }
-
         // Go to edit page
-        function editHabit(title) {
+        function editHabit(habit_id) {
             var user = Parse.User.current();
             var List = Parse.Object.extend("List");
             var query = new Parse.Query(List);
 
             query.get(user.get('list'), {
                 success: function(list) {
-                    list.set('editTitle', title);
+                    list.set('edit_id', habit_id);
                     list.save().then(function() {
                          window.location = 'edit.html';
                     });
@@ -92,7 +108,7 @@
             });
         }
 
-        function deleteHabit(element, title){
+        function deleteHabit(element, habit_id){
             // Remove from user's habit list
             var user = Parse.User.current();
             var List = Parse.Object.extend("List");
@@ -103,8 +119,7 @@
                     // The object was retrieved successfully.
                     var habits = list.get('habits');
                     for(h in habits) {
-
-                        if(habits[h].title == title) {
+                        if(habits[h].habit_id == habit_id) {
                             habits.splice(h, 1);
                             break;
                         }
@@ -126,15 +141,6 @@
         }
 
         function populateList() {
-            // Create template habit object
-            var habit = {
-                title : "",
-                icon : "../img/no.jpg",
-                weekly_freq : [],
-                daily_freq : 1,
-                notes : ""
-            };
-
             // Grab containing element for which we are going to add items into
             var container = document.getElementById('habit-list');
 
@@ -147,15 +153,36 @@
                     // The object was retrieved successfully.
                     // Populate the habit object
                     var habits = list.get('habits');
+                    var curHabit;
                     for(h in habits) {
-                        habit.title = habits[h].title;
-                        habit.icon = habits[h].icon;
+                        curHabit = habits[h];
 
                         var outerList = document.createElement('li');
-                        outerList.setAttribute("id", "habitItem_"+habit.title);
-                        outerList.innerHTML = formatTemplate(habit);
+                        var curId = "habitItem_"+curHabit.habit_id;
+                        // Construct the habit html.
+                        outerList.setAttribute("id", curId);
+                        outerList.innerHTML = formatTemplate(curHabit);
 
+                        // Append the html to the habit list.
                         container.appendChild(outerList);
+
+                        // Get the habit we just appended.
+                        var curList = document.getElementById(curId);
+
+                        // Highlight habit's week days.
+                        var weekContainer = curList.getElementsByClassName("week-container")[0];
+                        var daysArray = weekContainer.getElementsByTagName("div");
+
+                        var i;
+                        var daysLength = daysArray.length;
+                        for (i = 0; i < daysLength; i++) {
+                            if (curHabit.weekly_freq[i]) {
+                                daysArray[i].className = "week-day";
+                            }
+                        }
+
+                        // Refresh the habit.
+                        refreshHabit(curHabit);
                     }
                 },
                 error: function(object, error) {
@@ -165,6 +192,196 @@
                 }
             });
         }
+
+        /** Success/Fail **/
+        function success(habit_id) {
+            var user = Parse.User.current();
+            var List = Parse.Object.extend("List");
+            var query = new Parse.Query(List);
+
+            query.get(user.get('list'), {
+                success: function(list) {
+                    var habitList = list.get('habits');
+                    for(h in habitList) {
+                        if(habitList[h].habit_id == habit_id) {
+                            curHabit = habitList[h];
+                            break;
+                        }
+                    }
+
+                    curHabit.completed_today += 1;
+                    if (curHabit.completed_today >= curHabit.daily_freq) {
+                        // Habit is fully completed for the day.
+                        curHabit.completed_days += 1;
+
+                        // Do record changes.
+                        curHabit.current_streak += 1;
+                        if (curHabit.current_streak > curHabit.longest_streak) {
+                            curHabit.longest_streak = curHabit.current_streak;
+                        }
+                    }
+
+                    list.set('habits', habitList);
+                    list.save().then(function() {
+                        // Update UI
+                        refreshHabit(curHabit);
+                    });
+
+                },
+                error: function(object, error) {
+                    alert("Error: " + error.code + " " + error.message);
+                    // The object was not retrieved successfully.
+                    // error is a Parse.Error with an error code and message.
+                }
+            });
+        }
+
+        function fail(habit_id) {
+            var user = Parse.User.current();
+            var List = Parse.Object.extend("List");
+            var query = new Parse.Query(List);
+
+            query.get(user.get('list'), {
+                success: function(list) {
+                    var habitList = list.get('habits');
+                    for(h in habitList) {
+                        if(habitList[h].habit_id == habit_id) {
+                            curHabit = habitList[h];
+                            break;
+                        }
+                    }
+
+                    // Set completed_today to -1 to signal a failed day.
+                    curHabit.completed_today = -1;
+                    curHabit.current_streak = 0;
+
+                    list.set('habits', habitList);
+                    list.save().then(function() {
+                        // Update UI
+                        refreshHabit(curHabit);
+                    });
+
+                },
+                error: function(object, error) {
+                    alert("Error: " + error.code + " " + error.message);
+                    // The object was not retrieved successfully.
+                    // error is a Parse.Error with an error code and message.
+                }
+            });
+        }
+
+        function disableHabit(habit_id) {
+            var curList = document.getElementById("habitItem_"+habit_id);
+            var doneButton = curList.getElementsByClassName("op-done")[0];
+            var failButton = curList.getElementsByClassName("op-fail")[0];
+            var disabler1 = curList.getElementsByClassName("disabled-button")[0];
+            var disabler2 = curList.getElementsByClassName("disabled-button2")[0];
+
+            doneButton.disabled = true;
+            failButton.disabled = true;
+            disabler1.style.visibility = "visible";
+            disabler2.style.visibility = "visible";
+        }
+
+        function enableHabit(habit_id) {
+            var curList = document.getElementById("habitItem_"+habit_id);
+            var doneButton = curList.getElementsByClassName("op-done")[0];
+            var failButton = curList.getElementsByClassName("op-fail")[0];
+            var disabler1 = curList.getElementsByClassName("disabled-button")[0];
+            var disabler2 = curList.getElementsByClassName("disabled-button2")[0];
+
+            doneButton.disabled = false;
+            failButton.disabled = false;
+            disabler1.style.visibility = "hidden";
+            disabler2.style.visibility = "hidden";
+        }
+
+        /**** Update functions ****/
+
+        function refreshHabit(curHabit) {
+            // 1. Update the labels and buttons.
+            updateGUI(curHabit);
+
+            // 2. Update the graph.
+            updateBar(curHabit);
+        }
+
+        /**
+         * Updates the labels of the habit and checks if the buttons need to be disabled
+         */
+        function updateGUI(curHabit) {
+            // Get the dom.
+            var habit_id = curHabit.habit_id;
+            var curList = document.getElementById("habitItem_"+habit_id);
+            var graphMessage = curList.getElementsByClassName("graph-message")[0];
+            var completeMessage = curList.getElementsByClassName("complete-message")[0];
+
+            var dayString = "days";
+            var recordString = "days";
+            if (curHabit.completed_days == 1) {
+                dayString = "day";
+            }
+            if (curHabit.current_streak == 1) {
+                recordString = "day";
+            }
+
+
+            if (curHabit.completed_today >= curHabit.daily_freq) {
+                // Habit already completed for today.
+                graphMessage.innerHTML = "<strong style='color: rgb(98, 140, 193);'>"+curHabit.current_streak+"</strong> "+
+                                        recordString+" in a row! Best Record: <strong style='color: rgb(98, 140, 193);'>"+
+                                        curHabit.longest_streak+"</strong><br>";
+                completeMessage.innerHTML = "Completed <strong style='color: rgb(89, 167, 96);'>"+curHabit.completed_today
+                                            +" / "+curHabit.daily_freq+"</strong> for today!";
+                // Disable the habit for today.
+                disableHabit(habit_id);
+            } else if (curHabit.completed_today == -1) {
+                // Habit failed for today.
+                graphMessage.innerHTML = "Habit completed <strong style='color: rgb(98, 140, 193);'>"+curHabit.completed_days+
+                                        "</strong> "+dayString+" out of <strong style='color: rgb(98, 140, 193);'>"
+                                        +curHabit.total_days+"</strong>.<br>";
+                completeMessage.innerHTML = "Habit <strong style='color: rgba(199, 35, 20, 0.76);'>failed</strong>. \
+                                             Try harder tomorrow!";
+                // Disable the habit for today.
+                disableHabit(habit_id);
+            } else {
+                // Habit in progress for today
+                graphMessage.innerHTML = "Habit completed <strong style='color: rgb(98, 140, 193);'>"+
+                                        curHabit.completed_days+"</strong style='color: rgb(98, 140, 193);'> "+dayString+" \
+                                        out of <strong style='color: rgb(98, 140, 193);'>"+curHabit.total_days+"</strong>.<br>";
+                completeMessage.innerHTML = "Completed <strong>"+curHabit.completed_today+" / "+
+                                            curHabit.daily_freq+"</strong> for today.";
+                enableHabit(habit_id);
+            }
+        }
+
+        function updateBar(curHabit) {
+            // Get the dom.
+            var curList = document.getElementById("habitItem_"+curHabit.habit_id);
+            var blueLine = curList.getElementsByClassName("blue-line")[0];
+
+            // Calculate bar percentage.
+            var percentFull = curHabit.completed_days / curHabit.total_days;
+            var lineLength = percentFull * 150.0;
+            var lengthString = lineLength.toString();
+
+            // Set line length to the percentage.
+            blueLine.setAttribute("x2", lengthString);
+        }
+
+        // function resetCompleted() {
+        //     var user = getCurrentUser();
+        //     var habitList = JSON.parse(user.list);
+        //     var curHabit;
+        //     for(h in habitList) {
+        //         curHabit = habitList[h];
+        //         curHabit.completed_today = 0;
+        //     }
+
+        //     // Store newly modified list into the user's account
+        //     user.list = JSON.stringify(habitList);
+        //     modifyCurrentUser(user);
+        // }
 
         /*** Animation ***/
 
@@ -197,16 +414,46 @@
         }
 
         /* finds a child by id of a parent node */
-        function findChild(parent, id) {
+        function findChild(parent, element_id) {
             var children = parent.childNodes;
             var result;
             var node;
             for (node in children) {
-                if (children[node].id == id) {
+                if (children[node].id == element_id) {
                     result = children[node];
                 }
             }
             return result;
+        }
+
+        /*** Test Functions ***/
+        function advanceDay() {
+           // Testing code that will run on the server each time a day passes.
+            var user = Parse.User.current();
+            var List = Parse.Object.extend("List");
+            var query = new Parse.Query(List);
+
+            query.get(user.get('list'), {
+                success: function(list) {
+                    var habitList = list.get('habits');
+                    var curHabit;
+                    for(h in habitList) {
+                        curHabit = habitList[h];
+                        curHabit.total_days += 1;
+                        curHabit.completed_today = 0;
+                        // Update UI
+                        refreshHabit(curHabit);
+                    }
+
+                    list.set('habits', habitList);
+                    list.save();
+                },
+                error: function(object, error) {
+                    alert("Error: " + error.code + " " + error.message);
+                    // The object was not retrieved successfully.
+                    // error is a Parse.Error with an error code and message.
+                }
+            });
         }
     </script>
 </body>

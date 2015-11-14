@@ -36,8 +36,8 @@
        	</table>
        	<p id="Message"><span style="color: #4caf50; font-size: 14px">&#10004;</span></p>
        	<div class="buttons">
-       		<input class="loginButton" type="button" value="LogIn" onclick="logIn()">
-          <input class="signUpButton" type="button" value="SignUp" onclick="signUp()">
+       		<input class="loginButton" type="button" value="Log In" onclick="logIn()">
+          <input class="signUpButton" type="button" value="Sign Up" onclick="signUp()">
         </div>
       </form>
     </div>
@@ -80,10 +80,9 @@
         var List = Parse.Object.extend("List");
         var list = new List();
         list.set('habits', []);
-        list.set('editTitle', '');
+        list.set('edit_id', '');
 
         list.save().then(function(list){
-
           user.set("username", inputEmail);
           user.set("email", inputEmail);
           user.set("password", inputPassword);
