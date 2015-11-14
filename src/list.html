@@ -20,7 +20,7 @@
         <ul id="active-list" class="habit-list"></ul>
     </section>
     <section>
-        <h1>Habits Inactive For Today</h1>
+        <h1 id="inactive-title" style="visibility: visible">Habits Inactive For Today</h1>
         <ul id="inactive-list" class="habit-list"></ul>
     </section>
 	<div id="addHabit-empty">
@@ -119,6 +119,8 @@
         }
 
         function deleteHabit(element, habit_id) {
+            if(!confirm("Are you sure you want to delete this habit?")) { return; }
+
             // Remove from user's habit list
             var user = Parse.User.current();
             var List = Parse.Object.extend("List");
@@ -219,15 +221,21 @@
 			
             var activeList = document.getElementById("active-list");
             var inactiveList = document.getElementById("inactive-list");
+            var inactiveTitle = document.getElementById("inactive-title");
 			var msg = document.getElementById("addHabit-empty");
-			if(activeList.childNodes.length <= 0 && inactiveList.childNodes.length)
-			{
+			if(activeList.childNodes.length <= 0 && inactiveList.childNodes.length <= 0) {
 				msg.style.visibility = "visible";
 			}
-			else
-			{
+			else {
 				msg.style.visibility = "hidden";
 			}
+
+            if(inactiveList.childNodes.length <= 0) {
+                inactiveTitle.style.visibility = "hidden";
+            } 
+            else {
+                inactiveTitle.style.visibility = "visible";
+            }
 		}
 
         /** Success/Fail **/
