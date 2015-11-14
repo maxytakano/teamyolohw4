@@ -39,10 +39,10 @@
                     </button>\n \
                     <div class="white-square"></div>\n \
                     <span id="options-slideout" class="options">\n \
-                        <button type="button" class="op op-edit" onclick="editHabit("'+habit.habit_id+'");" title="edit habit">\n \
+                        <button type="button" class="op op-edit" onclick="editHabit(\''+habit.habit_id+'\');" title="edit habit">\n \
                             <img class="small-buttons" src="../img/edit.svg" alt="Edit">\n \
                         </button>\n \
-                        <button type="button" class="op op-del" onclick="deleteHabit(this, "'+habit.habit_id+'");" title="delete habit">\n \
+                        <button type="button" class="op op-del" onclick="deleteHabit(this, \''+habit.habit_id+'\');" title="delete habit">\n \
                             <img class="small-buttons" src="../img/delete.svg" alt="Del">\n \
                         </button>\n \
                     </span>\n \
@@ -77,10 +77,10 @@
             <div class="habit-op" id="button-container">\n \
                 <div class="disabled-button"></div>\n \
                 <div class="disabled-button2"></div>\n \
-                <button type="button" class="op op-done" onclick="success("'+habit.habit_id+'");" title="done">\n \
+                <button type="button" class="op op-done" onclick="success(\''+habit.habit_id+'\');" title="done">\n \
                     <img src="../img/done.svg" alt="Done">\n \
                 </button>\n \
-                <button type="button" class="op op-fail" onclick="fail("'+habit.habit_id+'");" title="done">\n \
+                <button type="button" class="op op-fail" onclick="fail(\''+habit.habit_id+'\');" title="done">\n \
                     <img src="../img/xIcon.png" alt="Done">\n \
                 </button>\n \
             </div>';
