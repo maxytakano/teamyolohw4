@@ -16,8 +16,12 @@
     <input type="button" onclick="advanceDay();" value="Advance Day"></input>
 
     <section>
-        <h1>Habit List</h1>
-        <ul id="habit-list"></ul>
+        <h1>Habit List - Tuesday 11/30</h1>
+        <ul id="active-list" class="habit-list"></ul>
+    </section>
+    <section>
+        <h1>Habits Inactive For Today</h1>
+        <ul id="inactive-list" class="habit-list"></ul>
     </section>
     <button type="button" id="addHabit" onclick="location.href='add.html'" title="add habit">+</button>
     <script type="text/javascript">
@@ -28,8 +32,6 @@
         // Returns a formateted string template for a list entry
         function formatTemplate(habit)
         {
-
-
             var listString = '\n \
             <ul class="habit-info">\n \
                 <li>\n \
@@ -142,7 +144,8 @@
 
         function populateList() {
             // Grab containing element for which we are going to add items into
-            var container = document.getElementById('habit-list');
+            var activeContainer = document.getElementById('active-list');
+            var inactiveContainer = document.getElementById('inactive-list');
 
             var user = Parse.User.current();
             var List = Parse.Object.extend("List");
@@ -164,8 +167,15 @@
                         outerList.innerHTML = formatTemplate(curHabit);
 
                         // Append the html to the habit list.
-                        container.appendChild(outerList);
-
+                        var currDay = 2;//currentDate.getDay();
+                        if(curHabit.weekly_freq[currDay]) {
+                            activeContainer.appendChild(outerList);
+                        }
+                        else {
+                            inactiveContainer.appendChild(outerList);
+                            disableHabit(curHabit.habit_id);
+                        }
+                        
                         // Get the habit we just appended.
                         var curList = document.getElementById(curId);
 
@@ -407,7 +417,7 @@
         /* returns the habit list node corresponding to an element in the habit */
         function getHabitRoot(element) {
             var curNode = element;
-            while (curNode.parentNode.id != "habit-list") {
+            while (curNode.parentNode.id != "active-list" && curNode.parentNode.id != "inactive-list") {
                 curNode = curNode.parentNode;
             }
             return curNode;

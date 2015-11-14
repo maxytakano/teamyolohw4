@@ -16,7 +16,11 @@
 		<div class="forms">
 			<h2>Add A Habit</h2>
 			<form>
-				<p><label><span id="title_text">Habit Title</span></label></p>
+				<p>
+					<label id="title_text" style="margin-right: 10px">Habit Title</label>
+					<label id="title_err_empty" style="color: red; visibility: hidden; position: absolute">*Please enter a non-empty title.</label>
+					<label id="title_err_unique" style="color: red; visibility: hidden; position: absolute">*Please enter an unique title.</label>
+				</p>
 				<p><input id="habit_title" type="text" name="fullname" placeholder="Exercise 30 minutes"></p>
 				<p><label>Habit Icon</label></p>
 				<div id="habit_icons">
@@ -25,7 +29,11 @@
 					<img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
 					<img id="../img/add.pngID" class="icon" src="../img/add.png" alt="find a image"/>
 				</div>
-				<p><label>Weekly Frequency (optional)</label></p>
+				<p>
+					<label style="margin-right: 10px">Weekly Frequency</label>
+					<label id="weekly_err" style="color: red; visibility: hidden">*Please select at least one weekly frequency.</label>
+				</p>
+				
 				<div id="ck-button">
 					<label> <input id="SundayID" type="checkbox" name="date" value="Sunday" checked><span>Sun</span></label>
 					<label> <input id="MondayID" type="checkbox" name="date" value="Monday" checked><span>Mon</span></label>
@@ -72,9 +80,38 @@
 			selectImage(document.getElementById("../img/sleep.jpgID"));
 
 			function onSubmit() {
-				// If form validates, submit habit
-				if (validateForm()) {
+				var h_title = document.getElementById('habit_title').value;
+				var title_err_unique = document.getElementById('title_err_unique');
+				var title_err_empty = document.getElementById('title_err_empty');
+				var weekly_err = document.getElementById('weekly_err');
 
+				title_err_empty.style.visibility = 'hidden';
+				title_err_unique.style.visibility = 'hidden';
+				weekly_err.style.visibility = 'hidden';
+
+				var hasError = false;
+
+				var labels = document.getElementById("ck-button").children;
+				var hasChecked = false;
+				for (var i = 0; i < labels.length; i++) {
+					var week = labels[i].children.date;
+					if (week.checked) {
+						hasChecked = true;
+						break;
+					}
+				}
+				if(!hasChecked) {
+					weekly_err.style.visibility = 'visible';
+					hasError = true;
+				}
+
+				// Check if the user entered a title.
+				if (h_title == "") {
+					title_err_empty.style.visibility = 'visible';
+					return;
+				}
+				else
+				{
 					var user = Parse.User.current();
 					var List = Parse.Object.extend("List");
 					var query = new Parse.Query(List);
@@ -82,15 +119,30 @@
 					query.get(user.get('list'), {
 					  	success: function(list) {
 					  		// The object was retrieved successfully.
+
+					  		var habits = list.get('habits');
+		                    var curHabit;
+		                    for(h in habits) {
+		                        curHabit = habits[h];
+		                        if(curHabit.habit_id == h_title) {
+									title_err_unique.style.visibility = 'visible';
+									return;
+		                        }
+		                    }
+
+		                    if(hasError) {
+								return;
+							}
+
 							newHabit.habit_id = document.getElementById('habit_title').value;
 							newHabit.weekly_freq = getWeeklyFrequency();
 							newHabit.daily_freq = getDailyFrequency();
 							newHabit.notes = document.getElementById('notes').value;
 
-					  		list.add('habits', newHabit);
-					  		list.save().then(function() {
-					  			window.location = 'list.html';
-					  		});
+							list.add('habits', newHabit);
+				  			list.save().then(function() {
+				  				window.location = 'list.html';
+				  			});	
 					  	},
 					  	error: function(object, error) {
 					  		alert("Error: " + error.code + " " + error.message);
@@ -99,25 +151,6 @@
 					  	}
 					});
 				}
-				else {
-					alert('form failed validation');
-				}
-			}
-
-			/**
-			 * Validates the current habit object to see if the form can be submitted
-			 * returns true if the form validates, false if it doesn't.
-			 */
-			function validateForm() {
-				// Check if the user entered a title.
-				if (document.getElementById('habit_title').value == "") {
-					// TODO: add markup to display validation message (unhide it or w/e)
-					console.log("need a title");
-					return false;
-				}
-
-				// passed validation checks, return true.
-				return true;
 			}
 
 			/**
