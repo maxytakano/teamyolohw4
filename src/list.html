@@ -71,13 +71,11 @@
                 </div><br>\n \
             </div>\n \
             <div class="habit-op" id="button-container">\n \
-                <div class="disabled-button"></div>\n \
-                <div class="disabled-button2"></div>\n \
                 <button type="button" class="op op-done" onclick="thumbsUp(\''+habit.habit_id+'\');" title="done">\n \
-                    <img src="../img/done.svg" alt="Done">\n \
+                    <img class="thumb-image" src="../img/thumbsUp.png" alt="Done">\n \
                 </button>\n \
                 <button type="button" class="op op-fail" onclick="thumbsDown(\''+habit.habit_id+'\');" title="done">\n \
-                    <img src="../img/xIcon.png" alt="Done">\n \
+                    <img class="thumb-image" src="../img/thumbsDown.png" alt="Done">\n \
                 </button>\n \
             </div>';
             return listString;
@@ -268,28 +266,38 @@
 
         function disableHabit(habit_id) {
             var curList = document.getElementById("habitItem_"+habit_id);
-            var doneButton = curList.getElementsByClassName("op-done")[0];
-            var failButton = curList.getElementsByClassName("op-fail")[0];
-            var disabler1 = curList.getElementsByClassName("disabled-button")[0];
-            var disabler2 = curList.getElementsByClassName("disabled-button2")[0];
+            var buttonContainer = curList.getElementsByClassName("habit-op")[0];
+            var doneButton = buttonContainer.children[0];
+            var failButton = buttonContainer.children[1];
+            var thumbImages = curList.getElementsByClassName("thumb-image");
+
+            var i; var thumbLength = thumbImages.length;
+            for (i = 0; i < thumbLength; i++) {
+                thumbImages[i].style.opacity = "0.4";
+            }
 
             doneButton.disabled = true;
             failButton.disabled = true;
-            disabler1.style.visibility = "visible";
-            disabler2.style.visibility = "visible";
+            doneButton.className = "op button-disabled";
+            failButton.className = "op button-disabled";
         }
 
         function enableHabit(habit_id) {
             var curList = document.getElementById("habitItem_"+habit_id);
-            var doneButton = curList.getElementsByClassName("op-done")[0];
-            var failButton = curList.getElementsByClassName("op-fail")[0];
-            var disabler1 = curList.getElementsByClassName("disabled-button")[0];
-            var disabler2 = curList.getElementsByClassName("disabled-button2")[0];
+            var buttonContainer = curList.getElementsByClassName("habit-op")[0];
+            var doneButton = buttonContainer.children[0];
+            var failButton = buttonContainer.children[1];
+            var thumbImages = curList.getElementsByClassName("thumb-image");
+
+            var i; var thumbLength = thumbImages.length;
+            for (i = 0; i < thumbLength; i++) {
+                thumbImages[i].style.opacity = "1.0";
+            }
 
             doneButton.disabled = false;
             failButton.disabled = false;
-            disabler1.style.visibility = "hidden";
-            disabler2.style.visibility = "hidden";
+            doneButton.className = "op op-done";
+            failButton.className = "op op-fail";
         }
 
         /**** Update functions ****/
