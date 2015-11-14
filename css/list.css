@@ -235,7 +235,7 @@ body{
 .options-out {
     position:relative;
     z-index: 1;
-    margin-left: -56px;
+    margin-left: -60px;
     height: 300px;
     visibility: visible;
 
