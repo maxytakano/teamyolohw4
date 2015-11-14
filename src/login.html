@@ -11,18 +11,18 @@
 		<title>Welcome to Virtue/Vice!</title>
 		<link rel="stylesheet" href="../css/login.css">
 	</head>
-	<body onload="checkCurrentUser();">
+	<body onload="clearFields(); checkCurrentUser();">
 	  <div class="login">
 	  	<h1>virtue / <i>vice</i></h1>
       <form class="loginForm" action="index_submit" method="get" accept-charset="utf-8">
-      	<table>
+      	<table style="margin-bottom: 10px">
       		<tr>
         		<td class="svgTd">
         			<label for="useremail">
         				<svg x="0px" y="0px" width="50px" height="50px" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1376 128q119 0 203.5 84.5t84.5 203.5v960q0 119-84.5 203.5t-203.5 84.5h-960q-119 0-203.5-84.5t-84.5-203.5v-960q0-119 84.5-203.5t203.5-84.5h960zm32 1056v-436q-31 35-64 55-34 22-132.5 85t-151.5 99q-98 69-164 69t-164-69q-46-32-141.5-92.5t-142.5-92.5q-12-8-33-27t-31-27v436q0 40 28 68t68 28h832q40 0 68-28t28-68zm0-573q0-41-27.5-70t-68.5-29h-832q-40 0-68 28t-28 68q0 37 30.5 76.5t67.5 64.5q47 32 137.5 89t129.5 83q3 2 17 11.5t21 14 21 13 23.5 13 21.5 9.5 22.5 7.5 20.5 2.5 20.5-2.5 22.5-7.5 21.5-9.5 23.5-13 21-13 21-14 17-11.5l267-174q35-23 66.5-62.5t31.5-73.5z"/></svg>
 						  </label>
 						</td>
-            <td><input id="useremail" class="textInput" type="email" name="useremail" placeholder="Email" required></td>
+            <td><input id="useremail" class="textInput" type="email" name="useremail" placeholder="Email Address" required></td>
           </tr>
           <tr style="height: 15px"><td></td><td></td></tr>
           <tr>
@@ -34,7 +34,9 @@
           	<td><input id="password" class="textInput" type="password" name="password" placeholder="Password" required></td>
           </tr>
        	</table>
-       	<p id="Message"><span style="color: #4caf50; font-size: 14px">&#10004;</span></p>
+       	<p id="Message" style="margin-top: 0; margin-bottom: 10px">
+          <span style="color: #4caf50; font-size: 14px;">&#10004;</span>
+        </p>
        	<div class="buttons">
        		<input class="loginButton" type="button" value="Log In" onclick="logIn()">
           <input class="signUpButton" type="button" value="Sign Up" onclick="signUp()">
@@ -55,13 +57,12 @@
         Parse.User.logIn(inputEmail,  inputPassword, {
           success: function(user) {
             // Do stuff after successful login.
-            displayMessage('Log In Successful!');
+            //displayMessage('Log In Successful!');
             window.location = 'list.html';
           },
           error: function(user, error) {
             // The login failed. Check error to see why.
-            alert("Error: " + error.code + " " + error.message);
-            displayMessage('Log In Unsuccessful! Make sure the account exists and you have the correct email and password!');
+            displayMessage('Log in unsuccessful. Invalid email or password.');
           }
         });
       }
@@ -95,9 +96,12 @@
               window.location = 'add.html';
             },
             error: function(user, error) {
-
-              displayMessage('Sign Up Unsuccessful! Please use unique, valid email and password!');
-              alert("Error: " + error.code + " " + error.message);
+              if(error.code == 202) {
+                displayMessage('Sign up unsuccessful.<br>Email address has already been taken.');
+              } 
+              else {
+                displayMessage('Sign up unsuccessful.<br>Please use a valid email address.');
+              }
             }
           });
         });
