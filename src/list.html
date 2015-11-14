@@ -21,15 +21,11 @@
     </section>
     <button type="button" id="addHabit" onclick="location.href='add.html'" title="add habit">+</button>
     <script type="text/javascript">
-
         populateList();
         //setTimeout(populateList, 200);
 
         // Returns a formateted string template for a list entry
-        function formatTemplate(habit)
-        {
-
-
+        function formatTemplate(habit) {
             var listString = '\n \
             <ul class="habit-info">\n \
                 <li>\n \
@@ -77,10 +73,10 @@
             <div class="habit-op" id="button-container">\n \
                 <div class="disabled-button"></div>\n \
                 <div class="disabled-button2"></div>\n \
-                <button type="button" class="op op-done" onclick="success("'+habit.habit_id+'");" title="done">\n \
+                <button type="button" class="op op-done" onclick="thumbsUp("'+habit.habit_id+'");" title="done">\n \
                     <img src="../img/done.svg" alt="Done">\n \
                 </button>\n \
-                <button type="button" class="op op-fail" onclick="fail("'+habit.habit_id+'");" title="done">\n \
+                <button type="button" class="op op-fail" onclick="thumbsDown("'+habit.habit_id+'");" title="done">\n \
                     <img src="../img/xIcon.png" alt="Done">\n \
                 </button>\n \
             </div>';
@@ -108,7 +104,7 @@
             });
         }
 
-        function deleteHabit(element, habit_id){
+        function deleteHabit(element, habit_id) {
             // Remove from user's habit list
             var user = Parse.User.current();
             var List = Parse.Object.extend("List");
@@ -194,7 +190,7 @@
         }
 
         /** Success/Fail **/
-        function success(habit_id) {
+        function thumbsUp(habit_id) {
             var user = Parse.User.current();
             var List = Parse.Object.extend("List");
             var query = new Parse.Query(List);
@@ -236,7 +232,7 @@
             });
         }
 
-        function fail(habit_id) {
+        function thumbsDown(habit_id) {
             var user = Parse.User.current();
             var List = Parse.Object.extend("List");
             var query = new Parse.Query(List);
