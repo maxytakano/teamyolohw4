@@ -16,17 +16,27 @@
     <input type="button" onclick="advanceDay();" value="Advance Day"></input>
 
     <section>
-        <h1>Habit List - Tuesday 11/30</h1>
+        <h1 id="header-text">Habit List</h1>
         <ul id="active-list" class="habit-list"></ul>
     </section>
     <section>
         <h1>Habits Inactive For Today</h1>
         <ul id="inactive-list" class="habit-list"></ul>
     </section>
+	<div id="addHabit-empty">
+		<div id="addHabit-message">
+			<p>You have no habits.<br/>Click here to add one.</p>
+		</div>
+		<img id="addHabit-arrow" src="../img/downArrow.png" alt="Arrow">
+	</div>
     <button type="button" id="addHabit" onclick="location.href='add.html'" title="add habit">+</button>
     <script type="text/javascript">
-
+		var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+		var currentDate = new Date();
+		document.getElementById("header-text").innerHTML += " - " + days[currentDate.getDay()] + " " + (currentDate.getMonth()+1) + "/" + currentDate.getDate();
+		
         populateList();
+		
         //setTimeout(populateList, 200);
 
         // Returns a formateted string template for a list entry
@@ -77,13 +87,11 @@
                 </div><br>\n \
             </div>\n \
             <div class="habit-op" id="button-container">\n \
-                <div class="disabled-button"></div>\n \
-                <div class="disabled-button2"></div>\n \
-                <button type="button" class="op op-done" onclick="success(\''+habit.habit_id+'\');" title="done">\n \
-                    <img src="../img/done.svg" alt="Done">\n \
+                <button type="button" class="op op-done" onclick="thumbsUp(\''+habit.habit_id+'\');" title="done">\n \
+                    <img class="thumb-image" src="../img/thumbsUp.png" alt="Done">\n \
                 </button>\n \
-                <button type="button" class="op op-fail" onclick="fail(\''+habit.habit_id+'\');" title="done">\n \
-                    <img src="../img/xIcon.png" alt="Done">\n \
+                <button type="button" class="op op-fail" onclick="thumbsDown(\''+habit.habit_id+'\');" title="done">\n \
+                    <img class="thumb-image" src="../img/thumbsDown.png" alt="Done">\n \
                 </button>\n \
             </div>';
             return listString;
@@ -110,7 +118,7 @@
             });
         }
 
-        function deleteHabit(element, habit_id){
+        function deleteHabit(element, habit_id) {
             // Remove from user's habit list
             var user = Parse.User.current();
             var List = Parse.Object.extend("List");
@@ -132,6 +140,7 @@
                         var child = getHabitRoot(element);
                         var parent = child.parentNode;
                         parent.removeChild(child);
+						checkForHabits();
                     });
                 },
                 error: function(object, error) {
@@ -167,12 +176,14 @@
                         outerList.innerHTML = formatTemplate(curHabit);
 
                         // Append the html to the habit list.
-                        var currDay = 2;//currentDate.getDay();
+                        var currDay = currentDate.getDay();
                         if(curHabit.weekly_freq[currDay]) {
                             activeContainer.appendChild(outerList);
+                            refreshHabit(curHabit);
                         }
                         else {
                             inactiveContainer.appendChild(outerList);
+                            refreshHabit(curHabit);
                             disableHabit(curHabit.habit_id);
                         }
                         
@@ -189,11 +200,10 @@
                             if (curHabit.weekly_freq[i]) {
                                 daysArray[i].className = "week-day";
                             }
-                        }
+                        }                        
 
-                        // Refresh the habit.
-                        refreshHabit(curHabit);
                     }
+					checkForHabits();
                 },
                 error: function(object, error) {
                     alert("Error: " + error.code + " " + error.message);
@@ -202,9 +212,26 @@
                 }
             });
         }
+		
+		/** Check to see if any habits are on page and place a user message if not **/
+		function checkForHabits()
+		{
+			
+            var activeList = document.getElementById("active-list");
+            var inactiveList = document.getElementById("inactive-list");
+			var msg = document.getElementById("addHabit-empty");
+			if(activeList.childNodes.length <= 0 && inactiveList.childNodes.length)
+			{
+				msg.style.visibility = "visible";
+			}
+			else
+			{
+				msg.style.visibility = "hidden";
+			}
+		}
 
         /** Success/Fail **/
-        function success(habit_id) {
+        function thumbsUp(habit_id) {
             var user = Parse.User.current();
             var List = Parse.Object.extend("List");
             var query = new Parse.Query(List);
@@ -246,7 +273,7 @@
             });
         }
 
-        function fail(habit_id) {
+        function thumbsDown(habit_id) {
             var user = Parse.User.current();
             var List = Parse.Object.extend("List");
             var query = new Parse.Query(List);
@@ -282,28 +309,38 @@
 
         function disableHabit(habit_id) {
             var curList = document.getElementById("habitItem_"+habit_id);
-            var doneButton = curList.getElementsByClassName("op-done")[0];
-            var failButton = curList.getElementsByClassName("op-fail")[0];
-            var disabler1 = curList.getElementsByClassName("disabled-button")[0];
-            var disabler2 = curList.getElementsByClassName("disabled-button2")[0];
+            var buttonContainer = curList.getElementsByClassName("habit-op")[0];
+            var doneButton = buttonContainer.children[0];
+            var failButton = buttonContainer.children[1];
+            var thumbImages = curList.getElementsByClassName("thumb-image");
+
+            var i; var thumbLength = thumbImages.length;
+            for (i = 0; i < thumbLength; i++) {
+                thumbImages[i].style.opacity = "0.4";
+            }
 
             doneButton.disabled = true;
             failButton.disabled = true;
-            disabler1.style.visibility = "visible";
-            disabler2.style.visibility = "visible";
+            doneButton.className = "op button-disabled";
+            failButton.className = "op button-disabled";
         }
 
         function enableHabit(habit_id) {
             var curList = document.getElementById("habitItem_"+habit_id);
-            var doneButton = curList.getElementsByClassName("op-done")[0];
-            var failButton = curList.getElementsByClassName("op-fail")[0];
-            var disabler1 = curList.getElementsByClassName("disabled-button")[0];
-            var disabler2 = curList.getElementsByClassName("disabled-button2")[0];
+            var buttonContainer = curList.getElementsByClassName("habit-op")[0];
+            var doneButton = buttonContainer.children[0];
+            var failButton = buttonContainer.children[1];
+            var thumbImages = curList.getElementsByClassName("thumb-image");
+
+            var i; var thumbLength = thumbImages.length;
+            for (i = 0; i < thumbLength; i++) {
+                thumbImages[i].style.opacity = "1.0";
+            }
 
             doneButton.disabled = false;
             failButton.disabled = false;
-            disabler1.style.visibility = "hidden";
-            disabler2.style.visibility = "hidden";
+            doneButton.className = "op op-done";
+            failButton.className = "op op-fail";
         }
 
         /**** Update functions ****/
@@ -438,6 +475,9 @@
 
         /*** Test Functions ***/
         function advanceDay() {
+            var activeContainer = document.getElementById('active-list');
+            var inactiveContainer = document.getElementById('inactive-list');
+
            // Testing code that will run on the server each time a day passes.
             var user = Parse.User.current();
             var List = Parse.Object.extend("List");
@@ -449,10 +489,18 @@
                     var curHabit;
                     for(h in habitList) {
                         curHabit = habitList[h];
-                        curHabit.total_days += 1;
-                        curHabit.completed_today = 0;
+
                         // Update UI
-                        refreshHabit(curHabit);
+                        var currDay = currentDate.getDay();
+                        if(curHabit.weekly_freq[currDay]) {
+                            curHabit.total_days += 1;
+                            curHabit.completed_today = 0;
+                            refreshHabit(curHabit);
+                        }
+                        else {
+                            refreshHabit(curHabit);
+                            disableHabit(curHabit.habit_id);
+                        }
                     }
 
                     list.set('habits', habitList);
