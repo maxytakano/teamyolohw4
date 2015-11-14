@@ -82,11 +82,11 @@
 	                    // The object was retrieved successfully.
 	                    // Populate the habit object
 	                    var habits = list.get('habits');
-	                    var h_title = list.get('edit_id');
+	                    var habit_id = list.get('edit_id');
 	                    var habit;
 	                    for(h in habits) {
 
-	                        if(habits[h].title == h_title) {
+	                        if(habits[h].habit_id == habit_id) {
 	                            habit = habits[h];
 	                            break;
 	                        }
@@ -97,7 +97,7 @@
 	                    }
 
 	                    else {
-							document.getElementById('habit_title').value = habit.title;
+							document.getElementById('habit_title').value = habit.habit_id;
 							selectImage(document.getElementById("../img/sleep.jpgID"));
 							for(var i = 0; i < habit.weekly_freq.length; i++) {
 								document.getElementById(habit.weekly_freq[i]+"ID").checked = true;
@@ -187,10 +187,20 @@
 				for (var i = 0; i < labels.length; i++) {
 					week = labels[i].children.date;
 					if (week.checked) {
-						selected_weeks.push(week.value);
+						console.log(i);
+						selected_weeks.push(true);
+					} else {
+						selected_weeks.push(false);
 					}
 				}
-
+				if(selected_weeks.length == 0) {
+					// TODO: throw validation instead
+					for (var i = 0; i < labels.length; i++) {
+						week = labels[i].children.date;
+						// selected_weeks.push(week.value);
+						selected_weeks.push(true);
+					}
+				}
 				return selected_weeks;
 			}
 
@@ -203,7 +213,6 @@
 				for (var i = 0; i < labels.length; i++) {
 					selected_freq = labels[i].children.day;
 					if (selected_freq.checked) {
-						// console.log(sele)
 						return selected_freq.value;
 					}
 				}
