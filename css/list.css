@@ -60,7 +60,7 @@ body{
     font-size: 24px;
     position: relative;
     z-index: 4;
-	
+
 	/* Handles names that are too long for box */
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -80,7 +80,6 @@ body{
     width: 18px;
     text-align: center;
     margin-right: 2px;
-
 }
 .week-day-off {
     color: #bbb;
@@ -94,6 +93,8 @@ body{
     margin-right: 2px;
 }
 
+/*** Habit message section ***/
+
 .message {
     position: absolute;
     text-align:center;
@@ -102,7 +103,7 @@ body{
 .message-total{
     /*width: 60%;*/
 }
-.message-total>svg{margin: 20px auto; margin-bottom: 5px;}
+.message-total>svg{margin: 20px auto; margin-bottom: -5px;}
 
 .graph-message {
     max-width: 300px;
@@ -111,6 +112,12 @@ body{
     display: inline-block;
     float: middle;
 }
+
+.record-message {
+    margin-top: 10px;
+    margin-bottom: 14px;
+}
+
 
 /* operations (for a existing habit) */
 .habit-op {
