@@ -13,6 +13,7 @@
 	</head>
 	<body onload="checkCurrentUser();">
     	<input type="button" onclick="logOut();" value="Log Out"></input>
+		<output id="list"></output>
 		<div class="forms">
 			<h2>Add A Habit</h2>
 			<form>
@@ -27,7 +28,46 @@
 					<img id="../img/sleep.jpgID" class="icon" onclick="selectImage(this);" src="../img/sleep.jpg" alt="sleep image"/>
 					<img id="../img/salad.jpgID" class="icon" onclick="selectImage(this);" src="../img/salad.jpg" alt="eat image"/>
 					<img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
-					<img id="../img/add.pngID" class="icon" src="../img/add.png" alt="find a image"/>
+
+    				<label for="file-input">
+    					<img id="../img/add.pngID" class="icon" src="../img/add.png" alt="find a image"/>
+    				</label>
+
+    				<input id="file-input" type="file" name="files[]" multiple />
+
+    				<script>
+					  function handleFileSelect(evt) {
+					    var files = evt.target.files; // FileList object
+
+					    // Loop through the FileList and render image files as thumbnails.
+					    for (var i = 0, f; f = files[i]; i++) {
+
+					      // Only process image files.
+					      if (!f.type.match('image.*')) {
+					        continue;
+					      }
+
+					      var reader = new FileReader();
+
+					      // Closure to capture the file information.
+					      reader.onload = (function(theFile) {
+					        return function(e) {
+					          // Render thumbnail.
+					          var span = document.createElement('span');
+					          span.innerHTML = ['<img class="icon" src="', e.target.result,
+					                            '" title="', escape(theFile.name), '"/>'].join('');
+					          document.getElementById('list').insertBefore(span, null);
+					        };
+					      })(f);
+
+					      // Read in the image file as a data URL.
+					      reader.readAsDataURL(f);
+					    }
+					  }
+
+					  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+					</script>
+    				
 				</div>
 				<p>
 					<label style="margin-right: 10px">Weekly Frequency</label>
@@ -56,6 +96,9 @@
 				<p id="save_p"><input id="save" type="button" value="Save It" onclick="onSubmit();"></p>
 			</form>
 		</div>
+
+
+
 		<script>
 			/**
 			 * habit object which is filled and submitted after the form

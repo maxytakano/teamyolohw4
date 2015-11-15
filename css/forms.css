@@ -157,6 +157,10 @@ div label input {
    margin-right:100px;
 }
 
+input#file-input{ 
+	display: none;
+}
+
 #ck-button {  
     overflow:auto;
 }
