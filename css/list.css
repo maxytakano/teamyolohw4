@@ -64,6 +64,10 @@ body{
 	/* Handles names that are too long for box */
 	overflow: hidden;
 	text-overflow: ellipsis;
+	
+	/* Handles names that would normally be too short */
+	min-width: 25px;
+	min-height: 60px;
 }
 .habit-icon{margin:0; border-radius:5px;width:100px; height:100px;}
 .week-container {

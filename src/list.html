@@ -30,6 +30,7 @@
 	</div>
     <button type="button" id="addHabit" onclick="location.href='add.html'" title="add habit">+</button>
     <script type="text/javascript">
+		var thumbLock = false;
 		var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 		var currentDate = new Date();
 		document.getElementById("header-text").innerHTML += " - " + days[currentDate.getDay()] + " " + (currentDate.getMonth()+1) + "/" + currentDate.getDate();
@@ -239,6 +240,9 @@
 
         /** Success/Fail **/
         function thumbsUp(habit_id) {
+			if(thumbLock){return;}
+			thumbLock = true;
+			
             var user = Parse.User.current();
             var List = Parse.Object.extend("List");
             var query = new Parse.Query(List);
@@ -269,13 +273,14 @@
                     list.save().then(function() {
                         // Update UI
                         refreshHabit(curHabit);
+						thumbLock = false;
                     });
-
                 },
                 error: function(object, error) {
                     alert("Error: " + error.code + " " + error.message);
                     // The object was not retrieved successfully.
                     // error is a Parse.Error with an error code and message.
+					thumbLock = false;
                 }
             });
         }
@@ -303,13 +308,14 @@
                     list.save().then(function() {
                         // Update UI
                         refreshHabit(curHabit);
+						thumbLock = false;
                     });
-
                 },
                 error: function(object, error) {
                     alert("Error: " + error.code + " " + error.message);
                     // The object was not retrieved successfully.
                     // error is a Parse.Error with an error code and message.
+					thumbLock = false;
                 }
             });
         }
