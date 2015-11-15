@@ -12,14 +12,43 @@ body {
   background: -moz-linear-gradient(bottom right, #BBDEFB, #B0C4DE) fixed ; /* For Firefox 3.6 to 15 */
   background: linear-gradient(to bottom right,  #BBDEFB, #B0C4DE) fixed; /* Standard syntax */
   height: 100%;
-  width: 100%;
-  padding: 0;
-  margin: 0;
+  margin: 8px;
 }
+
 p{
 	color:#6c6c6c;
 	font-size: medium;
 }
+
+/* Sign Out Button */
+.logoutButton {
+  -webkit-appearance:none;
+	width: 49%;
+	max-width: 200px;
+	text-align: center;
+	display: inline-block;
+	margin-left: 8px;
+	margin-bottom: 8px;
+	padding: 15px;
+	background:none;
+	background-color: #214864;
+	float: right;
+  border:none;
+  color:white;
+  -webkit-border-radius: 5px; /*For Safari, etc. */
+  -moz-border-radius: 5px; /* For Mozilla, etc. */
+  border-radius: 5px; /* CSS3 Feature */
+  opacity: 1.0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+ .logoutButton:hover {
+	opacity: 0.75;
+	cursor: pointer;
+}
+
 div.forms {
 	position: relative;
 	margin: 0 auto;
@@ -28,6 +57,7 @@ div.forms {
 	background-color: white;
 	border-radius: 25px;
 	bottom: auto;
+	clear:both;
 }
 input#habit_title{
 	height: 30px;
@@ -233,5 +263,3 @@ span#times{
 #daily-button input:hover + span {
     cursor: pointer;
 }
-
-
