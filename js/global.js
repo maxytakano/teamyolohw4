@@ -23,6 +23,7 @@ function checkCurrentUser() {
 
 // Logs out the current user
 function logOut() {
+  if(!confirm("Are you sure you want to log out?")){ return; }
   Parse.User.logOut();
   if(!(/login.html/.test(window.location.href))) {
     window.location = 'login.html';
