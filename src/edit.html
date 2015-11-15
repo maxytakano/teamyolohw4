@@ -16,7 +16,11 @@
 		<div class="forms">
 			<h2>Edit Habit</h2>
 			<form>
-				<p><label><span id="title_text">Habit Title</span></label></p>
+				<p>
+					<label id="title_text">Habit Title</label>
+					<label id="title_err_empty" style="color: red; visibility: hidden; position: absolute">*Please enter a non-empty title.</label>
+					<label id="title_err_unique" style="color: red; visibility: hidden; position: absolute">*Please enter an unique title.</label>
+				</p>
 				<p><input id="habit_title" type="text" name="fullname" placeholder="Exercise 30 minutes"></p>
 				<p><label>Habit Icon</label></p>
 				<div id="habit_icons">
@@ -25,7 +29,11 @@
 					<img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
 					<img id="../img/add.pngID" class="icon" src="../img/add.png" alt="find a image"/>
 				</div>
-				<p><label>Weekly Frequency (optional)</label></p>
+				<p>
+					<label style="margin-right: 10px">Weekly Frequency</label>
+					<label id="weekly_err" style="color: red; visibility: hidden">*Please select at least one weekly frequency.</label>
+				</p>
+				
 				<div id="ck-button">
 					<label> <input id="SundayID" type="checkbox" name="date" value="Sunday"><span>Sun</span></label>
 					<label> <input id="MondayID" type="checkbox" name="date" value="Monday"><span>Mon</span></label>
@@ -38,9 +46,9 @@
 
 				<p><label>Daily Frequency</label></p>
 				<div id="daily-button">
-					<label> <input id="Day1ID" type="radio" name="day" value="Day1"><span>1</span></label>
-					<label> <input id="Day2ID" type="radio" name="day" value="Day2"><span>2</span></label>
-					<label> <input id="Day3ID" type="radio" name="day" value="Day3"><span>3</span></label>
+					<label> <input id="Day1ID" type="radio" name="day" value="1"><span>1</span></label>
+					<label> <input id="Day2ID" type="radio" name="day" value="2"><span>2</span></label>
+					<label> <input id="Day3ID" type="radio" name="day" value="3"><span>3</span></label>
 					<span id="times">times</span>
 				</div>
 				<p><label><span id="notes_text">Notes (optional): </span></label></p>
@@ -100,9 +108,20 @@
 							document.getElementById('habit_title').value = habit.habit_id;
 							selectImage(document.getElementById("../img/sleep.jpgID"));
 							for(var i = 0; i < habit.weekly_freq.length; i++) {
-								document.getElementById(habit.weekly_freq[i]+"ID").checked = true;
+								if(habit.weekly_freq[i]) {
+									switch(i) { 
+										case 0: document.getElementById("SundayID").checked = true; break;
+										case 1: document.getElementById("MondayID").checked = true; break;
+										case 2: document.getElementById("TuesdayID").checked = true; break;
+										case 3: document.getElementById("WednesdayID").checked = true; break;
+										case 4: document.getElementById("ThursdayID").checked = true; break;
+										case 5: document.getElementById("FridayID").checked = true; break;
+										case 6: document.getElementById("SaturdayID").checked = true; break;
+										default: break;
+									}
+								}
 							}
-							document.getElementById(habit.daily_freq+"ID").checked = true;
+							document.getElementById("Day"+habit.daily_freq+"ID").checked = true;
 							document.getElementById('notes').value = habit.notes;
 	                    }
 	                },
@@ -113,7 +132,7 @@
 	                }
 	            });
 			}
-
+/*
 			function onSubmit() {
 
 				// If form validates, submit habit
@@ -157,7 +176,92 @@
 				else {
 					alert('form failed validation');
 				}
+			}*/
+
+
+			function onSubmit() {
+				var h_title = document.getElementById('habit_title').value;
+				var title_err_unique = document.getElementById('title_err_unique');
+				var title_err_empty = document.getElementById('title_err_empty');
+				var weekly_err = document.getElementById('weekly_err');
+
+				title_err_empty.style.visibility = 'hidden';
+				title_err_unique.style.visibility = 'hidden';
+				weekly_err.style.visibility = 'hidden';
+
+				var hasError = false;
+
+				var labels = document.getElementById("ck-button").children;
+				var hasChecked = false;
+				for (var i = 0; i < labels.length; i++) {
+					var week = labels[i].children.date;
+					if (week.checked) {
+						hasChecked = true;
+						break;
+					}
+				}
+				if(!hasChecked) {
+					weekly_err.style.visibility = 'visible';
+					hasError = true;
+				}
+
+				// Check if the user entered a title.
+				if (h_title == "") {
+					title_err_empty.style.visibility = 'visible';
+					return;
+				}
+				else
+				{
+					var user = Parse.User.current();
+					var List = Parse.Object.extend("List");
+					var query = new Parse.Query(List);
+
+					query.get(user.get('list'), {
+					  	success: function(list) {
+					  		// The object was retrieved successfully.
+
+					  		var habits = list.get('habits');
+		                    var curHabit;
+		                    for(h in habits) {
+		                        curHabit = habits[h];
+		                        if(curHabit.habit_id == h_title && curHabit.habit_id != list.get('edit_id')) {
+									title_err_unique.style.visibility = 'visible';
+									return;
+		                        }
+		                    }
+
+		                    if(hasError) {
+								return;
+							}
+
+		                    for(h in habits) {
+		                    	alert(habits[h].habit_id + ", " + list.get('edit_id'));
+		                        if(habits[h].habit_id == list.get('edit_id')) {
+		                            habits.splice(h, 1);
+		                            break;
+		                        }
+		                    }
+
+							newHabit.habit_id = document.getElementById('habit_title').value;
+							newHabit.weekly_freq = getWeeklyFrequency();
+							newHabit.daily_freq = getDailyFrequency();
+							newHabit.notes = document.getElementById('notes').value;
+
+							habits.push(newHabit);
+				  			list.save().then(function() {
+				  				window.location = 'list.html';
+				  			});	
+					  	},
+					  	error: function(object, error) {
+					  		alert("Error: " + error.code + " " + error.message);
+					    	// The object was not retrieved successfully.
+					    	// error is a Parse.Error with an error code and message.
+					  	}
+					});
+				}
 			}
+
+
 
 			/**
 			 * Validates the current habit object to see if the form can be submitted
@@ -237,46 +341,6 @@
 				// Save the current image into the habit object.
 				newHabit.icon = el.src;
 			}
-
-/*			// Fill out form with current data
-			function fillForm() {
-				var user = getCurrentUser();
-				var habit = getHabit(user.editID);
-				if(user.editID == 'null' || habit == undefined) {
-					alert("Sorry. This habit seems to have been deleted.");
-					window.location = 'list.html';
-				}
-				document.getElementById('habit_title').value = habit.title;
-				selectImage(document.getElementById("../img/sleep.jpgID"));
-				for(var i = 0; i < habit.weekly_freq.length; i++) {
-					document.getElementById(habit.weekly_freq[i]+"ID").checked = true;
-				}
-				document.getElementById(habit.daily_freq+"ID").checked = true;
-				document.getElementById('notes').value = habit.notes;
-			}
-
-			// Submit the editted habit
-			function onSubmit() {
-				// If form validates, submit newly modified habit and go to
-				// list page
-				if (validateForm()) {
-
-					// Populate the habit object
-					var user = getCurrentUser();
-					newHabit.id = user.editID;
-					newHabit.title = document.getElementById('habit_title').value;
-					newHabit.weekly_freq = getWeeklyFrequency();
-					newHabit.daily_freq = getDailyFrequency();
-					newHabit.notes = document.getElementById('notes').value;
-
-					modifyHabit(newHabit);
-					window.location = 'list.html';
-				} else {
-					alert('form failed validation');
-					// do nothing
-				}
-			}*/
-
 		</script>
 	</body>
 </html>
