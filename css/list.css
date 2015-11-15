@@ -8,6 +8,7 @@ body{
     background: -moz-linear-gradient(bottom right, #BBDEFB, #B0C4DE) fixed; /* For Firefox 3.6 to 15 */
     background: linear-gradient(to bottom right,  #BBDEFB, #B0C4DE) fixed; /* Standard syntax */
     font-family: Helvetica, san-sarif;
+    margin: 8px;
 }
 
 /* Sign Out Button (and advance day button until it's no longer needed */
@@ -17,10 +18,12 @@ body{
 	max-width: 200px;
 	text-align: center;
 	display: inline-block;
-	margin: 0;
 	padding: 15px;
 	background:none;
 	background-color: #214864;
+    float: right;
+    margin-left: 8px;
+    margin-bottom: 8px;
   border:none;
   color:white;
   -webkit-border-radius: 5px; /*For Safari, etc. */
@@ -327,4 +330,8 @@ body{
 	{
 		max-width: 350px;
 	}
+}
+
+section {
+    clear: both;
 }
