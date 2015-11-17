@@ -83,6 +83,10 @@
         list.set('habits', []);
         list.set('edit_id', '');
 
+        // default images
+        // TODO: not sure if you can do it like this.
+        // list.set('user_images', [{"__type":"File","name":"tfss-3f3a120b-1e94-4ec0-b660-aadf25916657-pitchfork2.jpg","url":"http://files.parsetfss.com/dc5a0d12-c7ba-499b-b77d-468d92a2042e/tfss-3f3a120b-1e94-4ec0-b660-aadf25916657-pitchfork2.jpg"}]);
+
         list.save().then(function(list){
           user.set("username", inputEmail);
           user.set("email", inputEmail);
@@ -98,7 +102,7 @@
             error: function(user, error) {
               if(error.code == 202) {
                 displayMessage('Sign up unsuccessful.<br>Email address has already been taken.');
-              } 
+              }
               else {
                 displayMessage('Sign up unsuccessful.<br>Please use a valid email address.');
               }

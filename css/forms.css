@@ -63,8 +63,12 @@ input#habit_title{
 	height: 30px;
 	width: 350px;
 	font-size:medium;
-
 }
+
+input#file-input{ 
+    display: none;
+}
+
 input#notes{
 	height: 30px;
 	width: 350px;
