@@ -12,8 +12,8 @@
     <link rel="stylesheet" type="text/css" href="../css/list.css">
 </head>
 <body onload="checkCurrentUser();">
-    <input type="button" onclick="logOut();" value="Log Out"></input>
-    <input type="button" onclick="advanceDay();" value="Advance Day"></input>
+    <input class="logoutButton" type="button" onclick="logOut();" value="Log Out"></input>
+    <input class="logoutButton" type="button" onclick="advanceDay();" value="Advance Day"></input>
 
     <section>
         <h1 id="header-text">Habit List</h1>
@@ -493,6 +493,10 @@
 
             query.get(user.get('list'), {
                 success: function(list) {
+					// Update Header Title
+					currentDate.setDate(currentDate.getDate()+1);
+					document.getElementById("header-text").innerHTML = "Habit List - " + days[currentDate.getDay()] + " " + (currentDate.getMonth()+1) + "/" + currentDate.getDate();
+				
                     var habitList = list.get('habits');
                     var curHabit;
                     for(h in habitList) {
@@ -500,6 +504,7 @@
 
                         // Update UI
                         var currDay = currentDate.getDay();
+						
                         if(curHabit.weekly_freq[currDay]) {
                             curHabit.total_days += 1;
                             curHabit.completed_today = 0;

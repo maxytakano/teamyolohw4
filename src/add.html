@@ -10,10 +10,16 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Add Habit</title>
 		<link rel="stylesheet" href="../css/forms.css">
+		<script>
+			if (window.File && window.FileReader && window.FileList && window.Blob) {
+				// Great success! All the File APIs are supported.
+			} else {
+				alert('The File APIs are not fully supported in this browser. Custom image upload not available.');
+			}
+		</script> 
 	</head>
 	<body onload="checkCurrentUser();">
-    	<input type="button" onclick="logOut();" value="Log Out"></input>
-		<output id="list"></output>
+    	<input class="logoutButton" type="button" onclick="logOut();" value="Log Out"></input>
 		<div class="forms">
 			<h2>Add A Habit</h2>
 			<form>
@@ -24,49 +30,22 @@
 				</p>
 				<p><input id="habit_title" type="text" name="fullname" placeholder="Exercise 30 minutes"></p>
 				<p><label>Habit Icon</label></p>
-				<div id="habit_icons">
+				<div id="habit_icons" class="scroll">
 					<img id="../img/sleep.jpgID" class="icon" onclick="selectImage(this);" src="../img/sleep.jpg" alt="sleep image"/>
 					<img id="../img/salad.jpgID" class="icon" onclick="selectImage(this);" src="../img/salad.jpg" alt="eat image"/>
 					<img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
-
+					<img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>					
+					<img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>					
+					<img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>					
+					<img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>					
+					<img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>					
+					<img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
+					
     				<label for="file-input">
     					<img id="../img/add.pngID" class="icon" src="../img/add.png" alt="find a image"/>
     				</label>
 
-    				<input id="file-input" type="file" name="files[]" multiple />
-
-    				<script>
-					  function handleFileSelect(evt) {
-					    var files = evt.target.files; // FileList object
-
-					    // Loop through the FileList and render image files as thumbnails.
-					    for (var i = 0, f; f = files[i]; i++) {
-
-					      // Only process image files.
-					      if (!f.type.match('image.*')) {
-					        continue;
-					      }
-
-					      var reader = new FileReader();
-
-					      // Closure to capture the file information.
-					      reader.onload = (function(theFile) {
-					        return function(e) {
-					          // Render thumbnail.
-					          var span = document.createElement('span');
-					          span.innerHTML = ['<img class="icon" src="', e.target.result,
-					                            '" title="', escape(theFile.name), '"/>'].join('');
-					          document.getElementById('list').insertBefore(span, null);
-					        };
-					      })(f);
-
-					      // Read in the image file as a data URL.
-					      reader.readAsDataURL(f);
-					    }
-					  }
-
-					  document.getElementById('files').addEventListener('change', handleFileSelect, false);
-					</script>
+    				<input id="file-input" type="file" onchange="readURL(this);"/>
     				
 				</div>
 				<p>
@@ -97,9 +76,8 @@
 			</form>
 		</div>
 
-
-
 		<script>
+	
 			/**
 			 * habit object which is filled and submitted after the form
 			 * passes validation.
@@ -119,6 +97,8 @@
                 longest_streak: 0,
                 completed_today: 0
 			};
+
+			var pictureArray = [];
 
 			selectImage(document.getElementById("../img/sleep.jpgID"));
 
@@ -258,6 +238,25 @@
 				// Save the current image into the habit object.
 				newHabit.icon = el.src;
 			}
+
+			function readURL(input) {
+				if (input.files && input.files[0]) {
+					var reader = new FileReader();
+
+					reader.onload = function (e) {
+						document.getElementById('file-input').src = e.target.result;
+					}
+				}
+
+				reader.readAsDataURL(input.files[0]);
+
+				var customImg = document.getElementById('file-input');
+				localStorage.setItem("imgData", customImg);
+				pictureArray.push(customImg);
+				console.log(array);
+				console.log("hiya");
+			}
+
 		</script>
 	</body>
 </html>
