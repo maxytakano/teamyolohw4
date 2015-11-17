@@ -18,7 +18,7 @@
 			}
 		</script> 
 	</head>
-	<body onload="checkCurrentUser();">
+	<body onload="checkCurrentUser(); populateImages();">
     	<input class="logoutButton" type="button" onclick="logOut();" value="Log Out"></input>
 		<div class="forms">
 			<h2>Add A Habit</h2>
@@ -34,6 +34,7 @@
 					<img id="../img/sleep.jpgID" class="icon" onclick="selectImage(this);" src="../img/sleep.jpg" alt="sleep image"/>
 					<img id="../img/salad.jpgID" class="icon" onclick="selectImage(this);" src="../img/salad.jpg" alt="eat image"/>
 					<img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
+
 					<img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>					
 					<img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>					
 					<img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>					
@@ -41,18 +42,23 @@
 					<img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>					
 					<img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
 					
-    				<label for="file-input">
-    					<img id="../img/add.pngID" class="icon" src="../img/add.png" alt="find a image"/>
-    				</label>
+					<!-- <img id="../img/add.pngID" class="icon" src="../img/add.png" alt="find a image"/> -->
 
-    				<input id="file-input" type="file" onchange="readURL(this);"/>
-    				
+					<img id="test-image" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
+
+
+					<label for="file-input">
+						<img id="../img/add.pngID" class="icon" src="../img/add.png" alt="find a image"/>
+					</label>
+
+					<input id="file-input" type="file" onchange="readURL(this);"/>
+
+
 				</div>
 				<p>
 					<label style="margin-right: 10px">Weekly Frequency</label>
 					<label id="weekly_err" style="color: red; visibility: hidden">*Please select at least one weekly frequency.</label>
 				</p>
-				
 				<div id="ck-button">
 					<label> <input id="SundayID" type="checkbox" name="date" value="Sunday" checked><span>Sun</span></label>
 					<label> <input id="MondayID" type="checkbox" name="date" value="Monday" checked><span>Mon</span></label>
@@ -165,7 +171,7 @@
 							list.add('habits', newHabit);
 				  			list.save().then(function() {
 				  				window.location = 'list.html';
-				  			});	
+				  			});
 					  	},
 					  	error: function(object, error) {
 					  		alert("Error: " + error.code + " " + error.message);
@@ -239,22 +245,72 @@
 				newHabit.icon = el.src;
 			}
 
+			/*** image uploading / reading ***/
+
+			// Gets the image file and saves it into the parse user_images array
 			function readURL(input) {
+				var imageFile, fileName, parseFile;
+
 				if (input.files && input.files[0]) {
 					var reader = new FileReader();
+					fileName = input.files[0].name;
 
+					// Callback saves the image into parse after the image is loaded
 					reader.onload = function (e) {
-						document.getElementById('file-input').src = e.target.result;
+						// Set the targe of the reasAsDataURL call.
+						imageFile = e.target.result;
+						// Save the base 64 url into a parse file
+						parseFile = new Parse.File(input.files[0].name, { base64: imageFile } );
+
+						parseFile.save().then(function() {
+							// Get the user's list.
+							var user = Parse.User.current();
+				            var List = Parse.Object.extend("List");
+				            var query = new Parse.Query(List);
+
+				            query.get(user.get('list'), {
+				                success: function(list) {
+				                	list.add('user_images', parseFile);
+				                    list.save();
+				                },
+				                error: function(object, error) {
+				                    alert("Error: " + error.code + " " + error.message);
+				                    // The object was not retrieved successfully.
+				                    // error is a Parse.Error with an error code and message.
+				                }
+				            });
+						}, function(error) {
+		                    alert("Error: " + error.code + " " + error.message);
+						});
 					}
 				}
 
+				// Read in the selected image
 				reader.readAsDataURL(input.files[0]);
+			}
 
-				var customImg = document.getElementById('file-input');
-				localStorage.setItem("imgData", customImg);
-				pictureArray.push(customImg);
-				console.log(array);
-				console.log("hiya");
+			// Populate all of the users extra images.
+			function populateImages() {
+				var user = Parse.User.current();
+	            var List = Parse.Object.extend("List");
+	            var query = new Parse.Query(List);
+	            var userImages;
+	            query.get(user.get('list'), {
+	                success: function(list) {
+	                	userImages = list.get('user_images');
+	                	console.log(userImages);
+	                	// if (userImages) {
+	                		
+	                	// }
+	                	// list.add('user_images', parseFile);
+	                    // list.save();
+	                },
+	                error: function(object, error) {
+	                    alert("Error: " + error.code + " " + error.message);
+	                    // The object was not retrieved successfully.
+	                    // error is a Parse.Error with an error code and message.
+	                }
+	            });
 			}
 
 		</script>
