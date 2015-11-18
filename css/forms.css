@@ -115,6 +115,7 @@ img.icon-selected {
     border: 5px solid #42A5F5;
 }
 
+/* most phones */
 @media (max-width: 500px) {
     div.forms {
         position: relative;
@@ -137,22 +138,29 @@ img.icon-selected {
         font-size:small;
     }
 
+    div.scroll {
+        margin-top: -5px;
+        width: 310px;
+        height:150px;
+        overflow: auto;
+    }
+
     img.icon{
         width: 60px;
         height: 60px;
         margin: 5px 5px 5px 5px;
-        border-radius: 25px;
-        /*-webkit-transform: scale(1);
-        transform: scale(1);
-        -webkit-transition: .3s ease-in-out;
-        transition: .3s ease-in-out;*/
+        border-radius: 15px;
     }
 
-    div.scroll {
-        margin-top: -5px;
-        width: 350px;
-        height:170px;
-        overflow: auto;
+    img.icon:hover{
+        margin: 0px 0px 0px 0px;
+        border: 5px solid #8FBBDE;
+        cursor: pointer;
+    }
+
+    img.icon-selected {
+        margin: 0px 0px 0px 0px;
+        border: 5px solid #42A5F5;
     }
 
     p{
@@ -168,6 +176,32 @@ img.icon-selected {
     {
         width: 300px;
         margin-bottom: 10px;
+    }
+
+    div.scroll {
+        margin-top: -5px;
+        margin-left: -5px;
+        width: 270px;
+        height:130px;
+        overflow: auto;
+    }
+
+    img.icon{
+        width: 55px;
+        height: 55px;
+        margin: 3px 3px 3px 3px;
+        border-radius: 15px;
+    }
+
+    img.icon:hover{
+        margin: 0px 0px 0px 0px;
+        border: 3px solid #8FBBDE;
+        cursor: pointer;
+    }
+
+    img.icon-selected {
+        margin: 0px 0px 0px 0px;
+        border: 3px solid #42A5F5;
     }
 }
 
