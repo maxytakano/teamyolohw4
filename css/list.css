@@ -298,6 +298,7 @@ body{
 		.habit-name
 		{
 			max-width: 210px;
+            white-space:nowrap;
 		}
 }
 
@@ -309,6 +310,7 @@ body{
 		.habit-name
 		{
 			max-width: 160px;
+            white-space:nowrap;
 		}
 		.habit-op
 		{
@@ -328,5 +330,6 @@ body{
 	.habit-name
 	{
 		max-width: 350px;
+        white-space:nowrap;
 	}
 }
