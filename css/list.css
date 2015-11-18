@@ -10,17 +10,19 @@ body{
     font-family: Helvetica, san-sarif;
 }
 
-/* Sign Out Button (and advance day button until it's no longer needed */
+/* Sign Out Button */
 .logoutButton {
   -webkit-appearance:none;
-	width: 49%;
-	max-width: 200px;
-	text-align: center;
-	display: inline-block;
-	margin: 0;
-	padding: 15px;
-	background:none;
-	background-color: #214864;
+    width: 49%;
+    max-width: 200px;
+    text-align: center;
+    display: inline-block;
+    margin-left: 8px;
+    margin-bottom: 8px;
+    padding: 15px;
+    background:none;
+    background-color: #214864;
+    float: right;
   border:none;
   color:white;
   -webkit-border-radius: 5px; /*For Safari, etc. */
@@ -286,7 +288,7 @@ body{
 /* phone */
 @media only screen
     and (max-width: 500px) {
-        section{width:350px;margin: 0 auto;}
+        section{width:350px;margin: 0 auto;clear:both;}
         .message{right:5px;bottom:65px;font-size: small;}
         .graph-message {
             max-width: 200px;
@@ -302,7 +304,7 @@ body{
 /* iphone 4 and 5 */
 @media only screen
     and (max-width: 350px) {
-        section{width:300px;margin: 0 auto;}
+        section{width:300px;margin: 0 auto; clear:both;}
         .message{right:4px;bottom:65px;font-size: xx-small;}
 		.habit-name
 		{
@@ -317,7 +319,7 @@ body{
 /* desktop, tablet */
 @media only screen
     and (min-width: 500px) {
-    section{width:500px;margin: 0 auto;}
+    section{width:500px;margin: 0 auto; clear:both;}
     .message{
         right: 14px;
         bottom: 65px;
