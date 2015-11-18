@@ -20,9 +20,7 @@
         </script>
     </head>
     <body onload="checkCurrentUser(); populateImages();">
-        <!-- <div class"logout-container"> -->
-            <input class="logoutButton" type="button" onclick="logOut();" value="Log Out"></input>
-        <!-- </div> -->
+        <input class="logoutButton" type="button" onclick="logOut();" value="Log Out"></input>
         <div class="forms">
             <h2>Add A Habit</h2>
             <form>
@@ -34,28 +32,21 @@
                 <p><input id="habit_title" type="text" name="fullname" placeholder="Exercise 30 minutes"></p>
                 <p><label>Habit Icon</label></p>
                 <div id="habit_icons" class="scroll">
-                    <img id="../img/sleep.jpgID" class="icon" onclick="selectImage(this);" src="../img/sleep.jpg" alt="sleep image"/>
-                    <img id="../img/salad.jpgID" class="icon" onclick="selectImage(this);" src="../img/salad.jpg" alt="eat image"/>
-                    <img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
-
-                    <img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
-                    <img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
-                    <img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
-                    <img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
-                    <!-- <img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/> -->
-                    <!-- <img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/> -->
-                    <!-- <img id="../img/add.pngID" class="icon" src="../img/add.png" alt="find a image"/> -->
-
-                    <img id="test-image" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
-
-
-                    <label for="file-input">
+                    <label for="file-input" id="input-image">
                         <img id="../img/add.pngID" class="icon" src="../img/add.png" alt="find a image"/>
                     </label>
 
+                    <img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
+                    <img id="../img/sleep.jpgID" class="icon" onclick="selectImage(this);" src="../img/sleep.jpg" alt="sleep image"/>
+                    <img id="../img/salad.jpgID" class="icon" onclick="selectImage(this);" src="../img/salad.jpg" alt="eat image"/>
+                    <img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
+                    <img id="../img/sleep.jpgID" class="icon" onclick="selectImage(this);" src="../img/sleep.jpg" alt="sleep image"/>
+
+                    <!-- <label for="file-input" id="input-image">
+                        <img id="../img/add.pngID" class="icon" src="../img/add.png" alt="find a image"/>
+                    </label> -->
+
                     <input id="file-input" type="file" onchange="readURL(this);"/>
-
-
                 </div>
                 <p>
                     <label style="margin-right: 10px">Weekly Frequency</label>
@@ -105,9 +96,7 @@
                 completed_today: 0
             };
 
-            var pictureArray = [];
-
-            selectImage(document.getElementById("../img/sleep.jpgID"));
+            // selectImage(document.getElementById("../img/sleep.jpgID"));
 
             function onSubmit() {
                 var h_title = document.getElementById('habit_title').value;
@@ -195,7 +184,6 @@
                 for (var i = 0; i < labels.length; i++) {
                     week = labels[i].children.date;
                     if (week.checked) {
-                        console.log(i);
                         selected_weeks.push(true);
                     } else {
                         selected_weeks.push(false);
@@ -252,8 +240,11 @@
             /*** image uploading / reading ***/
 
             // Gets the image file and saves it into the parse user_images array
+            // Then adds that image to the icon list
             function readURL(input) {
                 var imageFile, fileName, parseFile;
+                var habitIcons = document.getElementById("habit_icons");
+                var inputImage = document.getElementById("input-image");
 
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -276,6 +267,19 @@
                                 success: function(list) {
                                     list.add('user_images', parseFile);
                                     list.save();
+
+                                    // now add the newest image to the icon-list
+                                    var user_img;
+                                    user_img = document.createElement("img");
+                                    user_img.className = "icon";
+                                    user_img.src = parseFile.url();
+                                    user_img.onclick = function imageClosure() {
+                                        selectImage(this);
+                                    };
+
+                                    // insert after the add img button
+                                    habitIcons.insertBefore(user_img, inputImage.nextSibling);
+                                    selectImage(user_img);
                                 },
                                 error: function(object, error) {
                                     alert("Error: " + error.code + " " + error.message);
@@ -295,6 +299,9 @@
 
             // Populate all of the users extra images.
             function populateImages() {
+                var habitIcons = document.getElementById("habit_icons");
+                var inputImage = document.getElementById("input-image");
+
                 var user = Parse.User.current();
                 var List = Parse.Object.extend("List");
                 var query = new Parse.Query(List);
@@ -302,12 +309,20 @@
                 query.get(user.get('list'), {
                     success: function(list) {
                         userImages = list.get('user_images');
-                        console.log(userImages);
-                        // if (userImages) {
-                            
-                        // }
-                        // list.add('user_images', parseFile);
-                        // list.save();
+                        if (userImages) {
+                            var user_img;
+                            for (cur_image in userImages) {
+                                user_img = document.createElement("img");
+                                user_img.className = "icon";
+                                user_img.src = userImages[cur_image].url();
+                                user_img.onclick = function imageClosure() {
+                                    selectImage(this);
+                                };
+                                // insert after the add img button.
+                                habitIcons.insertBefore(user_img, inputImage.nextSibling);
+                            }
+                        }
+                        selectImage(habitIcons.children[1]);
                     },
                     error: function(object, error) {
                         alert("Error: " + error.code + " " + error.message);
