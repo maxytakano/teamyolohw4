@@ -4,8 +4,7 @@ function initParse() {
 }
 
 function initOneSignal() {
-    var OneSignal = OneSignal || [];
-    OneSignal.push(["init", {path: "/", appId: "e1389734-7a53-42ac-9eed-42812382c796", safari_web_id: "web.onesignal.auto.34e4584e-b851-4129-9188-f0d7c790d3df", autoRegister: false}]);
+
 }
 
 // Checks if an user is logged on already.
