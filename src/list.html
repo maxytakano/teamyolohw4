@@ -76,7 +76,7 @@
             <div class="message">\n \
                 <div class="message-total">\n \
                     <div class="graph-message">\n \
-                    </div><br>\n \
+                    </div>\n \
                     <svg class="habit-graph" height="25" width="150">\n \
                         <line x1="0" y1="0" x2="150" y2="0" style="stroke:rgba(171,171,171,0.6);stroke-width:25" />\n \
                         <line class="blue-line" x1="0" y1="0" x2="60" y2="0" style="stroke:rgba(65, 131, 215, 0.8);stroke-width:25" />\n \
@@ -84,7 +84,7 @@
                     <div class="complete-message">\n \
                         Completed <strong>0/1</strong> for today.\n \
                     </div>\n \
-                </div><br>\n \
+                </div>\n \
             </div>\n \
             <div class="habit-op" id="button-container">\n \
                 <button type="button" class="op op-done" onclick="thumbsUp(\''+habit.habit_id+'\');" title="done">\n \
@@ -379,32 +379,32 @@
                 recordString = "day";
             }
 
+            // 1. Update graph message.
+            graphMessage.innerHTML = "Habit completed <strong style='color: rgb(98, 140, 193);'>"+curHabit.completed_days+
+                                        "</strong><strong> / "+curHabit.total_days+"</strong> days. <br>";
 
+
+            // Decide which completed message to show and if we need to disable the habit.
             if (curHabit.completed_today >= curHabit.daily_freq) {
                 // Habit already completed for today.
-                graphMessage.innerHTML = "<strong style='color: rgb(98, 140, 193);'>"+curHabit.current_streak+"</strong> "+
+                completeMessage.innerHTML = "<strong style='color: rgb(98, 140, 193);'>"+curHabit.current_streak+"</strong> "+
                                         recordString+" in a row! Best Record: <strong style='color: rgb(98, 140, 193);'>"+
                                         curHabit.longest_streak+"</strong><br>";
-                completeMessage.innerHTML = "Completed <strong style='color: rgb(89, 167, 96);'>"+curHabit.completed_today
-                                            +" / "+curHabit.daily_freq+"</strong> for today!";
+
                 // Disable the habit for today.
                 disableHabit(habit_id);
             } else if (curHabit.completed_today == -1) {
                 // Habit failed for today.
-                graphMessage.innerHTML = "Habit completed <strong style='color: rgb(98, 140, 193);'>"+curHabit.completed_days+
-                                        "</strong> "+dayString+" out of <strong style='color: rgb(98, 140, 193);'>"
-                                        +curHabit.total_days+"</strong>.<br>";
                 completeMessage.innerHTML = "Habit <strong style='color: rgba(199, 35, 20, 0.76);'>failed</strong>. \
-                                             Try harder tomorrow!";
+                                              Try harder tomorrow!";
+
                 // Disable the habit for today.
                 disableHabit(habit_id);
             } else {
                 // Habit in progress for today
-                graphMessage.innerHTML = "Habit completed <strong style='color: rgb(98, 140, 193);'>"+
-                                        curHabit.completed_days+"</strong style='color: rgb(98, 140, 193);'> "+dayString+" \
-                                        out of <strong style='color: rgb(98, 140, 193);'>"+curHabit.total_days+"</strong>.<br>";
                 completeMessage.innerHTML = "Completed <strong>"+curHabit.completed_today+" / "+
-                                            curHabit.daily_freq+"</strong> for today.";
+                                            curHabit.daily_freq+"</strong> times for today.";
+
                 enableHabit(habit_id);
             }
         }

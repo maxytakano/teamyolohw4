@@ -128,8 +128,8 @@ body {
 }
 
 .message-total > svg {
-    margin: 20px auto; 
-    margin-bottom: 5px;
+    margin: 14px auto;
+    margin-bottom: 0;
 }
 
 .graph-message {
@@ -139,6 +139,17 @@ body {
     display: inline-block;
     float: middle;
 }
+
+.complete-message {
+    margin-bottom: 13px;
+}
+
+/*.record-message {*/
+    /*display: none;*/
+   /* -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    transition: all 0.5s ease;*/
+/*}*/
 
 /* operations (for a existing habit) */
 .habit-op {
@@ -389,11 +400,18 @@ body {
 
         .message {
             right:5px;
-            bottom:65px;
+            bottom:78px;
             font-size: small;
+            width: 200px;
         }
 
         .graph-message {
+            max-width: 200px;
+            word-wrap: break-word;
+            margin-left: 0px;
+        }
+
+        .completed-message {
             max-width: 200px;
             word-wrap: break-word;
             margin-left: 0px;
@@ -414,10 +432,22 @@ body {
             clear:both;
         }
 
+        .graph-message {
+            max-width: 165px;
+            word-wrap: break-word;
+            margin-left: 0px;
+        }
+        .completed-message {
+            max-width: 165px;
+            word-wrap: break-word;
+            margin-left: 0px;
+        }
+
         .message {
             right:4px;
-            bottom:65px;
-            font-size: xx-small;
+            bottom:78px;
+            width: 165px;
+            font-size: x-small;
         }
 
         .habit-name {
@@ -441,7 +471,7 @@ body {
 
     .message {
         right: 14px;
-        bottom: 65px;
+        bottom: 78px;
         width: 343px;
     }
 
