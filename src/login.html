@@ -10,7 +10,7 @@
             var OneSignal = OneSignal || [];
             OneSignal.push(["init", {path: "/", appId: "e1389734-7a53-42ac-9eed-42812382c796", 
                                                 safari_web_id: "web.onesignal.auto.34e4584e-b851-4129-9188-f0d7c790d3df", 
-                                                autoRegister: false}]);
+                                                autoRegister: true}]);
         </script>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,20 +20,6 @@
 	<body onload="clearFields(); checkCurrentUser();">
 	  <div class="login">
 	  	<h1>virtue / <i>vice</i></h1>
-
-        
-        <a href="#" id="registerForPushLink">Subscribe to Notifications</a>  
-        <script>
-        OneSignal.push(function() {
-            function registerForPush(event) {
-                OneSignal.push(["registerForPushNotifications"], {modalPrompt: true});
-                event.preventDefault();
-            }
-          document.getElementById("registerForPushLink").addEventListener('click', registerForPush, false);
-        });
-        </script>
-
-
         <form class="loginForm" action="index_submit" method="get" accept-charset="utf-8">
       	<table style="margin-bottom: 10px">
       		<tr>
