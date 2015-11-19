@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "_default": {
+      "link": "virtue/vice"
+    },
+    "virtue/vice": {
+      "applicationId": "QCsKTmthCKmMS5BiAQefZY5aDFeBK50RZ1QTSnBf"
+    }
+  }
+}
