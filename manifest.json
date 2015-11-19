@@ -1,8 +1,0 @@
-{
-  "name": "http://cse134b-fa15.co.nf",
-  "short_name": "http://cse134b-fa15.co.nf",
-  "start_url": "/",
-  "display": "standalone",
-  "gcm_sender_id": "440230116191",
-  "gcm_user_visible_only": true
-}
