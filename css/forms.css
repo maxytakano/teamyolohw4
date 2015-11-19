@@ -16,14 +16,10 @@ body {
     margin: 8px;
 }
 
-p{
+p {
     color:#6c6c6c;
     font-size: medium;
 }
-
-/*.logout-container {
-    text-align: right;
-}*/
 
 /* Sign Out Button */
 .logoutButton {
@@ -32,6 +28,7 @@ p{
     max-width: 200px;
     float:right;
     margin-bottom: 20px;
+    margin-left: 8px;
     padding: 6px 5px 6px 5px;
     background:none;
     background-color: #214864;
@@ -100,7 +97,7 @@ img.icon {
     -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
 }
 
-img.icon:hover{
+img.icon:hover {
     margin: 0px 0px 0px 0px;
     border: 5px solid #8FBBDE;
     cursor: pointer;
@@ -122,13 +119,13 @@ img.icon-selected {
         border-radius: 25px;
     }
 
-    input#habit_title{
+    input#habit_title {
         height: 30px;
         width: 250px;
         font-size:small;
     }
 
-    input#notes{
+    input#notes {
         height: 30px;
         width: 250px;
         font-size:small;
@@ -141,14 +138,14 @@ img.icon-selected {
         overflow: auto;
     }
 
-    img.icon{
+    img.icon {
         width: 60px;
         height: 60px;
         margin: 5px 5px 5px 5px;
         border-radius: 15px;
     }
 
-    img.icon:hover{
+    img.icon:hover {
         margin: 0px 0px 0px 0px;
         border: 5px solid #8FBBDE;
         cursor: pointer;
@@ -159,7 +156,7 @@ img.icon-selected {
         border: 5px solid #42A5F5;
     }
 
-    p{
+    p {
         color:#6c6c6c;
         font-size: small;
     }
@@ -168,8 +165,7 @@ img.icon-selected {
 /* for iphone screen */
 @media screen and (max-width: 350px)
 {
-    div.forms
-    {
+    div.forms {
         width: 300px;
         margin-bottom: 10px;
     }
@@ -201,7 +197,7 @@ img.icon-selected {
     }
 }
 
-h2{
+h2 {
     text-align:center;
     background-color: #bdbdbd;
     padding-top: 10px;
@@ -213,12 +209,9 @@ h2{
     text-shadow: 0px 0px 0px black;
 }
 
-
 span#notes_text{
     padding-right: 5px;
 }
-
-
 
 input#save{
     -webkit-appearance:none;
@@ -306,7 +299,7 @@ input#file-input{
     width:2.0em;
 }
 
-span#times{
+span#times {
     margin: 4px;
     padding:3px 0px;
     float:left;
@@ -316,7 +309,6 @@ span#times{
     text-align:center;
     padding:3px 0px;
     display:block;
-    /*border:1px solid #D0D0D0;*/
     overflow:auto;
 
 }
@@ -331,6 +323,7 @@ span#times{
     border-radius:25px;
     color:#fff;
 }
+
 #daily-button input:hover + span {
     cursor: pointer;
 }
