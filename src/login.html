@@ -2,10 +2,16 @@
 <html>
 	<head>
     <script src="https://www.parsecdn.com/js/parse-latest.js"></script>
-    <script src='../js/global.js'></script>
+
+
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
+    <link rel="manifest" href="/manifest.json">
     <script>
-        initParse();
+        var OneSignal = OneSignal || [];
+        OneSignal.push(["init", {path: "/", appId: "e1389734-7a53-42ac-9eed-42812382c796", autoRegister: false}]);
     </script>
+
+
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Welcome to Virtue/Vice!</title>
@@ -14,7 +20,21 @@
 	<body onload="clearFields(); checkCurrentUser();">
 	  <div class="login">
 	  	<h1>virtue / <i>vice</i></h1>
-      <form class="loginForm" action="index_submit" method="get" accept-charset="utf-8">
+
+        
+        <a href="#" id="registerForPushLink">Subscribe to Notifications</a>  
+        <script>
+        OneSignal.push(function() {
+            function registerForPush(event) {
+                OneSignal.push(["registerForPushNotifications"], {modalPrompt: true});
+                event.preventDefault();
+            }
+          document.getElementById("registerForPushLink").addEventListener('click', registerForPush, false);
+        });
+        </script>
+
+
+        <form class="loginForm" action="index_submit" method="get" accept-charset="utf-8">
       	<table style="margin-bottom: 10px">
       		<tr>
         		<td class="svgTd">
