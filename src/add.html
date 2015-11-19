@@ -64,9 +64,9 @@
 
                 <p><label>Daily Frequency</label></p>
                 <div id="daily-button">
-                    <label> <input id="Day1ID" type="radio" name="day" value="Day1" checked><span>1</span></label>
-                    <label> <input id="Day2ID" type="radio" name="day" value="Day2"><span>2</span></label>
-                    <label> <input id="Day3ID" type="radio" name="day" value="Day3"><span>3</span></label>
+                    <label> <input id="Day1ID" type="radio" name="day" value="1" checked><span>1</span></label>
+                    <label> <input id="Day2ID" type="radio" name="day" value="2"><span>2</span></label>
+                    <label> <input id="Day3ID" type="radio" name="day" value="3"><span>3</span></label>
                     <span id="times">times</span>
                 </div>
                 <p><label><span id="notes_text">Notes (optional): </span></label></p>
@@ -95,8 +95,6 @@
                 longest_streak: 0,
                 completed_today: 0
             };
-
-            // selectImage(document.getElementById("../img/sleep.jpgID"));
 
             function onAddSubmit() {
                 var h_title = document.getElementById('habit_title').value;
@@ -189,7 +187,7 @@
                             var saveButton = document.getElementById("save");
                             pTitle.innerHTML = "Edit A Habit";
                             pHeader.innerHTML = "Edit A Habit";
-                            saveButton.onclick = "onEditSubmit();";
+                            saveButton.setAttribute("onclick", "onEditSubmit();");
                             var labels = document.getElementById("ck-button").children;
                             for (var i = 0; i < labels.length; i++) {
                                 labels[i].children.date.checked = false;
@@ -243,7 +241,8 @@
                                         break;
                                 }
                             }
-                            document.getElementById(habit.daily_freq+"ID").checked = true;
+                            selectImage(document.getElementById(habit.icon + "ID"));
+                            document.getElementById("Day"+ habit.daily_freq+"ID").checked = true;
                             document.getElementById('notes').value = habit.notes;
                         }
                     },
@@ -256,9 +255,38 @@
             }
 
             function onEditSubmit() {
-                // If form validates, submit habit
-                if (validateForm()) {
+                var h_title = document.getElementById('habit_title').value;
+                var title_err_unique = document.getElementById('title_err_unique');
+                var title_err_empty = document.getElementById('title_err_empty');
+                var weekly_err = document.getElementById('weekly_err');
 
+                title_err_empty.style.visibility = 'hidden';
+                title_err_unique.style.visibility = 'hidden';
+                weekly_err.style.visibility = 'hidden';
+
+                var hasError = false;
+
+                var labels = document.getElementById("ck-button").children;
+                var hasChecked = false;
+                for (var i = 0; i < labels.length; i++) {
+                    var week = labels[i].children.date;
+                    if (week.checked) {
+                        hasChecked = true;
+                        break;
+                    }
+                }
+                if(!hasChecked) {
+                    weekly_err.style.visibility = 'visible';
+                    hasError = true;
+                }
+
+                // Check if the user entered a title.
+                if (h_title == "") {
+                    title_err_empty.style.visibility = 'visible';
+                    return;
+                }
+                else
+                {
                     var user = Parse.User.current();
                     var List = Parse.Object.extend("List");
                     var query = new Parse.Query(List);
@@ -267,15 +295,28 @@
                         success: function(list) {
                             // The object was retrieved successfully.
                             var habits = list.get('habits');
+                            var curHabit;
+                            for(h in habits) {
+                                curHabit = habits[h];
+                                if(curHabit.habit_id == h_title && curHabit.habit_id != list.get('edit_id')) {
+                                    title_err_unique.style.visibility = 'visible';
+                                    return;
+                                }
+                            }
+
+                            if(hasError) {
+                                return;
+                            }
+
                             for(h in habits) {
 
-                                if(habits[h].title == list.get('edit_id')) {
+                                if(habits[h].habit_id == list.get('edit_id')) {
                                     habits.splice(h, 1);
                                     break;
                                 }
                             }
 
-                            newHabit.title = document.getElementById('habit_title').value;
+                            newHabit.habit_id = document.getElementById('habit_title').value;
                             newHabit.weekly_freq = getWeeklyFrequency();
                             newHabit.daily_freq = getDailyFrequency();
                             newHabit.notes = document.getElementById('notes').value;
@@ -293,9 +334,6 @@
                             // error is a Parse.Error with an error code and message.
                         }
                     });
-                }
-                else {
-                    alert('form failed validation');
                 }
             }
 
@@ -389,15 +427,17 @@
                             var user = Parse.User.current();
                             var List = Parse.Object.extend("List");
                             var query = new Parse.Query(List);
-
+                            var userImages;
                             query.get(user.get('list'), {
                                 success: function(list) {
+                                    userImages = list.get('user_images');
                                     list.add('user_images', parseFile);
                                     list.save();
 
                                     // now add the newest image to the icon-list
                                     var user_img;
                                     user_img = document.createElement("img");
+                                    user_img.id = userImages[cur_image].url()+"ID";
                                     user_img.className = "icon";
                                     user_img.src = parseFile.url();
                                     user_img.onclick = function imageClosure() {
@@ -440,6 +480,7 @@
                             var user_img;
                             for (cur_image in userImages) {
                                 user_img = document.createElement("img");
+                                user_img.id = userImages[cur_image].url()+"ID";
                                 user_img.className = "icon";
                                 user_img.src = userImages[cur_image].url();
                                 user_img.onclick = function imageClosure() {
@@ -449,7 +490,9 @@
                                 habitIcons.insertBefore(user_img, inputImage.nextSibling);
                             }
                         }
-                        selectImage(habitIcons.children[1]);
+                        if(list.get('edit_id') == '') {
+                            selectImage(habitIcons.children[1]);
+                        }
                     },
                     error: function(object, error) {
                         alert("Error: " + error.code + " " + error.message);
