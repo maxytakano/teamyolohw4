@@ -1,7 +1,14 @@
 /* basic structure & layout */
-html{height: 100%;}
-h1{color:#888;text-align: center;}
-body{
+html {
+    height: 100%;
+}
+
+h1 {
+    color:#888;
+    text-align: center;
+}
+
+body {
     height:100%;   
     background: -webkit-linear-gradient(left top, #BBDEFB, #B0C4DE) fixed; /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(bottom right,#BBDEFB, #B0C4DE) fixed; /* For Opera 11.1 to 12.0 */
@@ -12,42 +19,56 @@ body{
 
 /* Sign Out Button */
 .logoutButton {
-  -webkit-appearance:none;
-    width: 49%;
+    -webkit-appearance:none;
+    -moz-appearance:none;
     max-width: 200px;
-    text-align: center;
-    display: inline-block;
+    float:right;
+    margin-bottom: 20px;
     margin-left: 8px;
-    margin-bottom: 8px;
-    padding: 15px;
+    padding: 6px 5px 6px 5px;
     background:none;
     background-color: #214864;
-    float: right;
-  border:none;
-  color:white;
-  -webkit-border-radius: 5px; /*For Safari, etc. */
-  -moz-border-radius: 5px; /* For Mozilla, etc. */
-  border-radius: 5px; /* CSS3 Feature */
-  opacity: 1.0;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
+    border:none;
+    color:white;
+    -webkit-border-radius: 5px; /*For Safari, etc. */
+    -moz-border-radius: 5px; /* For Mozilla, etc. */
+    border-radius: 5px; /* CSS3 Feature */
+    opacity: 1.0;
 }
 
- .logoutButton:hover {
-	opacity: 0.75;
-	cursor: pointer;
+.logoutButton:hover {
+    opacity: 0.75;
+    cursor: pointer;
 }
 
-.habit-list{list-style: none; padding:0;}
-.habit-list>li{position:relative; height: 240px;padding:5%; background:rgba(255,255,255,1); border:1px solid rgba(255, 255, 255, 0.3); border-radius:5px; margin:5px; padding:0;}
+.habit-list {
+    list-style: none;
+    padding:0;
+}
+
+.habit-list > li {
+    position:relative;
+    height: 240px;
+    padding:5%; background:rgba(255,255,255,1);
+    border:1px solid rgba(255, 255, 255, 0.3);
+    border-radius:5px;
+    margin:5px;
+    padding:0;
+}
 
 /* habit info */
 .habit-info {
     padding:0;
     margin-left:20px;
 }
-.habit-info>li{list-style:none; height:100%; padding:0; margin-right:5px; vertical-align: middle;}
+.habit-info > li {
+    list-style:none; 
+    height:100%;
+    padding:0; 
+    margin-right:5px; 
+    vertical-align: middle;
+}
+
 .habit-name {
     margin:0;
     padding:0;
@@ -59,16 +80,23 @@ body{
     font-size: 24px;
     position: relative;
     z-index: 4;
-	
-	/* Handles names that are too long for box */
-	overflow: hidden;
-	text-overflow: ellipsis;
+    /* Handles names that are too long for box */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-.habit-icon{margin:0; border-radius:5px;width:100px; height:100px;}
+
+.habit-icon {
+    margin:0; 
+    border-radius:5px;
+    width:100px; 
+    height:100px;
+}
+
 .week-container {
     margin-top: 2px;
     margin-left: -4px;
 }
+
 .week-day {
     display: inline-block;
     background-color: #BBDEFB;
@@ -79,8 +107,8 @@ body{
     width: 18px;
     text-align: center;
     margin-right: 2px;
-
 }
+
 .week-day-off {
     color: #bbb;
     display: inline-block;
@@ -98,10 +126,11 @@ body{
     text-align:center;
     color:#888;
 }
-.message-total{
-    /*width: 60%;*/
+
+.message-total > svg {
+    margin: 20px auto; 
+    margin-bottom: 5px;
 }
-.message-total>svg{margin: 20px auto; margin-bottom: 5px;}
 
 .graph-message {
     max-width: 300px;
@@ -123,6 +152,7 @@ body{
     top:170px;
     margin:0 auto;
 }
+
 .op {
     width:60px;
     height:60px;
@@ -132,7 +162,8 @@ body{
     padding: 5px;
     vertical-align: middle;
 }
-.op:focus{
+
+.op:focus {
     outline-style:none;
 }
 
@@ -140,12 +171,13 @@ body{
     background:rgba(0, 177, 106, 0.8);
     border:2px solid rgba(0, 128, 0, 0.3);
 }
+
 .op-done:hover {
     box-shadow: 0 0 5px gray;
     background:#00B16A;
     cursor:pointer;
 }
-.op-done:active{
+.op-done:active {
     box-shadow: 0 0 10px gray;
     background:#00B16A;
     border:2px solid green;
@@ -155,11 +187,13 @@ body{
     background:rgba(242, 38, 19, 0.7);
     border:2px solid rgba(128,0,0,0.3);
 }
+
 .op-fail:hover {
     box-shadow: 0 0 5px gray;
     background: rgba(242, 38, 19, 0.82);
     cursor:pointer;
 }
+
 .op-fail:active {
     box-shadow: 0 0 10px gray;
     background:#F22613;
@@ -171,6 +205,7 @@ body{
     border:2px solid #A9A9A9;
     cursor: default;
 }
+
 .thumb-image {
     height: 75%;
     width: 75%;
@@ -178,7 +213,6 @@ body{
 }
 
 /*** slide out options ***/
-
 .op-edit {
     background:rgba(247, 202, 24, 0.8);
     border: 2px solid rgba(255, 255, 0, 0.3);
@@ -186,10 +220,12 @@ body{
     width: 20px;
     padding: 0px;
 }
+
 .op-edit:hover{
     background:#F7CA18;
     cursor:pointer;
 }
+
 .op-edit:active{
     background:#F7CA18;
     border:2px solid yellow;
@@ -202,10 +238,12 @@ body{
     width: 20px;
     padding: 0px;
 }
+
 .op-del:hover{
     background:#F22613;
     cursor:pointer;
 }
+
 .op-del:active{
     background:#F22613;
     border:2px solid red;
@@ -221,23 +259,29 @@ body{
     padding: 0px;
     margin-left: 2px;
 }
+
 .selected {
     background:#0099FF;
 }
+
 .op-gear:hover{
     background:#0099FF;
     cursor:pointer;
- }
+}
+
 .op-gear:active{
     background:#0099FF;
     border:2px solid blue;
- }
+}
+
 .gear-img {
     height: 100%;
 }
+
 .small-buttons {
     height: 80%;
 }
+
 /* occludes view of buttons */
 .white-square {
     border: 2px solid #FFF;
@@ -251,6 +295,7 @@ body{
     top: 10px;
     left: -63px;
 }
+
 .options {
     position:relative;
     z-index: 1;
@@ -261,75 +306,147 @@ body{
     -moz-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+
 .options-out {
     position:relative;
     z-index: 1;
     margin-left: -56px;
     height: 300px;
     visibility: visible;
-
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
 
 /* add habit */
-#addHabit{position:fixed; bottom: 40px; right:40px;background:rgba(33, 72, 100, 1.0); width: 60px;height:60px; vertical-align: middle; font-size:36px; padding: 5px;line-height: 100%;color:white; border:2px solid rgba(85,85,85,0.7); -webkit-appereance: none; border-radius: 50%; box-shadow: 0 0 3px gray;}
-#addHabit:hover{background: rgba(33, 72, 100, 0.7); border:1px solid rgba(85,85,85,0.7); box-shadow: 0 0 5px gray;}
-#addHabit:active{border: 2px solid gray; background: rgb(33, 72, 100); box-shadow: 0 0 10px gray;}
-#addHabit:focus{outline-style:none;}
+#addHabit {
+    position:fixed;
+    bottom: 40px; 
+    right:40px;
+    background:rgba(33, 72, 100, 1.0); 
+    width: 60px;
+    height:60px; 
+    vertical-align: middle; 
+    font-size:36px; 
+    padding: 5px;
+    line-height: 100%;
+    color:white; 
+    border:2px solid rgba(85,85,85,0.7); 
+    -webkit-appereance: none; 
+    border-radius: 50%; 
+    box-shadow: 0 0 3px gray;
+}
+
+#addHabit:hover {
+    background: rgba(33, 72, 100, 0.7); 
+    border:1px solid rgba(85,85,85,0.7); 
+    box-shadow: 0 0 5px gray;
+}
+
+#addHabit:active {
+    border: 2px solid gray; 
+    background: rgb(33, 72, 100); 
+    box-shadow: 0 0 10px gray;
+}
+
+#addHabit:focus {
+    outline-style:none;
+}
 
 /* mesage above add habit when there are no habits displayed */
-#addHabit-empty{position: fixed; text-align: center; width: 60px; bottom: 110px; right: 40px; visibility: hidden;}
-#addHabit-message{padding:5%; /*background: rgba(255,255,255,1);*/ border:2px solid rgb(0,0,0); border-radius:5px; box-sizing: border-box; position: relative; width: 260px; right: 200px; font-size: x-large;}
-#addHabit-arrow{width: 60px;}
+#addHabit-empty {
+    position: fixed; 
+    text-align: center; 
+    width: 60px; 
+    bottom: 110px; 
+    right: 40px; 
+    visibility: hidden;
+}
 
+#addHabit-message {
+    padding:5%; 
+    border:2px solid rgb(0,0,0); 
+    border-radius:5px; 
+    box-sizing: border-box; 
+    position: relative; 
+    width: 260px; 
+    right: 200px; 
+    font-size: x-large;
+}
+
+#addHabit-arrow {
+    width: 60px;
+}
 
 /* phone */
 @media only screen
     and (max-width: 500px) {
-        section{width:350px;margin: 0 auto;clear:both;}
-        .message{right:5px;bottom:65px;font-size: small;}
+        section {
+            width:350px;
+            margin: 0 auto;
+            clear:both;
+        }
+
+        .message {
+            right:5px;
+            bottom:65px;
+            font-size: small;
+        }
+
         .graph-message {
             max-width: 200px;
             word-wrap: break-word;
             margin-left: 0px;
         }
-		.habit-name
-		{
-			max-width: 210px;
+
+        .habit-name {
+            max-width: 210px;
             white-space:nowrap;
-		}
+        }
 }
 
 /* iphone 4 and 5 */
 @media only screen
     and (max-width: 350px) {
-        section{width:300px;margin: 0 auto; clear:both;}
-        .message{right:4px;bottom:65px;font-size: xx-small;}
-		.habit-name
-		{
-			max-width: 160px;
+        section {
+            width:300px;
+            margin: 0 auto; 
+            clear:both;
+        }
+
+        .message {
+            right:4px;
+            bottom:65px;
+            font-size: xx-small;
+        }
+
+        .habit-name {
+            max-width: 160px;
             white-space:nowrap;
-		}
-		.habit-op
-		{
-			right: -27px;
-		}
+        }
+
+        .habit-op {
+            right: -27px;
+        }
 }
 
 /* desktop, tablet */
 @media only screen
     and (min-width: 500px) {
-    section{width:500px;margin: 0 auto; clear:both;}
-    .message{
+    section {
+        width:500px;
+        margin: 0 auto; 
+        clear:both;
+    }
+
+    .message {
         right: 14px;
         bottom: 65px;
         width: 343px;
     }
-	.habit-name
-	{
-		max-width: 350px;
+
+    .habit-name {
+        max-width: 350px;
         white-space:nowrap;
-	}
+    }
 }
