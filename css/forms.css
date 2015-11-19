@@ -258,14 +258,13 @@ input#file-input{
     display: none;
 }
 
-#ck-button {  
+#ck-button {
     overflow:auto;
 }
 
 #ck-button label {
     margin:4px;
     border-radius:5px;
-    /*border:1px solid #D0D0D0;*/
     background-color:#EFEFEF;
     float:left;
     width:4.0em;
@@ -275,14 +274,12 @@ input#file-input{
     text-align:center;
     padding:3px 0px;
     display:block;
-    /*border:1px solid #D0D0D0;*/
     overflow:auto;
-
 }
 
 #ck-button label input {
-    position:absolute;
-    top:-100%;
+    display: none;
+    cursor: pointer;
 }
 
 #ck-button input:checked + span {
@@ -290,7 +287,8 @@ input#file-input{
     border-radius:5px;
     color:#fff;
 }
-#ck-button input:hover + span {
+
+#ck-button span:hover {
     cursor: pointer;
 }
 
