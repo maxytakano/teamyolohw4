@@ -235,6 +235,7 @@ input#save{
 
 input#save:hover{
     cursor: pointer;
+    opacity: 0.75;
 }
 p#save_p{
     text-align: center;
@@ -264,6 +265,11 @@ input#file-input{
 }
 
 #ck-button label span {
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;
+
     text-align:center;
     padding:3px 0px;
     display:block;
@@ -276,7 +282,7 @@ input#file-input{
 }
 
 #ck-button input:checked + span {
-    background-color:#9c9696; 
+    background-color:#9c9696;
     border-radius:5px;
     color:#fff;
 }
@@ -304,24 +310,27 @@ span#times {
 }
 
 #daily-button label span {
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;
+
     text-align:center;
     padding:3px 0px;
     display:block;
     overflow:auto;
-
 }
 
 #daily-button label input {
-    position:absolute;
-    top:-100%;
+    display: none;
 }
 
 #daily-button input:checked + span {
-    background-color:#9c9696; 
+    background-color:#9c9696;
     border-radius:25px;
     color:#fff;
 }
 
-#daily-button input:hover + span {
+#daily-button span:hover {
     cursor: pointer;
 }
