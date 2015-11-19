@@ -8,7 +8,7 @@
         </script>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Add Habit</title>
+        <title id="pageTitle"></title>
         <link rel="stylesheet" href="../css/forms.css">
         <script>
             // File API check.
@@ -19,10 +19,10 @@
             }
         </script>
     </head>
-    <body onload="checkCurrentUser(); populateImages();">
+    <body onload="checkCurrentUser(); populateImages(); fillForm();">
         <input class="logoutButton" type="button" onclick="logOut();" value="Log Out"></input>
         <div class="forms">
-            <h2>Add A Habit</h2>
+            <h2 id="pageHeader">&nbsp;</h2>
             <form>
                 <p>
                     <label id="title_text" style="margin-right: 10px">Habit Title</label>
@@ -64,14 +64,14 @@
 
                 <p><label>Daily Frequency</label></p>
                 <div id="daily-button">
-                    <label> <input id="Day1ID" type="radio" name="day" value="1" checked><span>1</span></label>
-                    <label> <input id="Day2ID" type="radio" name="day" value="2"><span>2</span></label>
-                    <label> <input id="Day3ID" type="radio" name="day" value="3"><span>3</span></label>
+                    <label> <input id="Day1ID" type="radio" name="day" value="Day1" checked><span>1</span></label>
+                    <label> <input id="Day2ID" type="radio" name="day" value="Day2"><span>2</span></label>
+                    <label> <input id="Day3ID" type="radio" name="day" value="Day3"><span>3</span></label>
                     <span id="times">times</span>
                 </div>
                 <p><label><span id="notes_text">Notes (optional): </span></label></p>
                 <p><input id="notes" type="text" name="day" placeholder="None"></p>
-                <p id="save_p"><input id="save" type="button" value="Save It" onclick="onSubmit();"></p>
+                <p id="save_p"><input id="save" type="button" value="Save It" onclick="onAddSubmit();"></p>
             </form>
         </div>
 
@@ -98,7 +98,7 @@
 
             // selectImage(document.getElementById("../img/sleep.jpgID"));
 
-            function onSubmit() {
+            function onAddSubmit() {
                 var h_title = document.getElementById('habit_title').value;
                 var title_err_unique = document.getElementById('title_err_unique');
                 var title_err_empty = document.getElementById('title_err_empty');
@@ -169,6 +169,133 @@
                             // error is a Parse.Error with an error code and message.
                         }
                     });
+                }
+            }
+
+            function fillForm() {
+                var user = Parse.User.current();
+                var List = Parse.Object.extend("List");
+                var query = new Parse.Query(List);
+
+                query.get(user.get('list'), {
+                    success: function(list) {
+                        // The object was retrieved successfully.
+                        // Populate the habit object
+                        var habits = list.get('habits');
+                        var habit_id = list.get('edit_id');          
+                        var pTitle = document.getElementById("pageTitle");
+                        var pHeader = document.getElementById("pageHeader");
+                        if(habit_id != '') {
+                            var saveButton = document.getElementById("save");
+                            pTitle.innerHTML = "Edit A Habit";
+                            pHeader.innerHTML = "Edit A Habit";
+                            saveButton.onclick = "onEditSubmit();";
+                            var labels = document.getElementById("ck-button").children;
+                            for (var i = 0; i < labels.length; i++) {
+                                labels[i].children.date.checked = false;
+                            }
+                        }
+                        else {
+                            pTitle.innerHTML = "Add A Habit";
+                            pHeader.innerHTML = "Add A Habit";
+                            return;
+                        }
+                        var habit;
+                        for(h in habits) {
+
+                            if(habits[h].habit_id == habit_id) {
+                                habit = habits[h];
+                                break;
+                            }
+                        }
+                        if(!habit) {
+                            alert("Sorry. This habit seems to have been deleted.");
+                            window.location = 'list.html';
+                        }
+
+                        else {
+                            document.getElementById('habit_title').value = habit.habit_id;
+                            for(var i = 0; i < habit.weekly_freq.length; i++) {
+                                if(habit.weekly_freq[i])
+                                switch(i) {
+                                    case 0:
+                                        document.getElementById("SaturdayID").checked = true;
+                                        break;
+                                    case 1:
+                                        document.getElementById("MondayID").checked = true;
+                                        break;
+                                    case 2:
+                                        document.getElementById("TuesdayID").checked = true;
+                                        break;
+                                    case 3:
+                                        document.getElementById("WednesdayID").checked = true;
+                                        break;
+                                    case 4:
+                                        document.getElementById("ThursdayID").checked = true;
+                                        break;
+                                    case 5:
+                                        document.getElementById("FridayID").checked = true;
+                                        break;
+                                    case 6:
+                                        document.getElementById("SundayID").checked = true;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            document.getElementById(habit.daily_freq+"ID").checked = true;
+                            document.getElementById('notes').value = habit.notes;
+                        }
+                    },
+                    error: function(object, error) {
+                        alert("Error: " + error.code + " " + error.message);
+                        // The object was not retrieved successfully.
+                        // error is a Parse.Error with an error code and message.
+                    }
+                });
+            }
+
+            function onEditSubmit() {
+                // If form validates, submit habit
+                if (validateForm()) {
+
+                    var user = Parse.User.current();
+                    var List = Parse.Object.extend("List");
+                    var query = new Parse.Query(List);
+
+                    query.get(user.get('list'), {
+                        success: function(list) {
+                            // The object was retrieved successfully.
+                            var habits = list.get('habits');
+                            for(h in habits) {
+
+                                if(habits[h].title == list.get('edit_id')) {
+                                    habits.splice(h, 1);
+                                    break;
+                                }
+                            }
+
+                            newHabit.title = document.getElementById('habit_title').value;
+                            newHabit.weekly_freq = getWeeklyFrequency();
+                            newHabit.daily_freq = getDailyFrequency();
+                            newHabit.notes = document.getElementById('notes').value;
+                            habits.push(newHabit);
+
+                            list.set('habits', habits);
+                            list.set('edit_id', '');
+                            list.save().then(function() {
+                                window.location = 'list.html';
+                            });
+                        },
+                        error: function(object, error) {
+                            alert("Error: " + error.code + " " + error.message);
+                            // The object was not retrieved successfully.
+                            // error is a Parse.Error with an error code and message.
+                        }
+                    });
+                }
+                else {
+                    alert('form failed validation');
                 }
             }
 

@@ -107,7 +107,7 @@
                 success: function(list) {
                     list.set('edit_id', habit_id);
                     list.save().then(function() {
-                         window.location = 'edit.html';
+                         window.location = 'add.html';
                     });
                 },
                 error: function(object, error) {
@@ -204,6 +204,8 @@
                             }
                         }
                     }
+                    list.set('edit_id', '');
+                    list.save();
 					checkForHabits();
                 },
                 error: function(object, error) {
