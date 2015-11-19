@@ -37,15 +37,11 @@
                         <img id="../img/add.pngID" class="icon" src="../img/add.png" alt="find a image"/>
                     </label>
 
-                    <img id="../img/run.jpgID" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
-                    <img id="../img/sleep.jpgID" class="icon" onclick="selectImage(this);" src="../img/sleep.jpg" alt="sleep image"/>
-                    <img id="../img/salad.jpgID" class="icon" onclick="selectImage(this);" src="../img/salad.jpg" alt="eat image"/>
-                    <img id="../img/smoke.jpgID" class="icon" onclick="selectImage(this);" src="../img/smoke.jpg" alt="smoke image"/>
-                    <img id="../img/eat.jpgID" class="icon" onclick="selectImage(this);" src="../img/eat.jpg" alt="eat image"/>
-
-                    <!-- <label for="file-input" id="input-image">
-                        <img id="../img/add.pngID" class="icon" src="../img/add.png" alt="find a image"/>
-                    </label> -->
+                    <img id="run.jpg" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
+                    <img id="sleep.jpg" class="icon" onclick="selectImage(this);" src="../img/sleep.jpg" alt="sleep image"/>
+                    <img id="salad.jpg" class="icon" onclick="selectImage(this);" src="../img/salad.jpg" alt="eat image"/>
+                    <img id="smoke.jpg" class="icon" onclick="selectImage(this);" src="../img/smoke.jpg" alt="smoke image"/>
+                    <img id="eat.jpg" class="icon" onclick="selectImage(this);" src="../img/eat.jpg" alt="eat image"/>
 
                     <input id="file-input" type="file" onchange="readURL(this);"/>
                 </div>
@@ -89,7 +85,10 @@
              */
             var newHabit = {
                 habit_id : "",
-                icon : "",
+                icon : {
+                    icon_src : "",
+                    icon_id : ""
+                },
                 weekly_freq : [],
                 daily_freq : 1,
                 notes : "",
@@ -193,7 +192,7 @@
                         // The object was retrieved successfully.
                         // Populate the habit object
                         var habits = list.get('habits');
-                        var habit_id = list.get('edit_id');          
+                        var habit_id = list.get('edit_id');
                         var pTitle = document.getElementById("pageTitle");
                         var pHeader = document.getElementById("pageHeader");
                         if(habit_id != '') {
@@ -254,7 +253,8 @@
                                         break;
                                 }
                             }
-                            selectImage(document.getElementById(habit.icon + "ID"));
+                            var habitIcon = document.getElementById(habit.icon.icon_id);
+                            selectImage(habitIcon);
                             document.getElementById("Day"+ habit.daily_freq+"ID").checked = true;
                             document.getElementById('notes').value = habit.notes;
                         }
@@ -409,10 +409,9 @@
 
                 el.className = "icon icon-selected";
 
-                // el.style.border = "5px solid #42A5F5";
-
                 // Set the current image as the habit's icon.
-                newHabit.icon = el.src;
+                newHabit.icon.icon_id = el.id;
+                newHabit.icon.icon_src = el.src;
             }
 
             /*** image uploading / reading ***/
@@ -450,7 +449,7 @@
                                     // now add the newest image to the icon-list
                                     var user_img;
                                     user_img = document.createElement("img");
-                                    user_img.id = userImages[cur_image].url()+"ID";
+                                    user_img.id = parseFile.name();
                                     user_img.className = "icon";
                                     user_img.src = parseFile.url();
                                     user_img.onclick = function imageClosure() {
@@ -493,7 +492,7 @@
                             var user_img;
                             for (cur_image in userImages) {
                                 user_img = document.createElement("img");
-                                user_img.id = userImages[cur_image].url()+"ID";
+                                user_img.id = userImages[cur_image].name();
                                 user_img.className = "icon";
                                 user_img.src = userImages[cur_image].url();
                                 user_img.onclick = function imageClosure() {
@@ -503,6 +502,8 @@
                                 habitIcons.insertBefore(user_img, inputImage.nextSibling);
                             }
                         }
+
+                        // if we aren't editing anything select the first image
                         if(list.get('edit_id') == '') {
                             selectImage(habitIcons.children[1]);
                         }
