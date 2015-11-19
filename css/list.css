@@ -330,6 +330,67 @@ body {
     transition: all 0.5s ease;
 }
 
+/* notes button */
+.testy {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+}
+
+.testy-2 {
+    /*visibility: hidden;*/
+    position: absolute;
+    z-index: -1;
+    width: 470px;
+    right: -1px;
+    bottom: 0px;
+    height: 30px;
+    background-color: white;
+    border-radius: 0px 0 3px 3px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px 0px 3px 3px;
+    padding: 10px;
+
+    -webkit-transition: all 0.7s ease;
+    -moz-transition: all 0.7s ease;
+    transition: all 0.7s ease;
+}
+
+.testy-2-out {
+    /*visibility: hidden;*/
+    position: absolute;
+    z-index: -1;
+    width: 470px;
+    right: -1px;
+    bottom: -48px;
+    height: 30px;
+    background-color: white;
+    border-radius: 0px 0 3px 3px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px 0px 3px 3px;
+    padding: 10px;
+
+    -webkit-transition: all 0.7s ease;
+    -moz-transition: all 0.7s ease;
+    transition: all 0.7s ease;
+}
+
+li.margin-in {
+    margin-bottom: 0px;
+    -webkit-transition: all 0.7s ease;
+    -moz-transition: all 0.7s ease;
+    transition: all 0.7s ease;
+}
+
+li.margin-out {
+    margin-bottom: 60px;
+    border-bottom: 1px solid #81ACE4;
+    -webkit-transition: all 0.7s ease;
+    -moz-transition: all 0.7s ease;
+    transition: all 0.7s ease;
+
+}
+
 /* add habit */
 #addHabit {
     position:fixed;

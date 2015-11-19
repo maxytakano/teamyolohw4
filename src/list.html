@@ -93,7 +93,16 @@
                 <button type="button" class="op op-fail" onclick="thumbsDown(\''+habit.habit_id+'\');" title="done">\n \
                     <img class="thumb-image" src="../img/thumbsDown.png" alt="Done">\n \
                 </button>\n \
-            </div>';
+            </div> \n \
+            <div class="notes-container">\n \
+                <div class="testy"> \n \
+                    <input class="test-button" type="button" onclick="toggleNotes(this);" value="Notes"></input> \n \
+                </div> \n \
+                <div class="testy-2"> \n \
+                    eyyyy \n \
+                </div> \n \
+            </div> \n \
+            ';
             return listString;
         }
 
@@ -188,7 +197,7 @@
                             refreshHabit(curHabit);
                             disableHabit(curHabit.habit_id);
                         }
-                        
+
                         // Get the habit we just appended.
                         var curList = document.getElementById(curId);
 
@@ -215,11 +224,9 @@
                 }
             });
         }
-		
+
 		/** Check to see if any habits are on page and place a user message if not **/
-		function checkForHabits()
-		{
-			
+		function checkForHabits() {
             var activeList = document.getElementById("active-list");
             var inactiveList = document.getElementById("inactive-list");
             var inactiveTitle = document.getElementById("inactive-title");
@@ -233,7 +240,7 @@
 
             if(inactiveList.childNodes.length <= 0) {
                 inactiveTitle.style.visibility = "hidden";
-            } 
+            }
             else {
                 inactiveTitle.style.visibility = "visible";
             }
@@ -454,6 +461,20 @@
                 // toggle out options
                 optionsMenu.className = "options";
                 optionsButton.className = "op op-gear";
+            }
+        }
+
+        // Expand the notes section
+        function toggleNotes(element) {
+            var listNode = getHabitRoot(element);
+            var notesContainer = listNode.getElementsByClassName("notes-container")[0];
+            var notesSlideout = notesContainer.children[1];
+            if (listNode.className == "margin-out") {
+                notesSlideout.className = "testy-2";
+                listNode.className = "margin-in";
+            } else {
+                listNode.className = "margin-out";
+                notesSlideout.className = "testy-2-out";
             }
         }
 
