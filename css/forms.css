@@ -22,7 +22,7 @@ p {
 }
 
 /* Sign Out Button */
-.logoutButton {
+#logoutButton {
     -webkit-appearance:none;
     -moz-appearance:none;
     max-width: 200px;
@@ -40,12 +40,25 @@ p {
     opacity: 1.0;
 }
 
- .logoutButton:hover {
+ #logoutButton:hover {
     opacity: 0.75;
     cursor: pointer;
 }
 
-div.forms {
+#usernameDisplay {
+    color:#888;
+    position: absolute;
+    margin: 0px;
+    right: 75px;
+    top: 12px;
+    text-align: center;
+    overflow: hidden;
+    max-width: 300px;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+}
+
+#formDisplay {
     position: relative;
     margin: 40px auto;
     width: 500px;
@@ -53,6 +66,8 @@ div.forms {
     border-radius: 25px;
     bottom: auto;
     clear:both;
+    transition: opacity 1000ms;
+    opacity: 0;
 }
 
 input#habit_title {
@@ -108,9 +123,155 @@ img.icon-selected {
     border: 5px solid #42A5F5;
 }
 
+h2 {
+    text-align:center;
+    background-color: #bdbdbd;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    color:white;
+    text-shadow: 0px 0px 0px black;
+}
+
+#notes_text{
+    padding-right: 5px;
+}
+
+.formButton {
+    -webkit-appearance:none;
+    width: 40%;
+    display: inline-block;
+    padding: 15px;
+    border: none;
+    color: white;
+    -webkit-border-radius: 5px; /*For Safari, etc. */
+    -moz-border-radius: 5px; /* For Mozilla, etc. */
+    border-radius: 5px; /* CSS3 Feature */  
+    opacity: 1.0;
+    font-size: medium;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.formButton:hover {
+    cursor: pointer;
+    opacity: 0.75;
+}
+
+#save {
+    background-color: #48BA87;
+    margin-right: 10px;
+}
+
+#cancel {
+    background-color: #214864;
+}
+
+form{
+    padding-right: 25px;
+    padding-left: 25px;
+    padding-bottom: 20px;
+}
+
+div label input {
+   margin-right:100px;
+}
+
+#file-input{ 
+    display: none;
+}
+
+#ck-button {
+    overflow:auto;
+}
+
+#ck-button label {
+    margin:4px;
+    border-radius:5px;
+    background-color:#EFEFEF;
+    float:left;
+    width:4.0em;
+}
+
+#ck-button label span {
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;
+
+    text-align:center;
+    padding:3px 0px;
+    display:block;
+    overflow:auto;
+}
+
+#ck-button label input {
+    display: none;
+    cursor: pointer;
+    opacity: 0.75;
+}
+
+#ck-button input:checked + span {
+    background-color:#9c9696;
+    border-radius:5px;
+    color:#fff;
+}
+
+#ck-button span:hover {
+    cursor: pointer;
+    opacity: 0.75;
+}
+
+#daily-button {
+    overflow:auto;
+}
+
+#daily-button label {
+    margin:4px;
+    border-radius:25px;
+    background-color:#EFEFEF;
+    float:left;
+    width:2.0em;
+}
+
+#times {
+    margin: 4px;
+    padding:3px 0px;
+    float:left;
+}
+
+#daily-button label span {
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;
+
+    text-align:center;
+    padding:3px 0px;
+    display:block;
+    overflow:auto;
+}
+
+#daily-button label input {
+    display: none;
+}
+
+#daily-button input:checked + span {
+    background-color:#9c9696;
+    border-radius:25px;
+    color:#fff;
+}
+
+#daily-button span:hover {
+    cursor: pointer;
+    opacity: 0.75;
+}
+
 /* most phones */
 @media (max-width: 500px) {
-    div.forms {
+    #formDisplay {
         position: relative;
         margin: 20px auto;
         top: 0%;
@@ -162,10 +323,17 @@ img.icon-selected {
     }
 } /* end media 500px */
 
-/* for iphone screen */
-@media screen and (max-width: 350px)
-{
-    div.forms {
+/* phone */
+@media only screen
+    and (max-width: 499px) {
+        #usernameDisplay {
+            max-width: 45%;
+        }
+}
+
+/* iphone 4 and 5 */
+@media screen and (max-width: 350px) {
+    #formDisplay {
         width: 300px;
         margin-bottom: 10px;
     }
@@ -195,142 +363,8 @@ img.icon-selected {
         margin: 0px 0px 0px 0px;
         border: 3px solid #42A5F5;
     }
-}
 
-h2 {
-    text-align:center;
-    background-color: #bdbdbd;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-top-right-radius: 20px;
-    border-top-left-radius: 20px;
-
-    color:white;
-    text-shadow: 0px 0px 0px black;
-}
-
-span#notes_text{
-    padding-right: 5px;
-}
-
-input#save{
-    -webkit-appearance:none;
-    width: 49%;
-    display: inline-block;
-    margin: 0;
-    padding: 15px;
-    background: none;
-    border: none;
-    color: white;
-    background-color: #48BA87;
-    -webkit-border-radius: 5px; /*For Safari, etc. */
-    -moz-border-radius: 5px; /* For Mozilla, etc. */
-    border-radius: 5px; /* CSS3 Feature */  
-    opacity: 1.0;
-    font-size: medium;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-input#save:hover{
-    cursor: pointer;
-    opacity: 0.75;
-}
-p#save_p{
-    text-align: center;
-}
-form{
-    padding-left: 25px;
-    padding-bottom: 20px;
-}
-div label input {
-   margin-right:100px;
-}
-
-input#file-input{ 
-    display: none;
-}
-
-#ck-button {
-    overflow:auto;
-}
-
-#ck-button label {
-    margin:4px;
-    border-radius:5px;
-    background-color:#EFEFEF;
-    float:left;
-    width:4.0em;
-}
-
-#ck-button label span {
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
-    user-select: none;
-
-    text-align:center;
-    padding:3px 0px;
-    display:block;
-    overflow:auto;
-}
-
-#ck-button label input {
-    display: none;
-    cursor: pointer;
-}
-
-#ck-button input:checked + span {
-    background-color:#9c9696;
-    border-radius:5px;
-    color:#fff;
-}
-
-#ck-button span:hover {
-    cursor: pointer;
-}
-
-#daily-button {
-    overflow:auto;
-}
-
-#daily-button label {
-    margin:4px;
-    border-radius:25px;
-    background-color:#EFEFEF;
-    float:left;
-    width:2.0em;
-}
-
-span#times {
-    margin: 4px;
-    padding:3px 0px;
-    float:left;
-}
-
-#daily-button label span {
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
-    user-select: none;
-
-    text-align:center;
-    padding:3px 0px;
-    display:block;
-    overflow:auto;
-}
-
-#daily-button label input {
-    display: none;
-}
-
-#daily-button input:checked + span {
-    background-color:#9c9696;
-    border-radius:25px;
-    color:#fff;
-}
-
-#daily-button span:hover {
-    cursor: pointer;
+    #usernameDisplay {
+        max-width: 40%;
+    }
 }
