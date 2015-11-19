@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="http://www.parsecdn.com/js/parse-latest.js"></script>
+        <script src="https://www.parsecdn.com/js/parse-latest.js"></script>
         <script src='../js/global.js'></script>
         <script>
             initParse();
@@ -20,8 +20,9 @@
         </script>
     </head>
     <body onload="checkCurrentUser(); populateImages(); fillForm();">
-        <input class="logoutButton" type="button" onclick="logOut();" value="Log Out"></input>
-        <div class="forms">
+        <input id="logoutButton" type="button" onclick="logOut();" value="Log Out" title="Log Out"></input>
+        <h3 id="usernameDisplay"></h3>
+        <div id="formDisplay">
             <h2 id="pageHeader">&nbsp;</h2>
             <form>
                 <p>
@@ -29,7 +30,7 @@
                     <label id="title_err_empty" style="color: red; visibility: hidden; position: absolute">*Please enter a non-empty title.</label>
                     <label id="title_err_unique" style="color: red; visibility: hidden; position: absolute">*Please enter an unique title.</label>
                 </p>
-                <p><input id="habit_title" type="text" name="fullname" placeholder="Exercise 30 minutes"></p>
+                <p><input id="habit_title" type="text" name="fullname" placeholder="Exercise 30 minutes" title="Please enter a title."></p>
                 <p><label>Habit Icon</label></p>
                 <div id="habit_icons" class="scroll">
                     <label for="file-input" id="input-image">
@@ -49,25 +50,28 @@
                     <label id="weekly_err" style="color: red; visibility: hidden">*Please select at least one weekly frequency.</label>
                 </p>
                 <div id="ck-button">
-                    <label> <input id="SundayID" type="checkbox" name="date" value="Sunday" checked><span>Sun</span></label>
-                    <label> <input id="MondayID" type="checkbox" name="date" value="Monday" checked><span>Mon</span></label>
-                    <label> <input id="TuesdayID" type="checkbox" name="date" value="Tuesday" checked><span>Tues</span></label>
-                    <label> <input id="WednesdayID" type="checkbox" name="date" value="Wednesday" checked><span>Wed</span></label>
-                    <label> <input id="ThursdayID" type="checkbox" name="date" value="Thursday" checked><span>Thur</span></label>
-                    <label> <input id="FridayID" type="checkbox" name="date" value="Friday" checked><span>Fri</span></label>
-                    <label> <input id="SaturdayID" type="checkbox" name="date" value="Saturday" checked><span>Sat</span></label>
+                    <label> <input id="SundayID" type="checkbox" name="date" value="Sunday" checked><span title="Sunday">Sun</span></label>
+                    <label> <input id="MondayID" type="checkbox" name="date" value="Monday" checked><span title="Monday">Mon</span></label>
+                    <label> <input id="TuesdayID" type="checkbox" name="date" value="Tuesday" checked><span title="Tuesday">Tues</span></label>
+                    <label> <input id="WednesdayID" type="checkbox" name="date" value="Wednesday" checked><span title="Wednesday" >Wed</span></label>
+                    <label> <input id="ThursdayID" type="checkbox" name="date" value="Thursday" checked><span title="Thursday">Thur</span></label>
+                    <label> <input id="FridayID" type="checkbox" name="date" value="Friday" checked><span title="Friday">Fri</span></label>
+                    <label> <input id="SaturdayID" type="checkbox" name="date" value="Saturday" checked><span title="Saturday">Sat</span></label>
                 </div>
 
                 <p><label>Daily Frequency</label></p>
                 <div id="daily-button">
-                    <label> <input id="Day1ID" type="radio" name="day" value="1" checked><span>1</span></label>
-                    <label> <input id="Day2ID" type="radio" name="day" value="2"><span>2</span></label>
-                    <label> <input id="Day3ID" type="radio" name="day" value="3"><span>3</span></label>
+                    <label> <input id="Day1ID" type="radio" name="day" value="1" checked><span title="1">1</span></label>
+                    <label> <input id="Day2ID" type="radio" name="day" value="2"><span title="2">2</span></label>
+                    <label> <input id="Day3ID" type="radio" name="day" value="3"><span title="3">3</span></label>
                     <span id="times">times</span>
                 </div>
                 <p><label><span id="notes_text">Notes (optional): </span></label></p>
-                <p><input id="notes" type="text" name="day" placeholder="None"></p>
-                <p id="save_p"><input id="save" type="button" value="Save It" onclick="onAddSubmit();"></p>
+                <p><input id="notes" type="text" name="day" placeholder="None" title="Please enter some optional notes."></p>
+                <p id="button_p" style="text-align: center;">
+                    <input id="save" class="formButton" type="button" value="Save It" title="Save It" onclick="onAddSubmit();">
+                    <input id="cancel" class="formButton" type="button" value="Cancel" title="Cancel" onclick="onCancel();">
+                </p>
             </form>
         </div>
 
@@ -169,8 +173,17 @@
                 }
             }
 
+            function onCancel() {
+                window.location = 'list.html';
+            }
+
             function fillForm() {
+                var formDisplay = document.getElementById('formDisplay');
+                var usernameDisplay = document.getElementById('usernameDisplay');
+
                 var user = Parse.User.current();
+                usernameDisplay.innerHTML = "Hello, " + user.get('username');
+
                 var List = Parse.Object.extend("List");
                 var query = new Parse.Query(List);
 
@@ -494,6 +507,9 @@
                         if(list.get('edit_id') == '') {
                             selectImage(habitIcons.children[1]);
                         }
+                        var formDisplay = document.getElementById('formDisplay');
+                        window.getComputedStyle(formDisplay).opacity;
+                        formDisplay.style.opacity = 1;
                     },
                     error: function(object, error) {
                         alert("Error: " + error.code + " " + error.message);

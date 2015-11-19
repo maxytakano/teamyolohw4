@@ -18,13 +18,12 @@ body {
 }
 
 /* Sign Out Button */
-.logoutButton {
+#logoutButton {
     -webkit-appearance:none;
     -moz-appearance:none;
     max-width: 200px;
     float:right;
     margin-bottom: 20px;
-    margin-left: 8px;
     padding: 6px 5px 6px 5px;
     background:none;
     background-color: #214864;
@@ -36,7 +35,43 @@ body {
     opacity: 1.0;
 }
 
-.logoutButton:hover {
+#logoutButton:hover {
+    opacity: 0.75;
+    cursor: pointer;
+}
+
+#usernameDisplay {
+    color:#888;
+    position: absolute;
+    margin: 0px;
+    right: 75px;
+    top: 12px;
+    text-align: center;
+    overflow: hidden;
+    max-width: 300px;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+}
+
+/* Advance Day Button */
+#advanceDayButton {
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    max-width: 200px;
+    float:left;
+    margin-bottom: 20px;
+    padding: 6px 5px 6px 5px;
+    background:none;
+    background-color: #214864;
+    border:none;
+    color:white;
+    -webkit-border-radius: 5px; /*For Safari, etc. */
+    -moz-border-radius: 5px; /* For Mozilla, etc. */
+    border-radius: 5px; /* CSS3 Feature */
+    opacity: 1.0;
+}
+
+#advanceDayButton:hover {
     opacity: 0.75;
     cursor: pointer;
 }
@@ -44,6 +79,8 @@ body {
 .habit-list {
     list-style: none;
     padding:0;
+    transition: opacity 1000ms;
+    opacity: 0;
 }
 
 .habit-list > li {
@@ -394,12 +431,12 @@ li.margin-out {
 /* add habit */
 #addHabit {
     position:fixed;
-    bottom: 40px; 
-    right:40px;
+    bottom: 30px; 
+    right:30px;
     background:rgba(33, 72, 100, 1.0); 
     width: 60px;
     height:60px; 
-    vertical-align: middle; 
+    vertical-align: middle;
     font-size:36px; 
     padding: 5px;
     line-height: 100%;
@@ -414,6 +451,7 @@ li.margin-out {
     background: rgba(33, 72, 100, 0.7); 
     border:1px solid rgba(85,85,85,0.7); 
     box-shadow: 0 0 5px gray;
+    cursor: pointer;
 }
 
 #addHabit:active {
@@ -431,8 +469,8 @@ li.margin-out {
     position: fixed; 
     text-align: center; 
     width: 60px; 
-    bottom: 110px; 
-    right: 40px; 
+    bottom: 90px; 
+    right: 30px; 
     visibility: hidden;
 }
 
@@ -449,6 +487,24 @@ li.margin-out {
 
 #addHabit-arrow {
     width: 60px;
+}
+
+/* mid-sized screen */
+@media only screen
+    and (max-width: 750px) {
+        #addHabit {
+            bottom: 15px; 
+            right: 15px;
+        }
+
+        #addHabit-empty {
+            bottom: 75px; 
+            right: 15px;
+        }
+
+        .habit-name {
+            font-size: 20px;
+        }
 }
 
 /* phone */
@@ -483,6 +539,31 @@ li.margin-out {
         .habit-name {
             max-width: 210px;
             white-space:nowrap;
+        }
+
+        #addHabit {
+            font-size: 30px;
+            width: 50px;
+            height:50px; 
+            bottom: 10px; 
+            right: 10px;
+        }
+
+        #addHabit-empty {
+            bottom: 60px; 
+            right: 5px;
+        }
+
+        #addHabit-message {
+            right: 210px;
+        }
+
+        #usernameDisplay {
+            max-width: 45%;
+        }
+
+        .habit-name {
+            font-size: 18px;
         }
 }
 
@@ -521,6 +602,31 @@ li.margin-out {
 
         .habit-op {
             right: -27px;
+        }
+
+        #addHabit {
+            font-size:22px;
+            width: 40px;
+            height:40px; 
+            bottom: 5px; 
+            right: 5px;
+        }
+
+        #addHabit-empty {
+            bottom: 45px; 
+            right: -5px;
+        }
+
+        #addHabit-message {
+            right: 220px;
+        }
+
+        #usernameDisplay {
+            max-width: 40%;
+        }
+
+        .habit-name {
+            font-size: 15px;
         }
 }
 
