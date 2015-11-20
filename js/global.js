@@ -3,10 +3,6 @@ function initParse() {
     return true;
 }
 
-function initOneSignal() {
-
-}
-
 // Checks if an user is logged on already.
 function checkCurrentUser() {
     // If user has not logged in or previous user

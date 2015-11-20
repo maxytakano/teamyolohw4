@@ -173,7 +173,7 @@
                             });
                         },
                         error: function(object, error) {
-                            alert("Error: " + error.code + " " + error.message);
+                            console.log("Error: " + error.code + " " + error.message);
                             // The object was not retrieved successfully.
                             // error is a Parse.Error with an error code and message.
                         }
@@ -271,7 +271,7 @@
                         }
                     },
                     error: function(object, error) {
-                        alert("Error: " + error.code + " " + error.message);
+                        console.log("Error: " + error.code + " " + error.message);
                         // The object was not retrieved successfully.
                         // error is a Parse.Error with an error code and message.
                     }
@@ -354,7 +354,7 @@
                             });
                         },
                         error: function(object, error) {
-                            alert("Error: " + error.code + " " + error.message);
+                            console.log("Error: " + error.code + " " + error.message);
                             // The object was not retrieved successfully.
                             // error is a Parse.Error with an error code and message.
                         }
@@ -474,13 +474,13 @@
                                     selectImage(user_img);
                                 },
                                 error: function(object, error) {
-                                    alert("Error: " + error.code + " " + error.message);
+                                    console.log("Error: " + error.code + " " + error.message);
                                     // The object was not retrieved successfully.
                                     // error is a Parse.Error with an error code and message.
                                 }
                             });
                         }, function(error) {
-                            alert("Error: " + error.code + " " + error.message);
+                            console.log("Error: " + error.code + " " + error.message);
                         });
                     };
                 }
@@ -526,7 +526,7 @@
                         formDisplay.style.opacity = 1;
                     },
                     error: function(object, error) {
-                        alert("Error: " + error.code + " " + error.message);
+                        console.log("Error: " + error.code + " " + error.message);
                         // The object was not retrieved successfully.
                         // error is a Parse.Error with an error code and message.
                     }
