@@ -498,7 +498,7 @@
             var lengthString = lineLength.toString();
 
             // Set line length to the percentage.
-            if (lineLength < 11) {
+            if (lineLength < 11 || !lineLength) {
                 blueLine.setAttribute("stroke-width", 0);
             } else {
                 blueLine.setAttribute("stroke-width", 11);

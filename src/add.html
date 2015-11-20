@@ -99,6 +99,8 @@
                 completed_today: 0
             };
 
+            var currentDate = new Date();
+
             function onAddSubmit() {
                 var h_title = document.getElementById('habit_title').value;
                 var title_err_unique = document.getElementById('title_err_unique');
@@ -139,7 +141,6 @@
                     query.get(user.get('list'), {
                         success: function(list) {
                             // The object was retrieved successfully.
-
                             var habits = list.get('habits');
                             var curHabit;
                             var h;
@@ -159,6 +160,12 @@
                             newHabit.weekly_freq = getWeeklyFrequency();
                             newHabit.daily_freq = getDailyFrequency();
                             newHabit.notes = document.getElementById('notes').value;
+
+                            // check if total days should start at 0 since its an off day.
+                            var currDay = currentDate.getDay();
+                            if(!newHabit.weekly_freq[currDay]) {
+                                newHabit.total_days = 0;
+                            }
 
                             list.add('habits', newHabit);
                             list.save().then(function() {
