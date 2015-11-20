@@ -66,3 +66,37 @@ Parse.Cloud.job("SendReminder", function(request, status){
 	
 	send();
 });
+
+Parse.Cloud.define("TestNotifications", function(request, response){
+	send = function() {
+
+	var promise = new Parse.Promise();
+
+	var jsonBody = { 
+	  app_id: "e1389734-7a53-42ac-9eed-42812382c796", 
+	  included_segments: ["All"],
+	  headings: {en: "Virtue/Vice"},
+	  contents: {en: "Make sure to fill in your habits if you haven't today!"},
+	  data: {foo: "bar"}
+	};
+
+	Parse.Cloud.httpRequest({
+		method: "POST",
+		url: "https://onesignal.com/api/v1/notifications",
+		headers: {
+		  "Content-Type": "application/json;charset=utf-8",
+		  "Authorization": "Basic OTkzYjVlYTAtODVhYy00MDRlLWE1NGQtYmRiMmM5MmZmNzUw"
+		},
+		body: jsonBody
+	  }).then(function (httpResponse) {
+		promise.resolve(httpResponse)
+	  },
+	  function (httpResponse) {
+		promise.reject(httpResponse);
+	});
+
+	return promise;
+	};
+	
+	send();
+});

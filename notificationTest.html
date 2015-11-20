@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://www.parsecdn.com/js/parse-latest.js"></script>
+		<title>Notifications Test Page</title>
+		<meta charset="UTF-8">
+		<script>
+			Parse.initialize("QCsKTmthCKmMS5BiAQefZY5aDFeBK50RZ1QTSnBf", "fxfuyNWQ48U0L3LqOlrPOpKsQr0csPwRTW3eWelP");
+			function sendNotifications()
+			{
+				Parse.Cloud.run('TestNotifications', {
+					success: function(obj){
+					},
+					error: function(obj){
+					}
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<input type="button" onclick="sendNotifications();" value="Send Notifications"/>
+	</body>
+</html>
