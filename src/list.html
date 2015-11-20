@@ -12,8 +12,8 @@
     <link rel="stylesheet" type="text/css" href="../css/list.css">
 </head>
 <body onload="checkCurrentUser();">
-    <input id="logoutButton" class="standard-button" type="button" onclick="logOut();" value="Log Out" title="Log Out"></input>
-    <input id="advanceDayButton" class="standard-button" type="button" onclick="advanceDay();" value="Advance Day" title="Advance Day"></input>
+    <input id="logoutButton" class="standard-button" type="button" onclick="logOut();" value="Log Out" title="Log Out" />
+    <input id="advanceDayButton" class="standard-button" type="button" onclick="advanceDay();" value="Advance Day" title="Advance Day" />
     <h3 id="usernameDisplay"></h3>
 
     <section>
@@ -30,9 +30,9 @@
 		</div>
 		<img id="addHabit-arrow" src="../img/downArrow.png" alt="Arrow">
 	</div>
-    <button type="button" id="addHabit" onclick="location.href='add.html'" title="Add Habit">
+    <div id="addHabit" onclick="location.href='add.html'" title="Add Habit">
         <div style="position: relative; top: -2px; left: 0px;">+</div>
-    </button>
+    </div>
     <script type="text/javascript">
 		var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 		var currentDate = new Date();
