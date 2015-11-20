@@ -26,7 +26,7 @@ body {
     -moz-appearance:none;
     max-width: 200px;
     float:right;
-    margin-bottom: 20px;
+    margin-left: 8px;
     padding: 6px 5px 6px 5px;
     background:none;
     background-color: rgba(30, 85, 132, 0.8);
@@ -38,6 +38,7 @@ body {
     border-radius: 5px;/* CSS3 Feature */
     opacity: 1.0;
     outline: none;
+    margin-bottom: 6px;
 
     -webkit-transition: all 0.7s ease;
     -moz-transition: all 0.7s ease;
@@ -49,12 +50,19 @@ body {
     cursor: pointer;
 }
 
+#registerForPushLink {
+    clear: right;
+}
+
+#logoutButton {
+    padding: 5px 20px 5px 20px;
+}
+
 #usernameDisplay {
     color: rgba(30, 85, 132, 1.0);
-    position: absolute;
-    margin: 0px;
-    right: 68px;
-    top: 13px;
+    float: right;
+    margin-top: 6px;
+    margin-bottom: 0px;
     text-align: center;
     overflow: hidden;
     max-width: 300px;
@@ -520,6 +528,10 @@ li.margin-out {
             right: 15px;
         }
 
+        #usernameDisplay {
+            max-width: 42%;
+        }
+
         .habit-name {
             font-size: 20px;
         }
@@ -540,6 +552,10 @@ li.margin-out {
 
         .testy-2-out {
             width: 320px;
+        }
+
+        #usernameDisplay {
+            max-width: 10px;
         }
 
         .message {
@@ -585,7 +601,7 @@ li.margin-out {
         }
 
         #usernameDisplay {
-            max-width: 45%;
+            max-width: 35%;
         }
 
         .habit-name {
@@ -657,7 +673,7 @@ li.margin-out {
         }
 
         #usernameDisplay {
-            max-width: 40%;
+            max-width: 30%;
         }
 
         .habit-name {
