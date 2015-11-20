@@ -6,6 +6,10 @@ html {
     /*overflow-y: scroll;*/
 }
 
+input {
+    outline: none;
+}
+
 body {
     font-family: 'Helvetica', sans-serif;
     background: -webkit-linear-gradient(left top, #BBDEFB, #B0C4DE) fixed; /* For Safari 5.1 to 6.0 */
@@ -17,7 +21,8 @@ body {
 }
 
 p {
-    color:#6c6c6c;
+    /*color:#6c6c6c;*/
+    color: #366E98;
     font-size: medium;
 }
 
@@ -31,7 +36,7 @@ p {
     margin-left: 8px;
     padding: 6px 5px 6px 5px;
     background:none;
-    background-color: #214864;
+    background-color: #366E98;
     border:none;
     color:white;
     -webkit-border-radius: 5px; /*For Safari, etc. */
@@ -46,7 +51,7 @@ p {
 }
 
 #usernameDisplay {
-    color:#888;
+    color: #366E98;
     position: absolute;
     margin: 0px;
     right: 75px;
@@ -74,6 +79,8 @@ input#habit_title {
     height: 30px;
     width: 350px;
     font-size:medium;
+    border: 1px solid #73AEDA;
+    border-radius: 3px;
 }
 
 input#file-input {
@@ -84,6 +91,8 @@ input#notes {
     height: 30px;
     width: 350px;
     font-size:medium;
+    border: 1px solid #73AEDA;
+    border-radius: 3px;
 }
 
 div.scroll {
@@ -91,13 +100,6 @@ div.scroll {
     width: 450px;
     height:210px;
     overflow: auto;
-}
-
-img.icon {
-    width: 90px;
-    height: 90px;
-    margin: 5px 5px 5px 5px;
-    border-radius: 25px;
 }
 
 /* make it so the user can see the scrollbar */
@@ -112,20 +114,39 @@ img.icon {
     -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
 }
 
+img.icon {
+    width: 90px;
+    height: 90px;
+    margin: 5px 5px 5px 5px;
+    border-radius: 25px;
+}
+
+img.icon.adder {
+    border-radius: 5px;
+}
+
+
+
 img.icon:hover {
     margin: 0px 0px 0px 0px;
     border: 5px solid #8FBBDE;
     cursor: pointer;
 }
 
+img.icon.adder:hover {
+    opacity: .7;
+    border: 5px solid #fff;
+    /*border: none;*/
+}
+
 img.icon-selected {
     margin: 0px 0px 0px 0px;
-    border: 5px solid #42A5F5;
+    border: 5px solid #366E98;
 }
 
 h2 {
     text-align:center;
-    background-color: #bdbdbd;
+    background-color: #366E98;
     padding-top: 10px;
     padding-bottom: 10px;
     border-top-right-radius: 20px;
@@ -161,12 +182,12 @@ h2 {
 }
 
 #save {
-    background-color: #48BA87;
+    background-color: #366E98;
     margin-right: 10px;
 }
 
 #cancel {
-    background-color: #214864;
+    background-color: #6A747B;
 }
 
 form{
@@ -213,15 +234,27 @@ div label input {
     opacity: 0.75;
 }
 
+#ck-button input + span {
+    background-color:white;
+    border: 1px solid #366E98;
+    border-radius:5px;
+    color:#366E98;
+
+    -webkit-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+
 #ck-button input:checked + span {
-    background-color:#9c9696;
+    background-color:#366E98;
     border-radius:5px;
     color:#fff;
 }
 
 #ck-button span:hover {
+    background-color: #BBDEFB;
+    color: #366E98;
     cursor: pointer;
-    opacity: 0.75;
 }
 
 #daily-button {
@@ -240,6 +273,7 @@ div label input {
     margin: 4px;
     padding:3px 0px;
     float:left;
+    color: #366E98;
 }
 
 #daily-button label span {
@@ -252,6 +286,15 @@ div label input {
     padding:3px 0px;
     display:block;
     overflow:auto;
+
+    background-color:white;
+    border: 1px solid #366E98;
+    border-radius:25px;
+    color:#366E98;
+
+    -webkit-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    transition: all 0.4s ease;
 }
 
 #daily-button label input {
@@ -259,14 +302,15 @@ div label input {
 }
 
 #daily-button input:checked + span {
-    background-color:#9c9696;
+    background-color:#366E98;
     border-radius:25px;
     color:#fff;
 }
 
 #daily-button span:hover {
+    background-color: #BBDEFB;
+    color: #366E98;
     cursor: pointer;
-    opacity: 0.75;
 }
 
 /* most phones */

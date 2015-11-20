@@ -30,11 +30,11 @@
                     <label id="title_err_empty" style="color: red; visibility: hidden; position: absolute">*Please enter a non-empty title.</label>
                     <label id="title_err_unique" style="color: red; visibility: hidden; position: absolute">*Please enter an unique title.</label>
                 </p>
-                <p><input id="habit_title" type="text" name="fullname" placeholder="Exercise 30 minutes" title="Please enter a title."></p>
+                <p><input id="habit_title" type="text" name="fullname" placeholder=" Exercise 30 minutes" title="Please enter a title."></p>
                 <p><label>Habit Icon</label></p>
                 <div id="habit_icons" class="scroll">
                     <label for="file-input" id="input-image">
-                        <img id="../img/add.pngID" class="icon" src="../img/add.png" alt="find a image"/>
+                        <img id="../img/add.pngID" class="icon adder" src="../img/addImage.png" alt="find a image"/>
                     </label>
 
                     <img id="run.jpg" class="icon" onclick="selectImage(this);" src="../img/run.jpg" alt="run image"/>
@@ -47,7 +47,7 @@
                 </div>
                 <p>
                     <label style="margin-right: 10px">Weekly Frequency</label>
-                    <label id="weekly_err" style="color: red; visibility: hidden">*Please select at least one weekly frequency.</label>
+                    <label id="weekly_err" style="color: red; visibility: hidden; position: absolute;">*Please select at least one weekly frequency.</label>
                 </p>
                 <div id="ck-button">
                     <label> <input id="SundayID" type="checkbox" name="date" value="Sunday" checked><span title="Sunday">Sun</span></label>
@@ -64,10 +64,10 @@
                     <label> <input id="Day1ID" type="radio" name="day" value="1" checked><span title="1">1</span></label>
                     <label> <input id="Day2ID" type="radio" name="day" value="2"><span title="2">2</span></label>
                     <label> <input id="Day3ID" type="radio" name="day" value="3"><span title="3">3</span></label>
-                    <span id="times">times</span>
+                    <div id="times">times</div>
                 </div>
                 <p><label><span id="notes_text">Notes (optional): </span></label></p>
-                <p><input id="notes" type="text" name="day" placeholder="None" title="Please enter some optional notes."></p>
+                <p><input id="notes" maxlength="57" type="text" name="day" placeholder=" None" title="Please enter some optional notes."></p>
                 <p id="button_p" style="text-align: center;">
                     <input id="save" class="formButton" type="button" value="Save It" title="Save It" onclick="onAddSubmit();">
                     <input id="cancel" class="formButton" type="button" value="Cancel" title="Cancel" onclick="onCancel();">

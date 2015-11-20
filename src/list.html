@@ -12,8 +12,8 @@
     <link rel="stylesheet" type="text/css" href="../css/list.css">
 </head>
 <body onload="checkCurrentUser();">
-    <input id="logoutButton" type="button" onclick="logOut();" value="Log Out" title="Log Out"></input>
-    <input id="advanceDayButton" type="button" onclick="advanceDay();" value="Advance Day" title="Advance Day"></input>
+    <input id="logoutButton" class="standard-button" type="button" onclick="logOut();" value="Log Out" title="Log Out"></input>
+    <input id="advanceDayButton" class="standard-button" type="button" onclick="advanceDay();" value="Advance Day" title="Advance Day"></input>
     <h3 id="usernameDisplay"></h3>
 
     <section>
@@ -30,7 +30,9 @@
 		</div>
 		<img id="addHabit-arrow" src="../img/downArrow.png" alt="Arrow">
 	</div>
-    <button type="button" id="addHabit" onclick="location.href='add.html'" title="Add Habit">+</button>
+    <button type="button" id="addHabit" onclick="location.href='add.html'" title="Add Habit">
+        <div style="position: relative; top: -2px; left: 0px;">+</div>
+    </button>
     <script type="text/javascript">
 		var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 		var currentDate = new Date();
@@ -61,14 +63,28 @@
                 <li>\n \
                     <img class="habit-icon" src="'+habit.icon.icon_src+'" alt="habit icon"><br>\n \
                     <div class="week-container">\n \
-                        <div class="week-day-off">S<small>u</small></div>\n \
-                        <div class="week-day-off">M</div>\n \
-                        <div class="week-day-off">T<small>u</small></div>\n \
-                        <div class="week-day-off">W</div>\n \
+                        <div class="week-bubble week-day-off">\n \
+                            <div class="inner-week">S<small>u</small></div>\n \
+                        </div>\n \
+                        <div class="week-bubble week-day-off">\n \
+                            <div class="inner-week">M</div>\n \
+                        </div>\n \
+                        <div class="week-bubble week-day-off">\n \
+                            <div class="inner-week">T<small>u</small></div>\n \
+                        </div>\n \
+                        <div class="week-bubble week-day-off">\n \
+                            <div class="inner-week">W</div>\n \
+                        </div>\n \
                         <br><span style="margin-left: 14px;"></span>\n \
-                        <div class="week-day-off">T<small>h</small></div>\n \
-                        <div class="week-day-off">F</div>\n \
-                        <div class="week-day-off">S<small>a</small></div>\n \
+                        <div class="week-bubble week-day-off">\n \
+                            <div class="inner-week">T<small>h</small></div>\n \
+                        </div>\n \
+                        <div class="week-bubble week-day-off">\n \
+                            <div class="inner-week">F</div>\n \
+                        </div>\n \
+                        <div class="week-bubble week-day-off">\n \
+                            <div class="inner-week">S<small>a</small></div>\n \
+                        </div>\n \
                     </div>\n \
                 </li>\n \
             </ul>\n \
@@ -76,9 +92,9 @@
                 <div class="message-total">\n \
                     <div class="graph-message">\n \
                     </div>\n \
-                    <svg class="habit-graph" height="25" width="150">\n \
-                        <line x1="0" y1="0" x2="150" y2="0" style="stroke:rgba(171,171,171,0.6);stroke-width:25" />\n \
-                        <line class="blue-line" x1="0" y1="0" x2="60" y2="0" style="stroke:rgba(65, 131, 215, 0.8);stroke-width:25" />\n \
+                    <svg class="habit-graph" height="25" width="200">\n \
+                        <line x1="20" y1="7" x2="160" y2="7" stroke="#F66659" stroke-width="11" stroke-linecap="round" />\n \
+                        <line class="blue-line" x1="20" y1="7" x2="10" y2="7" stroke="#33C087" stroke-width="11" stroke-linecap="round" />\n \
                     </svg>\n \
                     <div class="complete-message">\n \
                         Completed <strong>0/1</strong> for today.\n \
@@ -97,9 +113,7 @@
                 <div class="testy"> \n \
                     <input class="test-button" type="button" onclick="toggleNotes(this);" value="Notes"></input> \n \
                 </div> \n \
-                <div class="testy-2"> \n \
-                    eyyyy \n \
-                </div> \n \
+                <div class="testy-2"> Notes: '+habit.notes+' </div> \n \
             </div> \n \
             ';
             return listString;
@@ -205,13 +219,14 @@
 
                         // Highlight habit's week days.
                         var weekContainer = curList.getElementsByClassName("week-container")[0];
-                        var daysArray = weekContainer.getElementsByTagName("div");
+                        var daysArray = weekContainer.getElementsByClassName("week-bubble");
+                        console.log(daysArray);
 
                         var i;
                         var daysLength = daysArray.length;
                         for (i = 0; i < daysLength; i++) {
-                            if (curHabit.weekly_freq[i]) {
-                                daysArray[i].className = "week-day";
+                            if (curHabit.weekly_freq[i] ) {
+                                daysArray[i].className = "week-bubble week-day";
                             }
                         }
                     }
@@ -258,6 +273,13 @@
             var List = Parse.Object.extend("List");
             var query = new Parse.Query(List);
 
+            var curList = document.getElementById("habitItem_"+habit_id);
+            var buttonContainer = curList.getElementsByClassName("habit-op")[0];
+            var doneButton = buttonContainer.children[0];
+            var failButton = buttonContainer.children[1];
+            doneButton.disabled = true;
+            failButton.disabled = true;
+
             query.get(user.get('list'), {
                 success: function(list) {
                     var habitList = list.get('habits');
@@ -299,6 +321,14 @@
             var user = Parse.User.current();
             var List = Parse.Object.extend("List");
             var query = new Parse.Query(List);
+
+            var curList = document.getElementById("habitItem_"+habit_id);
+            var buttonContainer = curList.getElementsByClassName("habit-op")[0];
+            var doneButton = buttonContainer.children[0];
+            var failButton = buttonContainer.children[1];
+            doneButton.disabled = true;
+            failButton.disabled = true;
+
 
             query.get(user.get('list'), {
                 success: function(list) {
@@ -395,15 +425,15 @@
             }
 
             // 1. Update graph message.
-            graphMessage.innerHTML = "Habit completed <strong style='color: rgb(98, 140, 193);'>"+curHabit.completed_days+
+            graphMessage.innerHTML = "Habit completed <strong>"+curHabit.completed_days+
                                         "</strong><strong> / "+curHabit.total_days+"</strong> days. <br>";
 
 
             // Decide which completed message to show and if we need to disable the habit.
             if (curHabit.completed_today >= curHabit.daily_freq) {
                 // Habit already completed for today.
-                completeMessage.innerHTML = "<strong style='color: rgb(98, 140, 193);'>"+curHabit.current_streak+"</strong> "+
-                                        recordString+" in a row! Best Record: <strong style='color: rgb(98, 140, 193);'>"+
+                completeMessage.innerHTML = "<strong style='color: #5994DE;'>"+curHabit.current_streak+"</strong> "+
+                                        recordString+" in a row! Best Record: <strong style='color: #5994DE;'>"+
                                         curHabit.longest_streak+"</strong><br>";
 
                 // Disable the habit for today.
@@ -431,11 +461,20 @@
 
             // Calculate bar percentage.
             var percentFull = curHabit.completed_days / curHabit.total_days;
-            var lineLength = percentFull * 150.0;
+            var lineLength = percentFull * 160.0;
+            lineLength += 10;
             var lengthString = lineLength.toString();
+            // lengthString += 120;
+            
+
+            if (lineLength < 11) {
+                blueLine.setAttribute("stroke-width", 0);
+            } else {
+                blueLine.setAttribute("stroke-width", 11);
+                blueLine.setAttribute("x2", lengthString);
+            }
 
             // Set line length to the percentage.
-            blueLine.setAttribute("x2", lengthString);
         }
 
         // function resetCompleted() {
@@ -475,12 +514,16 @@
             var listNode = getHabitRoot(element);
             var notesContainer = listNode.getElementsByClassName("notes-container")[0];
             var notesSlideout = notesContainer.children[1];
+            var notesButton = notesContainer.children[0].children[0];
             if (listNode.className == "margin-out") {
                 notesSlideout.className = "testy-2";
                 listNode.className = "margin-in";
+                notesButton.className = "test-button";
             } else {
                 listNode.className = "margin-out";
                 notesSlideout.className = "testy-2-out";
+                notesButton.className = "test-button selected";
+
             }
         }
 
