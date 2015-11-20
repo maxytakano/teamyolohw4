@@ -18,6 +18,67 @@ body {
     overflow: hidden;
 }
 
+h3 {
+    border-bottom: 1px solid #000;
+    line-height: 0.1em;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    font-size: 18px;
+    color: #333;
+    text-align: center;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-style: italic;
+}
+
+h3 span {
+    /*background: #B0C4DE none repeat scroll 0% 0%;*/
+    text-align: center;
+    padding:0% 3% 0% 3%;
+
+}
+
+.login .loginForm .login-button {
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    width: 49%;
+    /*padding: 15px 200px 15px 20px;*/
+    background:none;
+    /*background-color: rgba(30, 85, 132, 0.8);*/
+    border:none;
+    color:white;
+    font-weight: bold;
+    -webkit-border-radius: 5px; /*For Safari, etc. */
+    -moz-border-radius: 5px; /* For Mozilla, etc. */
+    border-radius: 5px; /* CSS3 Feature */
+    opacity: 1.0;
+
+    -webkit-transition: all 0.7s ease;
+    -moz-transition: all 0.7s ease;
+    transition: all 0.7s ease;
+}
+
+#log-in {
+    background-color: rgba(30, 85, 132, 0.8);
+
+}
+
+#log-in:hover {
+    background-color: rgba(30, 85, 132, 1.0);
+    cursor: pointer;
+}
+
+#sign-up {
+    background-color: rgba(44, 156, 104, 0.8);
+}
+
+#sign-up:hover {
+    background-color: rgba(44, 156, 104, 1.0);
+    cursor: pointer;
+}
+
 .login {
     position: relative;
     margin: 0 auto;

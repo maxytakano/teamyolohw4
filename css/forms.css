@@ -3,7 +3,6 @@ html {
     width: 100%;
     margin: 0;
     padding: 0;
-    /*overflow-y: scroll;*/
 }
 
 input {
@@ -21,9 +20,7 @@ body {
 }
 
 p {
-    /*color:#6c6c6c;*/
     color: #000;
-    /*color: #366E98;*/
     font-size: medium;
 }
 
@@ -54,7 +51,6 @@ p {
     cursor: pointer;
 }
 
-
 #usernameDisplay {
     color: rgba(30, 85, 132, 1.0);
     position: absolute;
@@ -69,19 +65,6 @@ p {
     font-size: 11pt;
 }
 
-#usernameDisplay {
-    color: #366E98;
-    position: absolute;
-    margin: 0px;
-    right: 75px;
-    top: 12px;
-    text-align: center;
-    overflow: hidden;
-    max-width: 300px;
-    white-space:nowrap;
-    text-overflow: ellipsis;
-}
-
 #formDisplay {
     position: relative;
     margin: 40px auto;
@@ -94,7 +77,7 @@ p {
     opacity: 0;
 }
 
-input#habit_title {
+#habit_title {
     height: 30px;
     width: 350px;
     font-size:medium;
@@ -102,11 +85,11 @@ input#habit_title {
     border-radius: 3px;
 }
 
-input#file-input {
+#file-input {
     display: none;
 }
 
-input#notes {
+#notes {
     height: 30px;
     width: 350px;
     font-size:medium;
@@ -121,7 +104,7 @@ div.scroll {
     overflow: auto;
 }
 
-/* make it so the user can see the scrollbar */
+/* make it so the user can always see the scrollbar */
 ::-webkit-scrollbar {
     -webkit-appearance: none;
     background-color: #8FBBDE;
@@ -145,38 +128,30 @@ img.icon.adder {
     opacity: 0.8;
 }
 
-
-
 img.icon:hover {
     margin: 0px 0px 0px 0px;
-    border: 5px solid #8FBBDE;
+    border: 5px solid rgba(30, 85, 132, 0.6);
     cursor: pointer;
 }
 
 img.icon.adder:hover {
     opacity: 1;
     border: 5px solid #fff;
-    /*border: none;*/
 }
 
 img.icon-selected {
     margin: 0px 0px 0px 0px;
-    border: 5px solid #366E98;
+    border: 5px solid rgba(30, 85, 132, 1.0);
 }
 
 h2 {
     text-align:center;
-    background-color: #366E98;
+    background-color: rgba(30, 85, 132, 1.0);
     padding-top: 10px;
     padding-bottom: 10px;
     border-top-right-radius: 20px;
     border-top-left-radius: 20px;
     color:white;
-    text-shadow: 0px 0px 0px black;
-}
-
-#notes_text{
-    padding-right: 5px;
 }
 
 .formButton {
@@ -188,7 +163,7 @@ h2 {
     color: white;
     -webkit-border-radius: 5px; /*For Safari, etc. */
     -moz-border-radius: 5px; /* For Mozilla, etc. */
-    border-radius: 5px; /* CSS3 Feature */  
+    border-radius: 5px; /* CSS3 Feature */
     opacity: 0.8;
     font-size: medium;
     -webkit-box-sizing: border-box;
@@ -224,7 +199,7 @@ div label input {
    margin-right:100px;
 }
 
-#file-input{ 
+#file-input{
     display: none;
 }
 
@@ -260,7 +235,6 @@ div label input {
 
 #ck-button input + span {
     background-color:rgba(30, 85, 132, 0.4);
-    /*border: 1px solid #366E98;*/
     border-radius:5px;
     color:#fff;
 
@@ -286,7 +260,6 @@ div label input {
 #daily-button label {
     margin:4px;
     border-radius:25px;
-    /*background-color:#EFEFEF;*/
     float:left;
     width:2.0em;
 }

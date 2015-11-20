@@ -9,7 +9,7 @@ h1 {
 }
 
 body {
-    height:100%;   
+    height:100%;
     background: -webkit-linear-gradient(left top, #BBDEFB, #B0C4DE) fixed; /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(bottom right,#BBDEFB, #B0C4DE) fixed; /* For Opera 11.1 to 12.0 */
     background: -moz-linear-gradient(bottom right, #BBDEFB, #B0C4DE) fixed; /* For Firefox 3.6 to 15 */
@@ -72,7 +72,7 @@ body {
 .habit-list > li {
     position:relative;
     height: 240px;
-    padding:5%; background:rgba(255,255,255,1);
+    background:rgba(255,255,255,1);
     border:1px solid rgba(255, 255, 255, 0.3);
     border-radius:5px;
     margin:5px;
@@ -85,10 +85,10 @@ body {
     margin-left:20px;
 }
 .habit-info > li {
-    list-style:none; 
+    list-style:none;
     height:100%;
-    padding:0; 
-    margin-right:5px; 
+    padding:0;
+    margin-right:5px;
     vertical-align: middle;
 }
 
@@ -110,8 +110,6 @@ body {
 
 .habit-icon {
     margin:0; 
-    /*border: 2px solid #5994DE;*/
-    /*border: 1px solid #4e4e4e;*/
     border-radius:5px;
     width:100px; 
     height:100px;
@@ -124,11 +122,9 @@ body {
 
 .week-day {
     display: inline-block;
-    /*background-color: #BBDEFB;*/
     border: 1px solid #5994DE;
     background-color: #5994DE;
     color: white;
-    /*border: 1px solid rgba(65, 131, 215, 0.8);*/
     border-radius: 100%;
     height: 20px;
     width: 20px;
@@ -165,19 +161,12 @@ body {
     margin-bottom: 0;
 }
 
-.svg-inner {
-    stroke: rgba(255,0,255,0.6);
-    stroke-width: 21;
-    /*stroke-linecap: "round";*/
-}
-
 .graph-message {
     max-width: 300px;
     min-width: 280px;
     word-wrap: break-word;
     margin-left: 0px;
     display: inline-block;
-    float: middle;
     color: rgba(30, 85, 132, 1.0);
 }
 
@@ -204,7 +193,6 @@ body {
     height:60px;
     margin-right:5px;
     border-radius: 50%;
-    /*box-shadow: 0 0 3px gray;*/
     padding: 5px;
     vertical-align: middle;
 }
@@ -250,7 +238,8 @@ body {
 
 .button-disabled {
     background: #949494;
-    border:2px solid #A9A9A9;
+    border: none;
+    /*border:2px solid #A9A9A9;*/
     cursor: default;
 }
 
