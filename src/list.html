@@ -110,7 +110,7 @@
                 </button>\n \
             </div> \n \
             <div class="notes-container">\n \
-                <div class="testy"> \n \
+                <div class="notes-button"> \n \
                     <input class="test-button" type="button" onclick="toggleNotes(this);" value="Notes"></input> \n \
                 </div> \n \
                 <div class="testy-2"> Notes: '+habit.notes+' </div> \n \
@@ -464,32 +464,15 @@
             var lineLength = percentFull * 160.0;
             lineLength += 10;
             var lengthString = lineLength.toString();
-            // lengthString += 120;
-            
 
+            // Set line length to the percentage.
             if (lineLength < 11) {
                 blueLine.setAttribute("stroke-width", 0);
             } else {
                 blueLine.setAttribute("stroke-width", 11);
                 blueLine.setAttribute("x2", lengthString);
             }
-
-            // Set line length to the percentage.
         }
-
-        // function resetCompleted() {
-        //     var user = getCurrentUser();
-        //     var habitList = JSON.parse(user.list);
-        //     var curHabit;
-        //     for(h in habitList) {
-        //         curHabit = habitList[h];
-        //         curHabit.completed_today = 0;
-        //     }
-
-        //     // Store newly modified list into the user's account
-        //     user.list = JSON.stringify(habitList);
-        //     modifyCurrentUser(user);
-        // }
 
         /*** Animation ***/
 

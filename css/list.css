@@ -10,10 +10,10 @@ h1 {
 
 body {
     height:100%;
-    background: -webkit-linear-gradient(left top, #BBDEFB, #B0C4DE) fixed; /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(bottom right,#BBDEFB, #B0C4DE) fixed; /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(bottom right, #BBDEFB, #B0C4DE) fixed; /* For Firefox 3.6 to 15 */
-    background: linear-gradient(to bottom right,  #BBDEFB, #B0C4DE) fixed; /* Standard syntax */
+    background: -webkit-linear-gradient(left top, #BBDEFB, #B0C4DE) fixed;/* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(bottom right,#BBDEFB, #B0C4DE) fixed;/* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(bottom right, #BBDEFB, #B0C4DE) fixed;/* For Firefox 3.6 to 15 */
+    background: linear-gradient(to bottom right,  #BBDEFB, #B0C4DE) fixed;/* Standard syntax */
     font-family: Helvetica, san-sarif;
 }
 
@@ -33,10 +33,11 @@ body {
     border:none;
     color:white;
     font-weight: bold;
-    -webkit-border-radius: 5px; /*For Safari, etc. */
-    -moz-border-radius: 5px; /* For Mozilla, etc. */
-    border-radius: 5px; /* CSS3 Feature */
+    -webkit-border-radius: 5px;/*For Safari, etc. */
+    -moz-border-radius: 5px;/* For Mozilla, etc. */
+    border-radius: 5px;/* CSS3 Feature */
     opacity: 1.0;
+    outline: none;
 
     -webkit-transition: all 0.7s ease;
     -moz-transition: all 0.7s ease;
@@ -109,9 +110,9 @@ body {
 }
 
 .habit-icon {
-    margin:0; 
+    margin:0;
     border-radius:5px;
-    width:100px; 
+    width:100px;
     height:100px;
 }
 
@@ -203,17 +204,14 @@ body {
 
 .op-done {
     background:rgba(0, 177, 106, 0.8);
-    /*border:2px solid rgba(0, 128, 0, 0.3);*/
     border:none;
 }
 
 .op-done:hover {
-    /*box-shadow: 0 0 5px gray;*/
     background:#00B16A;
     cursor:pointer;
 }
 .op-done:active {
-    /*box-shadow: 0 0 10px gray;*/
     background:#00B16A;
     border:2px solid green;
 }
@@ -221,17 +219,14 @@ body {
 .op-fail {
     background:rgba(242, 38, 19, 0.7);
     border: none;
-    /*border:2px solid rgba(128,0,0,0.3);*/
 }
 
 .op-fail:hover {
-    /*box-shadow: 0 0 5px gray;*/
     background: rgba(242, 38, 19, 0.82);
     cursor:pointer;
 }
 
 .op-fail:active {
-    /*box-shadow: 0 0 10px gray;*/
     background:#F22613;
     border:2px solid red;
 }
@@ -239,7 +234,6 @@ body {
 .button-disabled {
     background: #949494;
     border: none;
-    /*border:2px solid #A9A9A9;*/
     cursor: default;
 }
 
@@ -251,7 +245,6 @@ body {
 
 /*** slide out options ***/
 .op-edit {
-    /*background:rgba(247, 202, 24, 0.8);*/
     background: rgb(255, 155, 32);
     border: 2px solid rgb(224, 119, 29);
     height: 20px;
@@ -352,13 +345,14 @@ body {
     margin-left: -60px;
     height: 300px;
     visibility: visible;
+
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
 
 /* notes button */
-.testy {
+.notes-button {
     position: absolute;
     right: 5px;
     bottom: 5px;
@@ -370,13 +364,12 @@ body {
     max-width: 200px;
     padding: 6px 5px 6px 5px;
     color: white;
-    /*border: 1px solid rgba(30, 85, 132, 0.8);*/
     border: none;
     outline:none;
     background-color: rgba(30, 85, 132, 0.8);
-    -webkit-border-radius: 5px; /*For Safari, etc. */
-    -moz-border-radius: 5px; /* For Mozilla, etc. */
-    border-radius: 5px; /* CSS3 Feature */
+    -webkit-border-radius: 5px;/*For Safari, etc. */
+    -moz-border-radius: 5px;/* For Mozilla, etc. */
+    border-radius: 5px;/* CSS3 Feature */
     opacity: 1.0;
 
     -webkit-transition: all 0.4s ease;
@@ -385,22 +378,18 @@ body {
 }
 
 .test-button:hover {
-    /*border: 1px solid rgba(30, 85, 132, 1.0);*/
     background-color: rgba(30, 85, 132, 1.0);
     color: white;
     cursor: pointer;
 }
 
 .test-button.selected {
-    /*border: 1px solid rgba(30, 85, 132, 1.0);*/
     background-color: rgba(30, 85, 132, 1.0);
     color: white;
-    /*color: #5994DE;*/
     cursor: pointer;
 }
 
 .testy-2 {
-    /*visibility: hidden;*/
     position: absolute;
     z-index: -1;
     width: 470px;
@@ -421,7 +410,6 @@ body {
 }
 
 .testy-2-out {
-    /*visibility: hidden;*/
     position: absolute;
     z-index: -1;
     width: 470px;
@@ -460,21 +448,19 @@ li.margin-out {
 /* add habit */
 #addHabit {
     position:fixed;
-    bottom: 30px; 
+    bottom: 30px;
     right:30px;
-    background: rgba(30, 85, 132, 0.8); 
+    background: rgba(30, 85, 132, 0.8);
     width: 60px;
-    height:60px; 
+    height:60px;
     vertical-align: middle;
-    font-size:36px; 
+    font-size:36px;
     padding: 5px;
     line-height: 100%;
-    color:white; 
-    /*border:2px solid rgba(85,85,85,0.7); */
+    color:white;
     border: none;
-    -webkit-appereance: none; 
-    border-radius: 50%; 
-    /*box-shadow: 0 0 3px gray;*/
+    -webkit-appereance: none;
+    border-radius: 50%;
 
     -webkit-transition: all 0.7s ease;
     -moz-transition: all 0.7s ease;
@@ -483,14 +469,12 @@ li.margin-out {
 
 #addHabit:hover {
     background: rgba(30, 85, 132, 1.0);
-    /*border:1px solid rgba(85,85,85,0.7); */
-    /*box-shadow: 0 0 5px gray;*/
     cursor: pointer;
 }
 
 #addHabit:active {
-    border: 2px solid gray; 
-    background: rgb(33, 72, 100); 
+    border: 2px solid gray;
+    background: rgb(33, 72, 100);
     box-shadow: 0 0 10px gray;
 }
 
@@ -500,22 +484,22 @@ li.margin-out {
 
 /* mesage above add habit when there are no habits displayed */
 #addHabit-empty {
-    position: fixed; 
-    text-align: center; 
-    width: 60px; 
-    bottom: 90px; 
-    right: 30px; 
+    position: fixed;
+    text-align: center;
+    width: 60px;
+    bottom: 90px;
+    right: 30px;
     visibility: hidden;
 }
 
 #addHabit-message {
-    padding:5%; 
-    border:2px solid rgb(0,0,0); 
-    border-radius:5px; 
-    box-sizing: border-box; 
-    position: relative; 
-    width: 260px; 
-    right: 200px; 
+    padding:5%;
+    border:2px solid rgb(0,0,0);
+    border-radius:5px;
+    box-sizing: border-box;
+    position: relative;
+    width: 260px;
+    right: 200px;
     font-size: x-large;
 }
 
@@ -527,12 +511,12 @@ li.margin-out {
 @media only screen
     and (max-width: 750px) {
         #addHabit {
-            bottom: 15px; 
+            bottom: 15px;
             right: 15px;
         }
 
         #addHabit-empty {
-            bottom: 75px; 
+            bottom: 75px;
             right: 15px;
         }
 
@@ -586,13 +570,13 @@ li.margin-out {
         #addHabit {
             font-size: 30px;
             width: 50px;
-            height:50px; 
-            bottom: 10px; 
+            height:50px;
+            bottom: 10px;
             right: 10px;
         }
 
         #addHabit-empty {
-            bottom: 60px; 
+            bottom: 60px;
             right: 5px;
         }
 
@@ -614,7 +598,7 @@ li.margin-out {
     and (max-width: 350px) {
         section {
             width:300px;
-            margin: 0 auto; 
+            margin: 0 auto;
             clear:both;
         }
 
@@ -658,13 +642,13 @@ li.margin-out {
         #addHabit {
             font-size:22px;
             width: 40px;
-            height:40px; 
-            bottom: 5px; 
+            height:40px;
+            bottom: 5px;
             right: 5px;
         }
 
         #addHabit-empty {
-            bottom: 45px; 
+            bottom: 45px;
             right: -5px;
         }
 
@@ -686,7 +670,7 @@ li.margin-out {
     and (min-width: 500px) {
     section {
         width:500px;
-        margin: 0 auto; 
+        margin: 0 auto;
         clear:both;
     }
 
