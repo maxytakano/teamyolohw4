@@ -14,12 +14,17 @@ Parse.Cloud.job("AdvanceDay", function(request, status){
 		var habitList = curList.get("habits");
 		var curHabit;
 		
+		var h;
 		for(h in habitList)
 		{
 			curHabit = habitList[h];
 			
 			if(curHabit.weekly_freq[currDay]){
 				curHabit.total_days += 1;
+				if (curHabit.completed_today < curHabit.daily_freq) {
+                    // Habit is wasn't completed for the day.
+                    curHabit.current_streak = 0;
+                }
 				curHabit.completed_today = 0;
 			}
 		}

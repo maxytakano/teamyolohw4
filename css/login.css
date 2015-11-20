@@ -18,23 +18,42 @@ body {
     overflow: hidden;
 }
 
-h3 {
-    border-bottom: 1px solid #000;
-    line-height: 0.1em;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    font-size: 18px;
-    color: #333;
+.strike {
+    display: block;
     text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
     font-family: Georgia, "Times New Roman", Times, serif;
     font-style: italic;
+    font-size: 18px;
+    color: #333;
+    font-weight: bolder;
+    margin-bottom: 2em;
 }
 
-h3 span {
-    /*background: #B0C4DE none repeat scroll 0% 0%;*/
-    text-align: center;
-    padding:0% 3% 0% 3%;
+.strike > span {
+    position: relative;
+    display: inline-block;
+}
 
+.strike > span:before,
+.strike > span:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 9999px;
+    height: 1px;
+    background: black;
+}
+
+.strike > span:before {
+    right: 100%;
+    margin-right: 15px;
+}
+
+.strike > span:after {
+    left: 100%;
+    margin-left: 15px;
 }
 
 .login .loginForm .login-button {
@@ -235,6 +254,10 @@ h3 span {
         width: 48%;
         padding-left: 5px;
         padding-right: 5px;
+    }
+
+    .strike {
+        font-size: 14px;
     }
 }
 

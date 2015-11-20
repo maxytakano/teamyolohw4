@@ -567,7 +567,10 @@
             return result;
         }
 
-        /*** Test Functions ***/
+        /***
+         *  Test Function for TA's grading ease.
+         *  Click the advance day button to what happens when a day advances while the app is open.
+         ***/
         function advanceDay() {
             var activeContainer = document.getElementById('active-list');
             var inactiveContainer = document.getElementById('inactive-list');
@@ -592,17 +595,28 @@
                         var currDay = currentDate.getDay();
                         if(curHabit.weekly_freq[currDay]) {
                             curHabit.total_days += 1;
+
+                            if (curHabit.completed_today < curHabit.daily_freq) {
+                                // Habit is wasn't completed for the day.
+                                curHabit.current_streak = 0;
+                            }
+
                             curHabit.completed_today = 0;
-                            refreshHabit(curHabit);
-                        }
-                        else {
-                            refreshHabit(curHabit);
-                            disableHabit(curHabit.habit_id);
                         }
                     }
 
                     list.set('habits', habitList);
                     list.save();
+
+                    while (activeContainer.firstChild) {
+                        activeContainer.removeChild(activeContainer.firstChild);
+                    }
+
+                    while (inactiveContainer.firstChild) {
+                        inactiveContainer.removeChild(inactiveContainer.firstChild);
+                    }
+
+                    populateList();
                 },
                 error: function(object, error) {
                     alert("Error: " + error.code + " " + error.message);
@@ -610,6 +624,10 @@
                     // error is a Parse.Error with an error code and message.
                 }
             });
+
+
+
+
         }
     </script>
 </body>
