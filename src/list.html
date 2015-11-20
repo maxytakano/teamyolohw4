@@ -2,9 +2,32 @@
 <html>
 <head>
     <script src="https://www.parsecdn.com/js/parse-latest.js"></script>
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
     <script src='../js/global.js'></script>
     <script>
         initParse();
+        // Initialize OneSignal
+        var OneSignal = OneSignal || [];
+        OneSignal.push(["init", {appId: "e1389734-7a53-42ac-9eed-42812382c796", subdomainName: "cse134virtuevice",
+                                            safari_web_id: "web.onesignal.auto.34e4584e-b851-4129-9188-f0d7c790d3df",
+                                            autoRegister: false}]);
+        // Add Onesignal functions to style page once the DOM has loaded
+        document.addEventListener('DOMContentLoaded', function(){
+            OneSignal.push(function(){
+                if(OneSignal.isPushNotificationsSupported())
+                {
+                    var subscribeBtn = document.getElementById("registerForPushLink");
+                    subscribeBtn.style.display = "inline-block";
+                }
+            });
+            OneSignal.push(function() {
+                function registerForPush(event) {
+                  OneSignal.push(["registerForPushNotifications"], {modalPrompt: true});
+                  event.preventDefault();
+                }
+                document.getElementById("registerForPushLink").addEventListener('click', registerForPush, false);
+            });
+        });
     </script>
     <title>Virtue / Vice</title>
     <meta charset="UTF-8">
@@ -12,9 +35,10 @@
     <link rel="stylesheet" type="text/css" href="../css/list.css">
 </head>
 <body onload="checkCurrentUser();">
-    <input id="logoutButton" class="standard-button" type="button" onclick="logOut();" value="Log Out" title="Log Out" />
-    <input id="advanceDayButton" class="standard-button" type="button" onclick="advanceDay();" value="Advance Day" title="Advance Day" />
+    <input id="advanceDayButton" class="standard-button" type="button" onclick="advanceDay();" value="Advance Day" title="Advance Day"></input>
+    <input id="logoutButton" class="standard-button" type="button" onclick="logOut();" value="Log Out" title="Log Out"></input>
     <h3 id="usernameDisplay"></h3>
+    <input id="registerForPushLink" class="standard-button" type="button" style="display: none" value="Notifications" title="Subscribe To Notifications"></input>
 
     <section>
         <h1 id="header-text">Habit List</h1>
@@ -31,7 +55,7 @@
 		<img id="addHabit-arrow" src="../img/downArrow.png" alt="Arrow">
 	</div>
     <div id="addHabit" onclick="location.href='add.html'" title="Add Habit">
-        <div style="position: relative; top: -2px; left: 0px;">+</div>
+        <div style="position: relative; font-size: 2em; padding: 7px;">+</div>
     </div>
     <script type="text/javascript">
 		var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -152,6 +176,7 @@
                 success: function(list) {
                     // The object was retrieved successfully.
                     var habits = list.get('habits');
+                    var h;
                     for(h in habits) {
                         if(habits[h].habit_id == habit_id) {
                             habits.splice(h, 1);
@@ -182,7 +207,12 @@
             var usernameDisplay = document.getElementById('usernameDisplay');
 
             var user = Parse.User.current();
-            usernameDisplay.innerHTML = "Hello, " + user.get('username');
+            if(window.innerWidth < 499) {
+                usernameDisplay.innerHTML = user.get('username');
+            }
+            else {
+                usernameDisplay.innerHTML = "Hello, " + user.get('username');
+            }
 
             var List = Parse.Object.extend("List");
             var query = new Parse.Query(List);
@@ -193,6 +223,7 @@
                     // Populate the habit object
                     var habits = list.get('habits');
                     var curHabit;
+                    var h;
                     for(h in habits) {
                         curHabit = habits[h];
 
@@ -220,7 +251,6 @@
                         // Highlight habit's week days.
                         var weekContainer = curList.getElementsByClassName("week-container")[0];
                         var daysArray = weekContainer.getElementsByClassName("week-bubble");
-                        console.log(daysArray);
 
                         var i;
                         var daysLength = daysArray.length;
@@ -283,6 +313,7 @@
             query.get(user.get('list'), {
                 success: function(list) {
                     var habitList = list.get('habits');
+                    var h;
                     for(h in habitList) {
                         if(habitList[h].habit_id == habit_id) {
                             curHabit = habitList[h];
@@ -333,6 +364,7 @@
             query.get(user.get('list'), {
                 success: function(list) {
                     var habitList = list.get('habits');
+                    var h;
                     for(h in habitList) {
                         if(habitList[h].habit_id == habit_id) {
                             curHabit = habitList[h];
@@ -432,8 +464,8 @@
             // Decide which completed message to show and if we need to disable the habit.
             if (curHabit.completed_today >= curHabit.daily_freq) {
                 // Habit already completed for today.
-                completeMessage.innerHTML = "<strong style='color: #5994DE;'>"+curHabit.current_streak+"</strong> "+
-                                        recordString+" in a row! Best Record: <strong style='color: #5994DE;'>"+
+                completeMessage.innerHTML = "<strong style='color: rgba(30, 85, 132, 1.0);'>"+curHabit.current_streak+"</strong> "+
+                                        recordString+" in a row! Best Record: <strong style='color: rgba(30, 85, 132, 1.0);'>"+
                                         curHabit.longest_streak+"</strong><br>";
 
                 // Disable the habit for today.
@@ -550,15 +582,14 @@
 					// Update Header Title
 					currentDate.setDate(currentDate.getDate()+1);
 					document.getElementById("header-text").innerHTML = "Habit List - " + days[currentDate.getDay()] + " " + (currentDate.getMonth()+1) + "/" + currentDate.getDate();
-				
                     var habitList = list.get('habits');
                     var curHabit;
+                    var h;
                     for(h in habitList) {
                         curHabit = habitList[h];
 
                         // Update UI
                         var currDay = currentDate.getDay();
-						
                         if(curHabit.weekly_freq[currDay]) {
                             curHabit.total_days += 1;
                             curHabit.completed_today = 0;

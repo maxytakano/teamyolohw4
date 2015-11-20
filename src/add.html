@@ -126,7 +126,7 @@
                 }
 
                 // Check if the user entered a title.
-                if (h_title == "") {
+                if (h_title === "") {
                     title_err_empty.style.visibility = 'visible';
                     return;
                 }
@@ -142,6 +142,7 @@
 
                             var habits = list.get('habits');
                             var curHabit;
+                            var h;
                             for(h in habits) {
                                 curHabit = habits[h];
                                 if(curHabit.habit_id == h_title) {
@@ -195,13 +196,14 @@
                         var habit_id = list.get('edit_id');
                         var pTitle = document.getElementById("pageTitle");
                         var pHeader = document.getElementById("pageHeader");
-                        if(habit_id != '') {
+                        if(habit_id !== '') {
                             var saveButton = document.getElementById("save");
                             pTitle.innerHTML = "Edit A Habit";
                             pHeader.innerHTML = "Edit A Habit";
                             saveButton.setAttribute("onclick", "onEditSubmit();");
                             var labels = document.getElementById("ck-button").children;
-                            for (var i = 0; i < labels.length; i++) {
+                            var i;
+                            for (i = 0; i < labels.length; i++) {
                                 labels[i].children.date.checked = false;
                             }
                         }
@@ -211,6 +213,7 @@
                             return;
                         }
                         var habit;
+                        var h;
                         for(h in habits) {
 
                             if(habits[h].habit_id == habit_id) {
@@ -225,9 +228,10 @@
 
                         else {
                             document.getElementById('habit_title').value = habit.habit_id;
-                            for(var i = 0; i < habit.weekly_freq.length; i++) {
-                                if(habit.weekly_freq[i])
-                                switch(i) {
+                            var j;
+                            for(j = 0; j < habit.weekly_freq.length; j++) {
+                                if(habit.weekly_freq[j])
+                                switch(j) {
                                     case 0:
                                         document.getElementById("SaturdayID").checked = true;
                                         break;
@@ -294,7 +298,7 @@
                 }
 
                 // Check if the user entered a title.
-                if (h_title == "") {
+                if (h_title === "") {
                     title_err_empty.style.visibility = 'visible';
                     return;
                 }
@@ -309,6 +313,7 @@
                             // The object was retrieved successfully.
                             var habits = list.get('habits');
                             var curHabit;
+                            var h;
                             for(h in habits) {
                                 curHabit = habits[h];
                                 if(curHabit.habit_id == h_title && curHabit.habit_id != list.get('edit_id')) {
@@ -358,8 +363,9 @@
                 var labels = document.getElementById("ck-button").children;
                 var selected_weeks = [];
                 var week;
+                var i;
                 // Push each selected week into the selected_weeks array.
-                for (var i = 0; i < labels.length; i++) {
+                for (i = 0; i < labels.length; i++) {
                     week = labels[i].children.date;
                     if (week.checked) {
                         selected_weeks.push(true);
@@ -367,9 +373,9 @@
                         selected_weeks.push(false);
                     }
                 }
-                if(selected_weeks.length == 0) {
+                if(selected_weeks.length === 0) {
                     // TODO: throw validation instead
-                    for (var i = 0; i < labels.length; i++) {
+                    for (i = 0; i < labels.length; i++) {
                         week = labels[i].children.date;
                         // selected_weeks.push(week.value);
                         selected_weeks.push(true);
@@ -469,7 +475,7 @@
                         }, function(error) {
                             alert("Error: " + error.code + " " + error.message);
                         });
-                    }
+                    };
                 }
 
                 // Read in the selected image
@@ -490,6 +496,7 @@
                         userImages = list.get('user_images');
                         if (userImages) {
                             var user_img;
+                            var cur_image;
                             for (cur_image in userImages) {
                                 user_img = document.createElement("img");
                                 user_img.id = userImages[cur_image].name();
@@ -504,7 +511,7 @@
                         }
 
                         // if we aren't editing anything select the first image
-                        if(list.get('edit_id') == '') {
+                        if(list.get('edit_id') === '') {
                             selectImage(habitIcons.children[1]);
                         }
                         var formDisplay = document.getElementById('formDisplay');
