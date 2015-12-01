@@ -41,7 +41,7 @@ function habitInteractionAnalytics(operation, username, habit, error) {
     var dimensions = {
         operation_name: operation,
         user_name: username,
-        habit: habit,
+        habit_name: habit,
         error_code: error
     };
     Parse.Analytics.track('HIAnalytics', dimensions);
