@@ -58,6 +58,8 @@
         <div style="position: relative; font-size: 2em; padding: 7px;">+</div>
     </div>
     <script type="text/javascript">
+        javascriptErrorAnalytics();
+
 		var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 		var currentDate = new Date();
 		document.getElementById("header-text").innerHTML += " - " + days[currentDate.getDay()] + " " + (currentDate.getMonth()+1) + "/" + currentDate.getDate();
@@ -184,6 +186,7 @@
                         }
                     }
                     list.set('habits', habits);
+                    habitCRUDAnalytics('Delete', user.get('username'), habit_id, '');
                     list.save().then(function() {
                         // Remove habit entry from document
                         var child = getHabitRoot(element);
@@ -193,6 +196,7 @@
                     });
                 },
                 error: function(object, error) {
+                    habitCRUDAnalytics('Delete', user.get('username'), habit_id, JSON.stringify(error.code));
                     alert("Error: " + error.code + " " + error.message);
                     // The object was not retrieved successfully.
                     // error is a Parse.Error with an error code and message.
@@ -266,9 +270,12 @@
                     inactiveContainer.style.opacity = 1;
                     list.set('edit_id', '');
                     list.save();
+                    habitCRUDAnalytics('Read', user.get('username'), '', '');
 					checkForHabits();
+
                 },
                 error: function(object, error) {
+                    habitCRUDAnalytics('Read', user.get('username'), '', JSON.stringify(error.code));
                     alert("Error: " + error.code + " " + error.message);
                     // The object was not retrieved successfully.
                     // error is a Parse.Error with an error code and message.
@@ -333,6 +340,7 @@
                         }
                     }
 
+                    habitInteractionAnalytics('ThumbsUp', user.get('username'), habit_id, '');
                     list.set('habits', habitList);
                     list.save().then(function() {
                         // Update UI
@@ -341,6 +349,7 @@
 
                 },
                 error: function(object, error) {
+                    habitInteractionAnalytics('ThumbsUp', user.get('username'), habit_id, JSON.stringify(error.code));
                     alert("Error: " + error.code + " " + error.message);
                     // The object was not retrieved successfully.
                     // error is a Parse.Error with an error code and message.
@@ -376,6 +385,7 @@
                     curHabit.completed_today = -1;
                     curHabit.current_streak = 0;
 
+                    habitInteractionAnalytics('ThumbsDown', user.get('username'), habit_id, '');
                     list.set('habits', habitList);
                     list.save().then(function() {
                         // Update UI
@@ -384,6 +394,7 @@
 
                 },
                 error: function(object, error) {
+                    habitInteractionAnalytics('ThumbsDown', user.get('username'), habit_id , JSON.stringify(error.code));
                     alert("Error: " + error.code + " " + error.message);
                     // The object was not retrieved successfully.
                     // error is a Parse.Error with an error code and message.

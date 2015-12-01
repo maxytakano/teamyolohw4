@@ -76,6 +76,7 @@
         </div>
 
         <script>
+            javascriptErrorAnalytics();
             /**
              * habit object which is filled and submitted after the form
              * passes validation.
@@ -168,11 +169,13 @@
                             }
 
                             list.add('habits', newHabit);
+                            habitCRUDAnalytics('Create', user.get('username'), newHabit.habit_id, '');
                             list.save().then(function() {
                                 window.location = 'list.html';
                             });
                         },
                         error: function(object, error) {
+                            habitCRUDAnalytics('Create', user.get('username'), newHabit.habit_id, JSON.stringify(error.code));
                             console.log("Error: " + error.code + " " + error.message);
                             // The object was not retrieved successfully.
                             // error is a Parse.Error with an error code and message.
@@ -203,6 +206,7 @@
                         var habit_id = list.get('edit_id');
                         var pTitle = document.getElementById("pageTitle");
                         var pHeader = document.getElementById("pageHeader");
+
                         if(habit_id !== '') {
                             var saveButton = document.getElementById("save");
                             pTitle.innerHTML = "Edit A Habit";
@@ -349,11 +353,13 @@
 
                             list.set('habits', habits);
                             list.set('edit_id', '');
+                            habitCRUDAnalytics('Update', user.get('username'), newHabit.habit_id, '');
                             list.save().then(function() {
                                 window.location = 'list.html';
                             });
                         },
                         error: function(object, error) {
+                            habitCRUDAnalytics('Update', user.get('username'), newHabit.habit_id, JSON.stringify(error.code));
                             console.log("Error: " + error.code + " " + error.message);
                             // The object was not retrieved successfully.
                             // error is a Parse.Error with an error code and message.

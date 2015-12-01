@@ -46,6 +46,8 @@
         </form>
     </div>
     <script>
+        javascriptErrorAnalytics();
+
         // Attempts to log into user account
         function logIn() {
             if(!validateForm()) {
@@ -58,10 +60,12 @@
             Parse.User.logIn(inputEmail,  inputPassword, {
               success: function(user) {
                 // Do stuff after successful login.
+                userAnalytics("Login", inputEmail, "");
                 window.location = 'list.html';
               },
               error: function(user, error) {
                 // The login failed. Check error to see why.
+                userAnalytics("Login", inputEmail, JSON.stringify(error.code));
                 displayMessage('Log in unsuccessful. Invalid email or password.');
               }
             });
@@ -72,7 +76,6 @@
             if(!validateForm()) {
                return;
             }
-
             var inputEmail = document.getElementById('useremail').value;
             var inputPassword = document.getElementById('password').value;
 
@@ -90,15 +93,18 @@
 
                 user.signUp(null, {
                     success: function(user) {
+                        userAnalytics('Signup', inputEmail, '');
                         displayMessage('Sign Up Successful!');
                         window.location = 'list.html';
                     },
                     error: function(user, error) {
+                        userAnalytics('SignUp', inputEmail, JSON.stringify(error.code));
                         if(error.code == 202) {
                             displayMessage('Sign up unsuccessful.<br>Email address has already been taken.');
                         } else {
                             displayMessage('Sign up unsuccessful.<br>Please use a valid email address.');
                         }
+
                     }
                 });
             });
