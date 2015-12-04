@@ -68,6 +68,8 @@ APPLICATION SUMMARY:
 TEAM STRUCTURE AND DYNAMICS:
 - Jason Tan
 	- TODO: JASON
+- Max
+	- Assisted with analytics and monitoring. Worked on the a lot on the website in P4 so we didn't need to change much in P5. 
 - TODO: MAX, GIL, SAM, ALEXIE
 
 ------------------------------------------------------------------
