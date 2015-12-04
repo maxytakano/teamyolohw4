@@ -49,7 +49,11 @@ MINIFICATION AND BUNDLING:
 ------------------------------------------------------------------
 
 PHONE APP POC:
-- TODO: ALEXIE
+- We were able to slightly edit the code base in order to package the web application as an Android application using Phonegap.
+- Build done automatically by Adobe Phonegap Build, and the zip file that was sent to the service to build the APK is inside the repository as "PhoneGapArchive.zip"
+- All 3rd party scripts (such as Parse and OneSignal) had to be downloaded and added to the local build, as Phonegap is not able to download scripts from CDNs.
+- All features work correctly inside this Android application except for the notifications and custom image icon uploads and can be installed using the APK.
+- The APK is included inside the git repository as the file "ViceVirtue-debug (1).apk," and the zip file used to build it on Adobe
 
 ------------------------------------------------------------------
 
@@ -57,9 +61,11 @@ APPLICATION SUMMARY:
 - Technologies Used:
 	- Parse, Parse JavaScript SDK for the backend database, monitoring, and analytics
 	- Grunt Task manager and nodejs to use the Grunt Task Manager for minifiying our css, js and html files
-	- TODO: ALEXIE
+	- Phonegap and Adobe Phonegap Build was used in order to package and build the website as an Android APK.
 - Issues:
-	- TODO: EVERYONE
+	- Phonegap was unable to download outside scripts (such as Parse and OneSignal) for use inside the Android application, so they had to be included locally
+	- Although Phonegap has support for building IOS packages, it requires a lot more codebase modification and was not implemented in this project
+	- Custom image uploading is not handled properly inside the Android build
 - Limitations:
 	- Connection speed with Parse (TODO: JASON)
 
@@ -70,7 +76,8 @@ TEAM STRUCTURE AND DYNAMICS:
 	- TODO: JASON
 - Max
 	- Assisted with analytics and monitoring. Worked on the a lot on the website in P4 so we didn't need to change much in P5. 
-- TODO: MAX, GIL, SAM, ALEXIE
+- Gil and Alexie
+	- Created a modified version of the codebase in order to correctly build the Android APK using Phonegap
 
 ------------------------------------------------------------------
 
