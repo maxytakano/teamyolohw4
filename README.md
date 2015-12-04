@@ -19,10 +19,12 @@ TABLE OF CONTENTS:
 
 LINKS:
 
+You can view the application locally via the index.html page at the top directory of the zip.
+
 We have hosted our application online. The link to it is:
 http://cse134b-fa15.co.nf/
 
-We used GitHub as our repo. The link to it is (disregard the "HW4", we developed on top of HW4 and did not bother to make a new repo):
+We used GitHub as our repo. The link to it is (disregard the "hw4", we developed on top of HW4 and did not bother to make a new repo):
 https://github.com/maxytakano/teamyolohw4
 
 ------------------------------------------------------------------
