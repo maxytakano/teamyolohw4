@@ -10,7 +10,7 @@ module.exports = function(grunt){
                     removeEmptyAttributes: true
                 },
                 files: {
-                    '../min/index.html': ['../public/index.html']
+                    '../min/index.html': ['../index.html']
                 }
             },
             other_target: {
