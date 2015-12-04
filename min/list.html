@@ -1,0 +1,604 @@
+<!DOCTYPE html><html><head><script src="https://www.parsecdn.com/js/parse-latest.js"></script><script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script><script src="../js/global.js"></script><script>initParse();
+        // Initialize OneSignal
+        var OneSignal = OneSignal || [];
+        OneSignal.push(["init", {appId: "e1389734-7a53-42ac-9eed-42812382c796", subdomainName: "cse134virtuevice",
+                                            safari_web_id: "web.onesignal.auto.34e4584e-b851-4129-9188-f0d7c790d3df",
+                                            autoRegister: false}]);
+        // Add Onesignal functions to style page once the DOM has loaded
+        document.addEventListener('DOMContentLoaded', function(){
+            OneSignal.push(function(){
+                if(OneSignal.isPushNotificationsSupported())
+                {
+                    var subscribeBtn = document.getElementById("registerForPushLink");
+                    subscribeBtn.style.display = "inline-block";
+                }
+            });
+            OneSignal.push(function() {
+                function registerForPush(event) {
+                  OneSignal.push(["registerForPushNotifications"], {modalPrompt: true});
+                  event.preventDefault();
+                }
+                document.getElementById("registerForPushLink").addEventListener('click', registerForPush, false);
+            });
+        });</script><title>Virtue / Vice</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" type="text/css" href="../css/list.css"></head><body onload="checkCurrentUser()"><input id="advanceDayButton" class="standard-button" type="button" onclick="advanceDay()" value="Advance Day" title="Advance Day"><input id="logoutButton" class="standard-button" type="button" onclick="logOut()" value="Log Out" title="Log Out"><h3 id="usernameDisplay"></h3><input id="registerForPushLink" class="standard-button" type="button" style="display: none" value="Notifications" title="Subscribe To Notifications"><section><h1 id="header-text">Habit List</h1><ul id="active-list" class="habit-list"></ul></section><section><h1 id="inactive-title" style="visibility: hidden">Habits Inactive For Today</h1><ul id="inactive-list" class="habit-list"></ul></section><div id="addHabit-empty"><div id="addHabit-message"><p>You have no habits.<br>Click here to add one.</p></div><img id="addHabit-arrow" src="../img/downArrow.png" alt="Arrow"></div><div id="addHabit" onclick="location.href='add.html'" title="Add Habit"><div style="position: relative; font-size: 2em; padding: 7px">+</div></div><script type="text/javascript">javascriptErrorAnalytics();
+
+		var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+		var currentDate = new Date();
+		document.getElementById("header-text").innerHTML += " - " + days[currentDate.getDay()] + " " + (currentDate.getMonth()+1) + "/" + currentDate.getDate();
+
+        populateList();
+
+        // Returns a formateted string template for a list entry
+        function formatTemplate(habit)
+        {
+            var listString = '\n \
+            <ul class="habit-info">\n \
+                <li>\n \
+                    <div class="habit-name">'+habit.habit_id+'</div>\n \
+                    <button id="options-button" type="button" class="op op-gear" onClick="toggleButton(this);" title="Habit Options">\n \
+                        <img id="gear" class="gear-img" src="../img/gear.png" alt="Edit">\n \
+                    </button>\n \
+                    <div class="white-square"></div>\n \
+                    <span id="options-slideout" class="options">\n \
+                        <button type="button" class="op op-edit" onclick="editHabit(\''+habit.habit_id+'\');" title="Edit Habit">\n \
+                            <img class="small-buttons" src="../img/edit.svg" alt="Edit">\n \
+                        </button>\n \
+                        <button type="button" class="op op-del" onclick="deleteHabit(this, \''+habit.habit_id+'\');" title="Delete Habit">\n \
+                            <img class="small-buttons" src="../img/delete.svg" alt="Del">\n \
+                        </button>\n \
+                    </span>\n \
+                </li>\n \
+                <li>\n \
+                    <img class="habit-icon" src="'+habit.icon.icon_src+'" alt="habit icon"><br>\n \
+                    <div class="week-container">\n \
+                        <div class="week-bubble week-day-off">\n \
+                            <div class="inner-week">S<small>u</small></div>\n \
+                        </div>\n \
+                        <div class="week-bubble week-day-off">\n \
+                            <div class="inner-week">M</div>\n \
+                        </div>\n \
+                        <div class="week-bubble week-day-off">\n \
+                            <div class="inner-week">T<small>u</small></div>\n \
+                        </div>\n \
+                        <div class="week-bubble week-day-off">\n \
+                            <div class="inner-week">W</div>\n \
+                        </div>\n \
+                        <br><span style="margin-left: 14px;"></span>\n \
+                        <div class="week-bubble week-day-off">\n \
+                            <div class="inner-week">T<small>h</small></div>\n \
+                        </div>\n \
+                        <div class="week-bubble week-day-off">\n \
+                            <div class="inner-week">F</div>\n \
+                        </div>\n \
+                        <div class="week-bubble week-day-off">\n \
+                            <div class="inner-week">S<small>a</small></div>\n \
+                        </div>\n \
+                    </div>\n \
+                </li>\n \
+            </ul>\n \
+            <div class="message">\n \
+                <div class="message-total">\n \
+                    <div class="graph-message">\n \
+                    </div>\n \
+                    <svg class="habit-graph" height="25" width="200">\n \
+                        <line x1="20" y1="7" x2="160" y2="7" stroke="#F66659" stroke-width="11" stroke-linecap="round" />\n \
+                        <line class="blue-line" x1="20" y1="7" x2="10" y2="7" stroke="#33C087" stroke-width="11" stroke-linecap="round" />\n \
+                    </svg>\n \
+                    <div class="complete-message">\n \
+                        Completed <strong>0/1</strong> for today.\n \
+                    </div>\n \
+                </div>\n \
+            </div>\n \
+            <div class="habit-op" id="button-container">\n \
+                <button type="button" class="op op-done" onclick="thumbsUp(\''+habit.habit_id+'\');" title="Complete Habit">\n \
+                    <img class="thumb-image" src="../img/thumbsUp.png" alt="Done">\n \
+                </button>\n \
+                <button type="button" class="op op-fail" onclick="thumbsDown(\''+habit.habit_id+'\');" title="Fail Habit">\n \
+                    <img class="thumb-image" src="../img/thumbsDown.png" alt="Done">\n \
+                </button>\n \
+            </div> \n \
+            <div class="notes-container">\n \
+                <div class="notes-button"> \n \
+                    <input class="test-button" type="button" onclick="toggleNotes(this);" value="Notes"></input> \n \
+                </div> \n \
+                <div class="testy-2"> Notes: '+habit.notes+' </div> \n \
+            </div> \n \
+            ';
+            return listString;
+        }
+
+        // Go to edit page
+        function editHabit(habit_id) {
+            var user = Parse.User.current();
+            var List = Parse.Object.extend("List");
+            var query = new Parse.Query(List);
+
+            query.get(user.get('list'), {
+                success: function(list) {
+                    list.set('edit_id', habit_id);
+                    list.save().then(function() {
+                         window.location = 'add.html';
+                    });
+                },
+                error: function(object, error) {
+                    alert("Error: " + error.code + " " + error.message);
+                    // The object was not retrieved successfully.
+                    // error is a Parse.Error with an error code and message.
+                }
+            });
+        }
+
+        function deleteHabit(element, habit_id) {
+            if(!confirm("Are you sure you want to delete this habit?")) { return; }
+
+            // Remove from user's habit list
+            var user = Parse.User.current();
+            var List = Parse.Object.extend("List");
+            var query = new Parse.Query(List);
+
+            query.get(user.get('list'), {
+                success: function(list) {
+                    // The object was retrieved successfully.
+                    var habits = list.get('habits');
+                    var h;
+                    for(h in habits) {
+                        if(habits[h].habit_id == habit_id) {
+                            habits.splice(h, 1);
+                            break;
+                        }
+                    }
+                    list.set('habits', habits);
+                    habitCRUDAnalytics('Delete', user.get('username'), habit_id, '');
+                    list.save().then(function() {
+                        // Remove habit entry from document
+                        var child = getHabitRoot(element);
+                        var parent = child.parentNode;
+                        parent.removeChild(child);
+						checkForHabits();
+                    });
+                },
+                error: function(object, error) {
+                    habitCRUDAnalytics('Delete', user.get('username'), habit_id, JSON.stringify(error.code));
+                    alert("Error: " + error.code + " " + error.message);
+                    // The object was not retrieved successfully.
+                    // error is a Parse.Error with an error code and message.
+                }
+            });
+        }
+
+        function populateList() {
+            // Grab containing element for which we are going to add items into
+            var activeContainer = document.getElementById('active-list');
+            var inactiveContainer = document.getElementById('inactive-list');
+            var usernameDisplay = document.getElementById('usernameDisplay');
+
+            var user = Parse.User.current();
+            if(window.innerWidth < 499) {
+                usernameDisplay.innerHTML = user.get('username');
+            }
+            else {
+                usernameDisplay.innerHTML = "Hello, " + user.get('username');
+            }
+
+            var List = Parse.Object.extend("List");
+            var query = new Parse.Query(List);
+
+            query.get(user.get('list'), {
+                success: function(list) {
+                    // The object was retrieved successfully.
+                    // Populate the habit object
+                    var habits = list.get('habits');
+                    var curHabit;
+                    var h;
+                    for(h in habits) {
+                        curHabit = habits[h];
+
+                        var outerList = document.createElement('li');
+                        var curId = "habitItem_"+curHabit.habit_id;
+                        // Construct the habit html.
+                        outerList.setAttribute("id", curId);
+                        outerList.innerHTML = formatTemplate(curHabit);
+
+                        // Append the html to the habit list.
+                        var currDay = currentDate.getDay();
+                        if(curHabit.weekly_freq[currDay]) {
+                            activeContainer.appendChild(outerList);
+                            refreshHabit(curHabit);
+                        }
+                        else {
+                            inactiveContainer.appendChild(outerList);
+                            refreshHabit(curHabit);
+                            disableHabit(curHabit.habit_id);
+                        }
+
+                        // Get the habit we just appended.
+                        var curList = document.getElementById(curId);
+
+                        // Highlight habit's week days.
+                        var weekContainer = curList.getElementsByClassName("week-container")[0];
+                        var daysArray = weekContainer.getElementsByClassName("week-bubble");
+
+                        var i;
+                        var daysLength = daysArray.length;
+                        for (i = 0; i < daysLength; i++) {
+                            if (curHabit.weekly_freq[i] ) {
+                                daysArray[i].className = "week-bubble week-day";
+                            }
+                        }
+                    }
+                    window.getComputedStyle(activeContainer).opacity;
+                    activeContainer.style.opacity = 1;
+                    window.getComputedStyle(inactiveContainer).opacity;
+                    inactiveContainer.style.opacity = 1;
+                    list.set('edit_id', '');
+                    list.save();
+                    habitCRUDAnalytics('Read', user.get('username'), '', '');
+					checkForHabits();
+
+                },
+                error: function(object, error) {
+                    habitCRUDAnalytics('Read', user.get('username'), '', JSON.stringify(error.code));
+                    alert("Error: " + error.code + " " + error.message);
+                    // The object was not retrieved successfully.
+                    // error is a Parse.Error with an error code and message.
+                }
+            });
+        }
+
+		/** Check to see if any habits are on page and place a user message if not **/
+		function checkForHabits() {
+            var activeList = document.getElementById("active-list");
+            var inactiveList = document.getElementById("inactive-list");
+            var inactiveTitle = document.getElementById("inactive-title");
+			var msg = document.getElementById("addHabit-empty");
+			if(activeList.childNodes.length <= 0 && inactiveList.childNodes.length <= 0) {
+				msg.style.visibility = "visible";
+			}
+			else {
+				msg.style.visibility = "hidden";
+			}
+
+            if(inactiveList.childNodes.length <= 0) {
+                inactiveTitle.style.visibility = "hidden";
+            }
+            else {
+                inactiveTitle.style.visibility = "visible";
+            }
+		}
+
+        /** Success/Fail **/
+        function thumbsUp(habit_id) {
+            var user = Parse.User.current();
+            var List = Parse.Object.extend("List");
+            var query = new Parse.Query(List);
+
+            var curList = document.getElementById("habitItem_"+habit_id);
+            var buttonContainer = curList.getElementsByClassName("habit-op")[0];
+            var doneButton = buttonContainer.children[0];
+            var failButton = buttonContainer.children[1];
+            doneButton.disabled = true;
+            failButton.disabled = true;
+
+            query.get(user.get('list'), {
+                success: function(list) {
+                    var habitList = list.get('habits');
+                    var h;
+                    for(h in habitList) {
+                        if(habitList[h].habit_id == habit_id) {
+                            curHabit = habitList[h];
+                            break;
+                        }
+                    }
+
+                    curHabit.completed_today += 1;
+                    if (curHabit.completed_today >= curHabit.daily_freq) {
+                        // Habit is fully completed for the day.
+                        curHabit.completed_days += 1;
+
+                        // Do record changes.
+                        curHabit.current_streak += 1;
+                        if (curHabit.current_streak > curHabit.longest_streak) {
+                            curHabit.longest_streak = curHabit.current_streak;
+                        }
+                    }
+
+                    habitInteractionAnalytics('ThumbsUp', user.get('username'), habit_id, '');
+                    list.set('habits', habitList);
+                    list.save().then(function() {
+                        // Update UI
+                        refreshHabit(curHabit);
+                    });
+
+                },
+                error: function(object, error) {
+                    habitInteractionAnalytics('ThumbsUp', user.get('username'), habit_id, JSON.stringify(error.code));
+                    alert("Error: " + error.code + " " + error.message);
+                    // The object was not retrieved successfully.
+                    // error is a Parse.Error with an error code and message.
+                }
+            });
+        }
+
+        function thumbsDown(habit_id) {
+            var user = Parse.User.current();
+            var List = Parse.Object.extend("List");
+            var query = new Parse.Query(List);
+
+            var curList = document.getElementById("habitItem_"+habit_id);
+            var buttonContainer = curList.getElementsByClassName("habit-op")[0];
+            var doneButton = buttonContainer.children[0];
+            var failButton = buttonContainer.children[1];
+            doneButton.disabled = true;
+            failButton.disabled = true;
+
+
+            query.get(user.get('list'), {
+                success: function(list) {
+                    var habitList = list.get('habits');
+                    var h;
+                    for(h in habitList) {
+                        if(habitList[h].habit_id == habit_id) {
+                            curHabit = habitList[h];
+                            break;
+                        }
+                    }
+
+                    // Set completed_today to -1 to signal a failed day.
+                    curHabit.completed_today = -1;
+                    curHabit.current_streak = 0;
+
+                    habitInteractionAnalytics('ThumbsDown', user.get('username'), habit_id, '');
+                    list.set('habits', habitList);
+                    list.save().then(function() {
+                        // Update UI
+                        refreshHabit(curHabit);
+                    });
+
+                },
+                error: function(object, error) {
+                    habitInteractionAnalytics('ThumbsDown', user.get('username'), habit_id , JSON.stringify(error.code));
+                    alert("Error: " + error.code + " " + error.message);
+                    // The object was not retrieved successfully.
+                    // error is a Parse.Error with an error code and message.
+                }
+            });
+        }
+
+        function disableHabit(habit_id) {
+            var curList = document.getElementById("habitItem_"+habit_id);
+            var buttonContainer = curList.getElementsByClassName("habit-op")[0];
+            var doneButton = buttonContainer.children[0];
+            var failButton = buttonContainer.children[1];
+            var thumbImages = curList.getElementsByClassName("thumb-image");
+
+            var i; var thumbLength = thumbImages.length;
+            for (i = 0; i < thumbLength; i++) {
+                thumbImages[i].style.opacity = "0.4";
+            }
+
+            doneButton.disabled = true;
+            failButton.disabled = true;
+            doneButton.className = "op button-disabled";
+            failButton.className = "op button-disabled";
+        }
+
+        function enableHabit(habit_id) {
+            var curList = document.getElementById("habitItem_"+habit_id);
+            var buttonContainer = curList.getElementsByClassName("habit-op")[0];
+            var doneButton = buttonContainer.children[0];
+            var failButton = buttonContainer.children[1];
+            var thumbImages = curList.getElementsByClassName("thumb-image");
+
+            var i; var thumbLength = thumbImages.length;
+            for (i = 0; i < thumbLength; i++) {
+                thumbImages[i].style.opacity = "1.0";
+            }
+
+            doneButton.disabled = false;
+            failButton.disabled = false;
+            doneButton.className = "op op-done";
+            failButton.className = "op op-fail";
+        }
+
+        /**** Update functions ****/
+
+        function refreshHabit(curHabit) {
+            // 1. Update the labels and buttons.
+            updateGUI(curHabit);
+
+            // 2. Update the graph.
+            updateBar(curHabit);
+        }
+
+        /**
+         * Updates the labels of the habit and checks if the buttons need to be disabled
+         */
+        function updateGUI(curHabit) {
+            // Get the dom.
+            var habit_id = curHabit.habit_id;
+            var curList = document.getElementById("habitItem_"+habit_id);
+            var graphMessage = curList.getElementsByClassName("graph-message")[0];
+            var completeMessage = curList.getElementsByClassName("complete-message")[0];
+
+            var dayString = "days";
+            var recordString = "days";
+            if (curHabit.completed_days == 1) {
+                dayString = "day";
+            }
+            if (curHabit.current_streak == 1) {
+                recordString = "day";
+            }
+
+            // 1. Update graph message.
+            graphMessage.innerHTML = "Habit completed <strong>"+curHabit.completed_days+
+                                        "</strong><strong> / "+curHabit.total_days+"</strong> days. <br>";
+
+
+            // Decide which completed message to show and if we need to disable the habit.
+            if (curHabit.completed_today >= curHabit.daily_freq) {
+                // Habit already completed for today.
+                completeMessage.innerHTML = "<strong style='color: rgba(30, 85, 132, 1.0);'>"+curHabit.current_streak+"</strong> "+
+                                        recordString+" in a row! Best Record: <strong style='color: rgba(30, 85, 132, 1.0);'>"+
+                                        curHabit.longest_streak+"</strong><br>";
+
+                // Disable the habit for today.
+                disableHabit(habit_id);
+            } else if (curHabit.completed_today == -1) {
+                // Habit failed for today.
+                completeMessage.innerHTML = "Habit <strong style='color: rgba(199, 35, 20, 0.76);'>failed</strong>. \
+                                              Try harder tomorrow!";
+
+                // Disable the habit for today.
+                disableHabit(habit_id);
+            } else {
+                // Habit in progress for today
+                completeMessage.innerHTML = "Completed <strong>"+curHabit.completed_today+" / "+
+                                            curHabit.daily_freq+"</strong> times for today.";
+
+                enableHabit(habit_id);
+            }
+        }
+
+        function updateBar(curHabit) {
+            // Get the dom.
+            var curList = document.getElementById("habitItem_"+curHabit.habit_id);
+            var blueLine = curList.getElementsByClassName("blue-line")[0];
+
+            // Calculate bar percentage.
+            var percentFull = curHabit.completed_days / curHabit.total_days;
+            var lineLength = percentFull * 160.0;
+            lineLength += 10;
+            var lengthString = lineLength.toString();
+
+            // Set line length to the percentage.
+            if (lineLength < 11 || !lineLength) {
+                blueLine.setAttribute("stroke-width", 0);
+            } else {
+                blueLine.setAttribute("stroke-width", 11);
+                blueLine.setAttribute("x2", lengthString);
+            }
+        }
+
+        /*** Animation ***/
+
+        /* slides out the options then back in */
+        function toggleButton(element) {
+            var parent = element.parentNode;
+            var optionsButton = findChild(parent, "options-button");
+            var optionsMenu = findChild(parent, "options-slideout");
+            if (optionsMenu.className == "options") {
+                // toggle in options
+                optionsMenu.className = "options-out";
+                optionsButton.className = "op op-gear selected";
+            } else {
+                // toggle out options
+                optionsMenu.className = "options";
+                optionsButton.className = "op op-gear";
+            }
+        }
+
+        // Expand the notes section
+        function toggleNotes(element) {
+            var listNode = getHabitRoot(element);
+            var notesContainer = listNode.getElementsByClassName("notes-container")[0];
+            var notesSlideout = notesContainer.children[1];
+            var notesButton = notesContainer.children[0].children[0];
+            if (listNode.className == "margin-out") {
+                notesSlideout.className = "testy-2";
+                listNode.className = "margin-in";
+                notesButton.className = "test-button";
+            } else {
+                listNode.className = "margin-out";
+                notesSlideout.className = "testy-2-out";
+                notesButton.className = "test-button selected";
+
+            }
+        }
+
+
+        /*** Helper functions ***/
+
+        /* returns the habit list node corresponding to an element in the habit */
+        function getHabitRoot(element) {
+            var curNode = element;
+            while (curNode.parentNode.id != "active-list" && curNode.parentNode.id != "inactive-list") {
+                curNode = curNode.parentNode;
+            }
+            return curNode;
+        }
+
+        /* finds a child by id of a parent node */
+        function findChild(parent, element_id) {
+            var children = parent.childNodes;
+            var result;
+            var node;
+            for (node in children) {
+                if (children[node].id == element_id) {
+                    result = children[node];
+                }
+            }
+            return result;
+        }
+
+        /***
+         *  Test Function for TA's grading ease.
+         *  Click the advance day button to what happens when a day advances while the app is open.
+         ***/
+        function advanceDay() {
+            var activeContainer = document.getElementById('active-list');
+            var inactiveContainer = document.getElementById('inactive-list');
+
+           // Testing code that will run on the server each time a day passes.
+            var user = Parse.User.current();
+            var List = Parse.Object.extend("List");
+            var query = new Parse.Query(List);
+
+            query.get(user.get('list'), {
+                success: function(list) {
+					// Update Header Title
+					currentDate.setDate(currentDate.getDate()+1);
+					document.getElementById("header-text").innerHTML = "Habit List - " + days[currentDate.getDay()] + " " + (currentDate.getMonth()+1) + "/" + currentDate.getDate();
+                    var habitList = list.get('habits');
+                    var curHabit;
+                    var h;
+                    for(h in habitList) {
+                        curHabit = habitList[h];
+
+                        // Update UI
+                        var currDay = currentDate.getDay();
+                        if(curHabit.weekly_freq[currDay]) {
+                            curHabit.total_days += 1;
+
+                            if (curHabit.completed_today < curHabit.daily_freq) {
+                                // Habit is wasn't completed for the day.
+                                curHabit.current_streak = 0;
+                            }
+
+                            curHabit.completed_today = 0;
+                        }
+                    }
+
+                    list.set('habits', habitList);
+                    list.save();
+
+                    while (activeContainer.firstChild) {
+                        activeContainer.removeChild(activeContainer.firstChild);
+                    }
+
+                    while (inactiveContainer.firstChild) {
+                        inactiveContainer.removeChild(inactiveContainer.firstChild);
+                    }
+
+                    populateList();
+                },
+                error: function(object, error) {
+                    alert("Error: " + error.code + " " + error.message);
+                    // The object was not retrieved successfully.
+                    // error is a Parse.Error with an error code and message.
+                }
+            });
+
+
+
+
+        }</script></body></html>
