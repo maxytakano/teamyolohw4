@@ -6,7 +6,8 @@ module.exports = function(grunt){
             my_target: {
                 options: {
                     removeComments: true,
-                    collapseWhitespace: true
+                    collapseWhitespace: true,
+                    removeEmptyAttributes: true
                 },
                 files: {
                     '../min/index.html': ['../public/index.html']
@@ -15,7 +16,9 @@ module.exports = function(grunt){
             other_target: {
                 options: {
                     removeComments: true,
-                    collapseWhitespace: true
+                    collapseWhitespace: true,
+                    minifyJS: true,
+                    removeEmptyAttributes: true
                 },
                 files: [{
                     expand: true,
