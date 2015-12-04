@@ -34,7 +34,17 @@ Password: parseparse1
 ------------------------------------------------------------------
 
 MINIFICATION AND BUNDLING:
-- TODO: SAM
+- Our implementation uses Grunt Task Manager to perform the minification and bundling
+- The service uses 3 Grunt modules to perform minification: grunt-contrib-cssmin to minify and package css files, grunt-contrib-uglify to minify and package js files, and grunt-contrib-htmlmin to minify html files
+- The minifyed files are generated with the default grunt taks and placed in a folder \min, which is also automatically generated.
+
+- !IMPORTANT! 
+- The modules that are installed and used in the tasks require files that are not written by us that are placed in directories that are about 5-6 folders deep. This prevents a Windows user from pushing or pulling those files with git. 
+- Thus, as a form of verification, the package.json file and gruntfile.js will be pushed, but you will need to also ensure that you have downloaded nodejs v4.2.2 LTS and that the grunt client is installed.
+- The following modules will need then to be installed using the command prompt while in the /grunt/ directory before the default task can be run:
+	- grunt-contrib-htmlmin
+	- grunt-contrib-uglify
+	- grunt-contrib-cssmin
 
 ------------------------------------------------------------------
 
@@ -46,7 +56,7 @@ PHONE APP POC:
 APPLICATION SUMMARY:
 - Technologies Used:
 	- Parse, Parse JavaScript SDK for the backend database, monitoring, and analytics
-	- TODO: SAM
+	- Grunt Task manager and nodejs to use the Grunt Task Manager for minifiying our css, js and html files
 	- TODO: ALEXIE
 - Issues:
 	- TODO: EVERYONE
