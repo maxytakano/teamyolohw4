@@ -1,10 +1,38 @@
 HOMEWORK #5 README
 
-TEAM: 
-MEMBERS: 
+TEAM: Y0l0vv3bd3v$69
+MEMBERS: Jason Tan, Gil Olaes, Alexie Sousa, Max Takano, Sam Marks
 
 ------------------------------------------------------------------
 
+TABLE OF CONTENTS:
+- LINKS
+- FINISHED APPLICATION
+- ERROR MONITORING AND USAGE MONITORING ANALYTICS
+- MINIFICATION AND BUNDLING
+- PHONE APP PROOF OF CONCEPT
+- APPLICATION SUMMARY
+- TEAM STRUCTURE AND DYNAMICS
+- OTHER NOTES AND COMMENTS
+
+------------------------------------------------------------------
+
+LINKS:
+
+We have hosted our application online. The link to it is:
+http://cse134b-fa15.co.nf/
+
+We used GitHub as our repo. The link to it is (disregard the "HW4", we developed on top of HW4 and did not bother to make a new repo):
+https://github.com/maxytakano/teamyolohw4
+
+------------------------------------------------------------------
+
+FINISHED APPLICATION:
+	- Using Parse we have authenticated (defaulted) and have cloud storage for our database needs. This was done in HW4 already.
+	- Using OneSignal, we have browser notifcations working on Chrome (not on IE since IE doesn't have an implementations of the notifications API nor Mozilla Firefox since this feature on OneSignal is still in Alpha stages) and on Android (not on iOS because iOS is incompatible unless user downloads an application which is deemed to be too much effort for this project's needs. This was done in HW4 already.
+	- We have included monitoring and analytics using Parse, as described in the next section.
+
+------------------------------------------------------------------
 ERROR MONITORING AND USAGE MONITORING ANALYTICS:
 - Our implementation uses Parse's analytics service (specifically Parse JavaScript SDK). 
 - Using this service, we have included monitoring for Parse logging (automatic), JavaScript errors, user events such as login and signup, CRUD operations for habit objects, and habit interaction events such as thumbing up/down (completing and failing) a habit. These events are done by sending an analytics object that can include up to 8 attributes of String data to Parse. These events can then be filtered according to one or more attribute(s) on the Parse website for viewing.
@@ -97,12 +125,17 @@ TEAM STRUCTURE AND DYNAMICS:
 - Jason Tan
 	- Implemented and tested Parse analytics and monitoring. Formatted this README template.
 - Max
-	- Assisted with analytics and monitoring. Worked on the a lot on the website in P4 so we didn't need to change much in P5. 
+	- Assisted with analytics and monitoring. Worked on the a lot on the website in P4 so we didn't need to change much in P5.
+- Sam
+	- Automated the minification and bundling tasks using Grunt.
 - Gil and Alexie
 	- Created a modified version of the codebase in order to correctly build the Android APK using Phonegap
 
-
 ------------------------------------------------------------------
 
-OTHER COMMENTS (SUBJECT TO CHANGE):
-- TODO: EVERYBODY
+OTHER NOTES AND COMMENTS:
+	- No extra credit
+		- We did not implement image spriting.
+		- We did not do any other package efforts.
+
+------------------------------------------------------------------
